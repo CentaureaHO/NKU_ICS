@@ -1417,7 +1417,7 @@ STBTT_DEF int stbtt_FindGlyphIndex(const stbtt_fontinfo* info, int unicode_codep
         return 0;
     }
     else if (format == 4)
-    {   // standard mapping for windows fonts: binary search
+    {  // standard mapping for windows fonts: binary search
         // collection of ranges
         stbtt_uint16 segcount      = ttUSHORT(data + index_map + 6) >> 1;
         stbtt_uint16 searchRange   = ttUSHORT(data + index_map + 8) >> 1;
