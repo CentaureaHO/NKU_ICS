@@ -20,17 +20,17 @@ FUNCTION
 <<fputs>>---write a character string in a file or stream
 
 INDEX
-	fputs
+        fputs
 
 ANSI_SYNOPSIS
-	#include <stdio.h>
-	int fputs(const char *<[s]>, FILE *<[fp]>);
+        #include <stdio.h>
+        int fputs(const char *<[s]>, FILE *<[fp]>);
 
 TRAD_SYNOPSIS
-	#include <stdio.h>
-	int fputs(<[s]>, <[fp]>)
-	char *<[s]>;
-	FILE *<[fp]>;
+        #include <stdio.h>
+        int fputs(<[s]>, <[fp]>)
+        char *<[s]>;
+        FILE *<[fp]>;
 
 DESCRIPTION
 <<fputs>> writes the string at <[s]> (but without the trailing null)
@@ -47,25 +47,22 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 <<lseek>>, <<read>>, <<sbrk>>, <<write>>.
 */
 
+#include "fvwrite.h"
 #include <stdio.h>
 #include <string.h>
-#include "fvwrite.h"
 
 /*
  * Write the given string to the given file.
  */
 
-int
-_DEFUN (fputs, (s, fp),
-	char _CONST * s _AND
-	FILE * fp)
+int _DEFUN(fputs, (s, fp), char _CONST* s _AND FILE* fp)
 {
-  struct __suio uio;
-  struct __siov iov;
+    struct __suio uio;
+    struct __siov iov;
 
-  iov.iov_base = s;
-  iov.iov_len = uio.uio_resid = strlen (s);
-  uio.uio_iov = &iov;
-  uio.uio_iovcnt = 1;
-  return __sfvwrite (fp, &uio);
+    iov.iov_base = s;
+    iov.iov_len = uio.uio_resid = strlen(s);
+    uio.uio_iov                 = &iov;
+    uio.uio_iovcnt              = 1;
+    return __sfvwrite(fp, &uio);
 }

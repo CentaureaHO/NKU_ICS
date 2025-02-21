@@ -3,16 +3,16 @@ FUNCTION
 <<fileno>>---return file descriptor associated with stream
 
 INDEX
-	fileno
+        fileno
 
 ANSI_SYNOPSIS
-	#include <stdio.h>
-	int fileno(FILE *<[fp]>);
+        #include <stdio.h>
+        int fileno(FILE *<[fp]>);
 
 TRAD_SYNOPSIS
-	#include <stdio.h>
-	int fileno(<[fp]>)
-	FILE *<[fp]>;
+        #include <stdio.h>
+        int fileno(<[fp]>)
+        FILE *<[fp]>;
 
 DESCRIPTION
 You can use <<fileno>> to return the file descriptor identified by <[fp]>.
@@ -28,13 +28,11 @@ POSIX requires <<fileno>>.
 Supporting OS subroutines required: none.
 */
 
-#include <stdio.h>
 #include "local.h"
+#include <stdio.h>
 
-int
-_DEFUN (fileno, (f),
-	FILE * f)
+int _DEFUN(fileno, (f), FILE* f)
 {
-  CHECK_INIT (f);
-  return __sfileno (f);
+    CHECK_INIT(f);
+    return __sfileno(f);
 }

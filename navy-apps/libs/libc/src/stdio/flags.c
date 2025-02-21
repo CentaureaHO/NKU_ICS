@@ -17,9 +17,9 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+#include <fcntl.h>
 #include <stdio.h>
 #include <time.h>
-#include <fcntl.h>
 
 #include <errno.h>
 #include <sys/types.h>
@@ -30,55 +30,49 @@
  * Return 0 on error.
  */
 
-int
-__sflags (ptr, mode, optr)
-     struct _reent *ptr;
-     register char *mode;
-     int *optr;
+int            __sflags(ptr, mode, optr) struct _reent* ptr;
+register char* mode;
+int*           optr;
 {
-  register int ret, m, o;
+    register int ret, m, o;
 
-  switch (mode[0])
+    switch (mode[0])
     {
-    case 'r':			/* open for reading */
-      ret = __SRD;
-      m = O_RDONLY;
-      o = 0;
-      break;
+        case 'r': /* open for reading */
+            ret = __SRD;
+            m   = O_RDONLY;
+            o   = 0;
+            break;
 
-    case 'w':			/* open for writing */
-      ret = __SWR;
-      m = O_WRONLY;
-      o = O_CREAT | O_TRUNC;
-      break;
+        case 'w': /* open for writing */
+            ret = __SWR;
+            m   = O_WRONLY;
+            o   = O_CREAT | O_TRUNC;
+            break;
 
-    case 'a':			/* open for appending */
-      ret = __SWR | __SAPP;
-      m = O_WRONLY;
-      o = O_CREAT | O_APPEND;
-      break;
-    default:			/* illegal mode */
-      ptr->_errno = EINVAL;
-      return (0);
+        case 'a': /* open for appending */
+            ret = __SWR | __SAPP;
+            m   = O_WRONLY;
+            o   = O_CREAT | O_APPEND;
+            break;
+        default: /* illegal mode */ ptr->_errno = EINVAL; return (0);
     }
-  if (mode[1] == '+' || mode[2] == '+')
-    {
-      ret |= __SRW;
-      m = O_RDWR;
+    if (mode[1] == '+' || mode[2] == '+') {
+        ret |= __SRW;
+        m = O_RDWR;
     }
-  if (mode[1] == 'b' || mode[2] == 'b')
-    {
+    if (mode[1] == 'b' || mode[2] == 'b') {
 #ifdef O_BINARY
-      m |= O_BINARY;
+        m |= O_BINARY;
 #endif
     }
-  else
+    else
     {
 #ifdef O_TEXT
-      m |= O_TEXT;
+        m |= O_TEXT;
 #endif
     }
 
-  *optr = m | o;
-  return ret;
+    *optr = m | o;
+    return ret;
 }
