@@ -73,17 +73,20 @@ static int cmd_info(char* args)
 
 static int cmd_x(char* args)
 {
-    // Currently, we only support a number as expression
+    char* arg = strtok(NULL, " ");
+    Assert(arg != NULL, "Argument N is missing for command x");
+    int n = atoi(arg);
 
-    int      step = 0;
-    uint32_t addr = 0;
+    arg = strtok(NULL, " ");
+    Assert(arg != NULL, "Argument EXPR is missing for command x");
 
-    sscanf(args, "%d 0x%x", &step, &addr);
+    Log("Scanning %d words starting from %s", n, arg);
 
-    for (int i = 0; i < step; ++i) {
-        // data = vaddr_read(addr + i * 4, 4);
-        // printf("0x%08x: 0x%08x\n", addr + i * 4, data);
-
+    bool     success = false;
+    uint32_t addr    = expr(arg, &success);
+    Assert(success, "Failed to evaluate expression \"%s\"", arg);
+    
+    for (int i = 0; i < n; i++) {
         printf("0x%08x: 0x%08x\n", addr, vaddr_read(addr, 4));
         addr += 4;
     }
