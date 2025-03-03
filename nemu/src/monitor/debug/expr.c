@@ -367,7 +367,8 @@ static uint32_t eval_unary_expr(int* pos)
 static uint32_t eval_factor(int* pos)
 {
     if (check_token(*pos, TK_STAR)) {
-        TODO();
+        ++(*pos);
+        return vaddr_read(eval_expr(pos), 4);
     }
 
     if (check_token(*pos, TK_LPARAN)) {
