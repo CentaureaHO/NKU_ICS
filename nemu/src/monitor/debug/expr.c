@@ -146,15 +146,15 @@ static bool make_token(char* e)
                 matched_str[substr_len] = '\0';
                 Log("match substr \"%s\" as token %s", matched_str, token2str(rules[i].token_type));
 #else
-                /*
-                Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-                    i,
-                    rules[i].regex,
-                    position,
-                    substr_len,
-                    substr_len,
-                    substr_start);
-                */
+/*
+Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+    i,
+    rules[i].regex,
+    position,
+    substr_len,
+    substr_len,
+    substr_start);
+*/
 #endif
 
                 position += substr_len;
@@ -370,10 +370,10 @@ static uint32_t eval_factor(int* pos)
 {
     if (check_token(*pos, TK_STAR)) {
         ++(*pos);
-        
+
         // return vaddr_read(eval_expr(pos), 4);
         uint32_t addr = eval_expr(pos);
-        uint32_t val = vaddr_read(addr, 4);
+        uint32_t val  = vaddr_read(addr, 4);
         Log("read memory at 0x%08x: 0x%08x", addr, val);
         return val;
     }

@@ -73,12 +73,20 @@ static int cmd_info(char* args)
 
 static int cmd_x(char* args)
 {
-    int n = 0;
-    char* endptr = NULL;
+    char* expr_ptr = NULL;
+    int   n        = strtol(args, &expr_ptr, 10);
 
-    n = strtol(args, &endptr, 10);
+    Assert(n > 0, "Got argument \"%s\" for x, but it should be a positive integer", args);
+    Assert(*expr_ptr == ' ', "Got argument \"%s\" for x, but it should be followed by a space", args);
 
-    Log("n = %d, endptr = %s", n, endptr);
+    bool     success = false;
+    uint32_t addr    = expr(expr_ptr + 1, &success);
+    Assert(success, "Failed to evaluate expression \"%s\"", expr_ptr + 1);
+
+    for (int i = 0; i < n; i++) {
+        printf("0x%08x: 0x%08x\n", addr, vaddr_read(addr, 4));
+        addr += 4;
+    }
 
     return 0;
 }
