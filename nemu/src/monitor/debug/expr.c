@@ -405,7 +405,19 @@ static uint32_t eval_operand(int* pos)
     }
     else if (check_token(*pos, TK_REG))
     {
-        TODO();
+        char* reg_name = tokens[*pos].str + 1;
+        ++(*pos);
+
+        if (strcmp(reg_name, "eax") == 0) return cpu.eax;
+        if (strcmp(reg_name, "ecx") == 0) return cpu.ecx;
+        if (strcmp(reg_name, "edx") == 0) return cpu.edx;
+        if (strcmp(reg_name, "ebx") == 0) return cpu.ebx;
+        if (strcmp(reg_name, "esp") == 0) return cpu.esp;
+        if (strcmp(reg_name, "ebp") == 0) return cpu.ebp;
+        if (strcmp(reg_name, "esi") == 0) return cpu.esi;
+        if (strcmp(reg_name, "edi") == 0) return cpu.edi;
+
+        Log("unknown register %s", reg_name);
         return 0;
     }
     else if (check_token(*pos, TK_VAR))
