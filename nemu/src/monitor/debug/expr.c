@@ -6,19 +6,58 @@
 #include <regex.h>
 #include <sys/types.h>
 
-enum
+#define TOKENS                         \
+    X(TK_NOTYPE, void, 0)              \
+    X(TK_DECNUM, decimal number, 1)    \
+    X(TK_HEXNUM, hex number, 2)        \
+    X(TK_REG, register, 3)             \
+    X(TK_LPARAN, left parantheses, 4)  \
+    X(TK_RPARAN, right parantheses, 5) \
+    X(TK_ADD, add, 6)                  \
+    X(TK_SUB, sub, 7)                  \
+    X(TK_DIV, div, 8)                  \
+    X(TK_EQ, equal, 9)                 \
+    X(TK_NEQ, not equal, 10)           \
+    X(TK_AND, and, 11)                 \
+    X(TK_OR, or, 12)                   \
+    X(TK_NOT, not, 13)                 \
+    X(TK_STAR, star, 14)
+
+/*
+typedef enum
 {
     TK_NOTYPE = 256,
     TK_EQ
 
-    /* TODO: Add more token types */
+    // TODO: Add more token types
 
-};
+} TokenType;
+*/
+
+typedef enum {
+#define X(cn, name, id) cn = id,
+    TOKENS
+#undef X
+} TokenType;
+
+const char* token2str(TokenType type)
+{
+    switch (type)
+    {
+#define X(cn, name, id) \
+    case cn: return #name;
+        TOKENS
+#undef X
+        default: return "unknown";
+    }
+
+    return "unknown";
+}
 
 static struct rule
 {
-    char* regex;
-    int   token_type;
+    char*     regex;
+    TokenType token_type;
 } rules[] = {
 
     /* TODO: Add more rules.
@@ -26,8 +65,24 @@ static struct rule
      */
 
     {" +", TK_NOTYPE},  // spaces
+    /*
     {"\\+", '+'},       // plus
     {"==", TK_EQ}       // equal
+    */
+    {"0x[0-9a-fA-F]+", TK_HEXNUM},  // hex number
+    {"[0-9]+", TK_DECNUM},          // decimal number
+    {"\\$[a-zA-Z]+", TK_REG},       // register
+    {"\\(", TK_LPARAN},             // left parantheses
+    {"\\)", TK_RPARAN},             // right parantheses
+    {"\\+", TK_ADD},                // add
+    {"-", TK_SUB},                  // sub
+    {"\\*", TK_STAR},               // star
+    {"/", TK_DIV},                  // div
+    {"==", TK_EQ},                  // equal
+    {"!=", TK_NEQ},                 // not equal
+    {"&&", TK_AND},                 // and
+    {"\\|\\|", TK_OR},              // or
+    {"!", TK_NOT}                   // not
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]))
@@ -61,6 +116,8 @@ typedef struct token
 Token tokens[32];
 int   nr_token;
 
+#define EXPRDBG_LOG_ENABLE
+
 static bool make_token(char* e)
 {
     int        position = 0;
@@ -69,6 +126,10 @@ static bool make_token(char* e)
 
     nr_token = 0;
 
+#ifdef EXPRDBG_LOG_ENABLE
+    char matched_str[32];
+#endif
+
     while (e[position] != '\0') {
         /* Try all rules one by one. */
         for (i = 0; i < NR_REGEX; i++) {
@@ -76,6 +137,11 @@ static bool make_token(char* e)
                 char* substr_start = e + position;
                 int   substr_len   = pmatch.rm_eo;
 
+#ifdef EXPRDBG_LOG_ENABLE
+                strncpy(matched_str, substr_start, substr_len);
+                matched_str[substr_len] = '\0';
+                Log("match substr \"%s\" as token %s", matched_str, token2str(rules[i].token_type));
+#else
                 Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
                     i,
                     rules[i].regex,
@@ -83,18 +149,20 @@ static bool make_token(char* e)
                     substr_len,
                     substr_len,
                     substr_start);
+#endif
+
                 position += substr_len;
 
                 /* TODO: Now a new token is recognized with rules[i]. Add codes
                  * to record the token in the array `tokens'. For certain types
                  * of tokens, some extra actions should be performed.
                  */
-
-                switch (rules[i].token_type)
-                {
-                    default: TODO();
-                }
-
+                /*
+                                switch (rules[i].token_type)
+                                {
+                                    default: TODO();
+                                }
+                */
                 break;
             }
         }
@@ -116,7 +184,7 @@ uint32_t expr(char* e, bool* success)
     }
 
     /* TODO: Insert codes to evaluate the expression. */
-    TODO();
+    // TODO();
 
     return 0;
 }

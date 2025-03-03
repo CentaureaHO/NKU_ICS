@@ -39,15 +39,14 @@ static int cmd_q(char* args) { return -1; }
 
 static int cmd_si(char* args)
 {
-    if (args == NULL) 
-    {
+    if (args == NULL) {
         cpu_exec(1);
         return 0;
     }
 
     int n = 0;
     Assert((n = atoi(args)) >= 1, "Got argument \"%s\" for si, but it should be a positive integer", args);
-    
+
     cpu_exec(n);
 
     return 0;
@@ -55,8 +54,7 @@ static int cmd_si(char* args)
 
 static int cmd_info(char* args)
 {
-    if (strcmp(args, "r") == 0)
-    {
+    if (strcmp(args, "r") == 0) {
         printf("eax\t0x%08x\t%d\n", cpu.eax, cpu.eax);
         printf("ecx\t0x%08x\t%d\n", cpu.ecx, cpu.ecx);
         printf("edx\t0x%08x\t%d\n", cpu.edx, cpu.edx);
@@ -69,7 +67,7 @@ static int cmd_info(char* args)
     }
     else
         Assert(false, "Unknown argument \"%s\" for info", args);
-    
+
     return 0;
 }
 
@@ -82,13 +80,27 @@ static int cmd_x(char* args)
 
     sscanf(args, "%d 0x%x", &step, &addr);
 
-    for (int i = 0; i < step; ++i)
-    {
+    for (int i = 0; i < step; ++i) {
         // data = vaddr_read(addr + i * 4, 4);
         // printf("0x%08x: 0x%08x\n", addr + i * 4, data);
 
         printf("0x%08x: 0x%08x\n", addr, vaddr_read(addr, 4));
         addr += 4;
+    }
+
+    return 0;
+}
+
+static int cmd_p(char* args)
+{
+    bool     success = false;
+    uint32_t result  = expr(args, &success);
+    if (success) {
+        printf("Result: %u\n", result);
+    }
+    else
+    {
+        printf("Failed to evaluate expression \"%s\"\n", args);
     }
 
     return 0;
@@ -108,6 +120,7 @@ static struct
     {"si", "Execute the program step by step", cmd_si},
     {"info", "Print the information of registers", cmd_info},
     {"x", "Scan memory", cmd_x},
+    {"p", "Evaluate expression", cmd_p},
 
     /* TODO: Add more commands */
 
