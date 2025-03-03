@@ -44,7 +44,7 @@ static int cmd_si(char* args)
     }
 
     int n = 0;
-    Assert((n = atoi(args)) >= 1, "Argument for si must be at least 1");
+    Assert((n = atoi(args)) >= 1, "Got argument %s for si, but it should be a positive integer", args);
     
     cpu_exec(n);
 
