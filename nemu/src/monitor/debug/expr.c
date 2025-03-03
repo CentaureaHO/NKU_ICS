@@ -368,7 +368,12 @@ static uint32_t eval_factor(int* pos)
 {
     if (check_token(*pos, TK_STAR)) {
         ++(*pos);
-        return vaddr_read(eval_expr(pos), 4);
+        
+        // return vaddr_read(eval_expr(pos), 4);
+        uint32_t addr = eval_expr(pos);
+        uint32_t val = vaddr_read(addr, 4);
+        Log("read memory at 0x%08x: 0x%08x", addr, val);
+        return val;
     }
 
     if (check_token(*pos, TK_LPARAN)) {
