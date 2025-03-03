@@ -210,7 +210,7 @@ static uint32_t eval_relational_expr(int* pos);
 static uint32_t eval_add_sub_expr(int* pos);
 // MulDivExpr -> UnaryExpr | MulDivExpr TK_STAR UnaryExpr | MulDivExpr TK_DIV UnaryExpr
 static uint32_t eval_mul_div_expr(int* pos);
-// UnaryExpr -> Factor | TK_ADD Factor | TK_SUB Factor | TK_NOT Factor
+// UnaryExpr -> Factor | TK_ADD UnaryExpr | TK_SUB UnaryExpr | TK_NOT UnaryExpr
 static uint32_t eval_unary_expr(int* pos);
 // Factor -> Operand | (Expr) | TK_STAR Expr
 static uint32_t eval_factor(int* pos);
@@ -350,17 +350,17 @@ static uint32_t eval_unary_expr(int* pos)
 {
     if (check_token(*pos, TK_ADD)) {
         ++(*pos);
-        return eval_factor(pos);
+        return eval_unary_expr(pos);
     }
     else if (check_token(*pos, TK_SUB))
     {
         ++(*pos);
-        return -eval_factor(pos);
+        return -eval_unary_expr(pos);
     }
     else if (check_token(*pos, TK_NOT))
     {
         ++(*pos);
-        return !eval_factor(pos);
+        return !eval_unary_expr(pos);
     }
     else
         return eval_factor(pos);
