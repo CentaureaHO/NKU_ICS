@@ -6,6 +6,8 @@
 #include <regex.h>
 #include <sys/types.h>
 
+#define MAX_TOKEN_LEN 32
+
 #define TOKENS                         \
     X(TK_NOTYPE, void, 0)              \
     X(TK_DECNUM, decimal number, 1)    \
@@ -30,7 +32,7 @@ typedef enum
     TK_NOTYPE = 256,
     TK_EQ
 
-    // TODO: Add more token types
+    // DONE: Add more token types
 
 } TokenType;
 */
@@ -61,7 +63,7 @@ static struct rule
     TokenType token_type;
 } rules[] = {
 
-    /* TODO: Add more rules.
+    /* DONE: Add more rules.
      * Pay attention to the precedence level of different rules.
      */
 
@@ -115,7 +117,7 @@ typedef struct token
     char      str[32];
 } Token;
 
-Token tokens[32];
+Token tokens[MAX_TOKEN_LEN];
 int   nr_token;
 
 #define EXPRDBG_LOG_ENABLE
@@ -155,29 +157,29 @@ static bool make_token(char* e)
 
                 position += substr_len;
 
-                /* TODO: Now a new token is recognized with rules[i]. Add codes
+                /* DONE: Now a new token is recognized with rules[i]. Add codes
                  * to record the token in the array `tokens'. For certain types
                  * of tokens, some extra actions should be performed.
                  */
                 /*
                                 switch (rules[i].token_type)
                                 {
-                                    default: TODO();
+                                    default:
                                 }
                 */
 
                 if (rules[i].token_type == TK_NOTYPE) break;
 
-                if (nr_token >= 32) {
+                if (nr_token >= MAX_TOKEN_LEN) {
                     Log("too many tokens");
                     return false;
                 }
 
-                tokens[nr_token].type          = rules[i].token_type;
-                if (substr_len > 3) substr_len = 31;
+                tokens[nr_token].type           = rules[i].token_type;
+                if (substr_len > 31) substr_len = 31;
                 strncpy(tokens[nr_token].str, substr_start, substr_len);
                 tokens[nr_token].str[substr_len] = '\0';
-                nr_token++;
+                ++nr_token;
 
                 break;
             }
@@ -192,6 +194,29 @@ static bool make_token(char* e)
     return true;
 }
 
+// Expr -> LogicalOrExpr
+static uint32_t eval_expr(int* pos);
+// LogicalOrExpr -> LogicalAndExpr | LogicalOrExpr TK_OR LogicalAndExpr
+static uint32_t eval_logical_or_expr(int* pos);
+// LogicalAndExpr -> EqualityExpr | LogicalAndExpr TK_AND EqualityExpr
+static uint32_t eval_logical_and_expr(int* pos);
+// EqualityExpr -> RelationalExpr | EqualityExpr TK_EQ RelationalExpr | EqualityExpr TK_NEQ RelationalExpr
+static uint32_t eval_equality_expr(int* pos);
+// RelationalExpr -> AddSubExpr
+static uint32_t eval_relational_expr(int* pos);
+// AddSubExpr -> MulDivExpr | AddSubExpr TK_ADD MulDivExpr | AddSubExpr TK_SUB MulDivExpr
+static uint32_t eval_add_sub_expr(int* pos);
+// MulDivExpr -> UnaryExpr | MulDivExpr TK_STAR UnaryExpr | MulDivExpr TK_DIV UnaryExpr
+static uint32_t eval_mul_div_expr(int* pos);
+// UnaryExpr -> Factor | TK_ADD Factor | TK_SUB Factor | TK_NOT Factor
+static uint32_t eval_unary_expr(int* pos);
+// Factor -> Operand | (Expr) | TK_STAR Expr
+static uint32_t eval_factor(int* pos);
+// Operand -> TK_DECNUM | TK_HEXNUM | TK_REG | TK_VAR
+static uint32_t eval_operand(int* pos);
+// UnaryOp -> TK_NOT
+// static uint32_t eval_unary_op(int* pos);
+
 uint32_t expr(char* e, bool* success)
 {
     if (!make_token(e)) {
@@ -201,6 +226,193 @@ uint32_t expr(char* e, bool* success)
 
     /* TODO: Insert codes to evaluate the expression. */
     // TODO();
+    int      pos = 0;
+    uint32_t val = eval_expr(&pos);
 
+    *success = true;
+    return val;
+}
+
+inline bool check_token(int pos, TokenType type) { return pos < nr_token && tokens[pos].type == type; }
+
+static uint32_t eval_expr(int* pos) { return eval_logical_or_expr(pos); }
+
+static uint32_t eval_logical_or_expr(int* pos)
+{
+    uint32_t val = eval_logical_and_expr(pos);
+
+    while (*pos < nr_token && tokens[*pos].type == TK_OR) {
+        ++(*pos);
+        uint32_t rval = eval_logical_and_expr(pos);
+        val           = val || rval;
+    }
+
+    return val;
+}
+
+static uint32_t eval_logical_and_expr(int* pos)
+{
+    uint32_t val = eval_equality_expr(pos);
+
+    while (*pos < nr_token && tokens[*pos].type == TK_AND) {
+        ++(*pos);
+        uint32_t rval = eval_equality_expr(pos);
+        val           = val && rval;
+    }
+
+    return val;
+}
+
+static uint32_t eval_equality_expr(int* pos)
+{
+    uint32_t val = eval_relational_expr(pos);
+
+    while (*pos < nr_token) {
+        if (check_token(*pos, TK_EQ)) {
+            ++(*pos);
+            uint32_t rval = eval_relational_expr(pos);
+            val           = (val == rval);
+        }
+        else if (check_token(*pos, TK_NEQ))
+        {
+            ++(*pos);
+            uint32_t rval = eval_relational_expr(pos);
+            val           = (val != rval);
+        }
+        else
+            break;
+    }
+
+    return val;
+}
+
+static uint32_t eval_relational_expr(int* pos)
+{
+    // 此文法来自于上一学期我的编译原理作业
+    // 其中显然会有关系运算符
+    // 虽然此处实际没有关系运算符，但既然已经有这个文法了，那就带上了
+    return eval_add_sub_expr(pos);
+}
+
+static uint32_t eval_add_sub_expr(int* pos)
+{
+    uint32_t val = eval_mul_div_expr(pos);
+
+    while (*pos < nr_token) {
+        if (check_token(*pos, TK_ADD)) {
+            ++(*pos);
+            uint32_t rval = eval_mul_div_expr(pos);
+            val += rval;
+        }
+        else if (check_token(*pos, TK_SUB))
+        {
+            ++(*pos);
+            uint32_t rval = eval_mul_div_expr(pos);
+            val -= rval;
+        }
+        else
+            break;
+    }
+
+    return val;
+}
+
+static uint32_t eval_mul_div_expr(int* pos)
+{
+    uint32_t val = eval_unary_expr(pos);
+
+    while (*pos < nr_token) {
+        if (check_token(*pos, TK_STAR)) {
+            ++(*pos);
+            uint32_t rval = eval_unary_expr(pos);
+            val *= rval;
+        }
+        else if (check_token(*pos, TK_DIV))
+        {
+            ++(*pos);
+            uint32_t rval = eval_unary_expr(pos);
+            if (rval == 0) {
+                Log("divided by zero");
+                return 0;
+            }
+            val /= rval;
+        }
+        else
+            break;
+    }
+
+    return val;
+}
+
+static uint32_t eval_unary_expr(int* pos)
+{
+    if (check_token(*pos, TK_ADD)) {
+        ++(*pos);
+        return eval_factor(pos);
+    }
+    else if (check_token(*pos, TK_SUB))
+    {
+        ++(*pos);
+        return -eval_factor(pos);
+    }
+    else if (check_token(*pos, TK_NOT))
+    {
+        ++(*pos);
+        return !eval_factor(pos);
+    }
+    else
+        return eval_factor(pos);
+}
+
+static uint32_t eval_factor(int* pos)
+{
+    if (check_token(*pos, TK_STAR)) {
+        TODO();
+    }
+
+    if (check_token(*pos, TK_LPARAN)) {
+        ++(*pos);
+        uint32_t val = eval_expr(pos);
+        if (*pos < nr_token && check_token(*pos, TK_RPARAN)) {
+            ++(*pos);
+            return val;
+        }
+        else
+        {
+            Log("missing right parantheses");
+            return 0;
+        }
+    }
+
+    return eval_operand(pos);
+}
+
+static uint32_t eval_operand(int* pos)
+{
+    if (check_token(*pos, TK_DECNUM)) {
+        uint32_t val = 0;
+        sscanf(tokens[*pos].str, "%u", &val);
+        ++(*pos);
+        return val;
+    }
+    else if (check_token(*pos, TK_HEXNUM))
+    {
+        uint32_t val = 0;
+        sscanf(tokens[*pos].str, "%x", &val);
+        ++(*pos);
+        return val;
+    }
+    else if (check_token(*pos, TK_REG))
+    {
+        TODO();
+        return 0;
+    }
+    else if (check_token(*pos, TK_VAR))
+    {
+        TODO();
+        return 0;
+    }
+
+    Log("unexpected token %s", tokens[*pos].str);
     return 0;
 }
