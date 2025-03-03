@@ -35,6 +35,8 @@ static int cmd_c(char* args)
     return 0;
 }
 
+static int cmd_q(char* args) { return -1; }
+
 static int cmd_si(char* args)
 {
     if (args == NULL) 
@@ -51,7 +53,25 @@ static int cmd_si(char* args)
     return 0;
 }
 
-static int cmd_q(char* args) { return -1; }
+static int cmd_info(char* args)
+{
+    if (strcmp(args, "r") == 0)
+    {
+        printf("eax\t0x%08x\t%d\n", cpu.eax, cpu.eax);
+        printf("ecx\t0x%08x\t%d\n", cpu.ecx, cpu.ecx);
+        printf("edx\t0x%08x\t%d\n", cpu.edx, cpu.edx);
+        printf("ebx\t0x%08x\t%d\n", cpu.ebx, cpu.ebx);
+        printf("esp\t0x%08x\t0x%08x\n", cpu.esp, cpu.esp);
+        printf("ebp\t0x%08x\t0x%08x\n", cpu.ebp, cpu.ebp);
+        printf("esi\t0x%08x\t0x%08x\n", cpu.esi, cpu.esi);
+        printf("edi\t0x%08x\t0x%08x\n", cpu.edi, cpu.edi);
+        printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
+    }
+    else
+        Assert(false, "Unknown argument \"%s\" for info", args);
+    
+    return 0;
+}
 
 static int cmd_help(char* args);
 
@@ -63,8 +83,9 @@ static struct
 } cmd_table[] = {
     {"help", "Display informations about all supported commands", cmd_help},
     {"c", "Continue the execution of the program", cmd_c},
-    {"si", "Execute the program step by step", cmd_si},
     {"q", "Exit NEMU", cmd_q},
+    {"si", "Execute the program step by step", cmd_si},
+    {"info", "Print the information of registers", cmd_info},
 
     /* TODO: Add more commands */
 
