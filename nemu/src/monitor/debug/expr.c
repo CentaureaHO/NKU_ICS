@@ -120,7 +120,7 @@ typedef struct token
 Token tokens[MAX_TOKEN_LEN];
 int   nr_token;
 
-#define EXPRDBG_LOG_ENABLE
+// #define EXPRDBG_LOG_ENABLE
 
 static bool make_token(char* e)
 {
@@ -146,6 +146,7 @@ static bool make_token(char* e)
                 matched_str[substr_len] = '\0';
                 Log("match substr \"%s\" as token %s", matched_str, token2str(rules[i].token_type));
 #else
+                /*
                 Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
                     i,
                     rules[i].regex,
@@ -153,6 +154,7 @@ static bool make_token(char* e)
                     substr_len,
                     substr_len,
                     substr_start);
+                */
 #endif
 
                 position += substr_len;
