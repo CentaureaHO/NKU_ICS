@@ -74,7 +74,7 @@ static int cmd_info(char* args)
 static int cmd_x(char* args)
 {
     int step = 0;
-    char* expr_str = NULL;
+    char expr_str[256];
 
     sscanf(args, "%d %s", &step, expr_str);
     Assert(step > 0, "Invalid step \"%d\" for x", step);
