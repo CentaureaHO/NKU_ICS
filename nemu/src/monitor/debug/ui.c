@@ -82,6 +82,8 @@ static int cmd_x(char* args)
 
     sscanf(args, "%d 0x%x", &step, &addr);
 
+    pmem[0] = 0;
+
     return 0;
 }
 
