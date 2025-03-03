@@ -21,7 +21,8 @@
     X(TK_AND, and, 11)                 \
     X(TK_OR, or, 12)                   \
     X(TK_NOT, not, 13)                 \
-    X(TK_STAR, star, 14)
+    X(TK_STAR, star, 14)                \
+    X(TK_VAR, variable, 15) 
 
 /*
 typedef enum
@@ -82,7 +83,8 @@ static struct rule
     {"!=", TK_NEQ},                 // not equal
     {"&&", TK_AND},                 // and
     {"\\|\\|", TK_OR},              // or
-    {"!", TK_NOT}                   // not
+    {"!", TK_NOT},                   // not
+    {"[a-zA-Z_][a-zA-Z0-9_]*", TK_VAR}  // variable
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]))
