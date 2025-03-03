@@ -21,8 +21,8 @@
     X(TK_AND, and, 11)                 \
     X(TK_OR, or, 12)                   \
     X(TK_NOT, not, 13)                 \
-    X(TK_STAR, star, 14)                \
-    X(TK_VAR, variable, 15) 
+    X(TK_STAR, star, 14)               \
+    X(TK_VAR, variable, 15)
 
 /*
 typedef enum
@@ -70,20 +70,20 @@ static struct rule
     {"\\+", '+'},       // plus
     {"==", TK_EQ}       // equal
     */
-    {"0x[0-9a-fA-F]+", TK_HEXNUM},  // hex number
-    {"[0-9]+", TK_DECNUM},          // decimal number
-    {"\\$[a-zA-Z]+", TK_REG},       // register
-    {"\\(", TK_LPARAN},             // left parantheses
-    {"\\)", TK_RPARAN},             // right parantheses
-    {"\\+", TK_ADD},                // add
-    {"-", TK_SUB},                  // sub
-    {"\\*", TK_STAR},               // star
-    {"/", TK_DIV},                  // div
-    {"==", TK_EQ},                  // equal
-    {"!=", TK_NEQ},                 // not equal
-    {"&&", TK_AND},                 // and
-    {"\\|\\|", TK_OR},              // or
-    {"!", TK_NOT},                   // not
+    {"0x[0-9a-fA-F]+", TK_HEXNUM},      // hex number
+    {"[0-9]+", TK_DECNUM},              // decimal number
+    {"\\$[a-zA-Z]+", TK_REG},           // register
+    {"\\(", TK_LPARAN},                 // left parantheses
+    {"\\)", TK_RPARAN},                 // right parantheses
+    {"\\+", TK_ADD},                    // add
+    {"-", TK_SUB},                      // sub
+    {"\\*", TK_STAR},                   // star
+    {"/", TK_DIV},                      // div
+    {"==", TK_EQ},                      // equal
+    {"!=", TK_NEQ},                     // not equal
+    {"&&", TK_AND},                     // and
+    {"\\|\\|", TK_OR},                  // or
+    {"!", TK_NOT},                      // not
     {"[a-zA-Z_][a-zA-Z0-9_]*", TK_VAR}  // variable
 };
 
@@ -111,8 +111,8 @@ void init_regex()
 
 typedef struct token
 {
-    int  type;
-    char str[32];
+    TokenType type;
+    char      str[32];
 } Token;
 
 Token tokens[32];
@@ -165,6 +165,20 @@ static bool make_token(char* e)
                                     default: TODO();
                                 }
                 */
+
+                if (rules[i].token_type == TK_NOTYPE) break;
+
+                if (nr_token >= 32) {
+                    Log("too many tokens");
+                    return false;
+                }
+
+                tokens[nr_token].type          = rules[i].token_type;
+                if (substr_len > 3) substr_len = 31;
+                strncpy(tokens[nr_token].str, substr_start, substr_len);
+                tokens[nr_token].str[substr_len] = '\0';
+                nr_token++;
+
                 break;
             }
         }
