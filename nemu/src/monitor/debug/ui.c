@@ -82,7 +82,14 @@ static int cmd_x(char* args)
 
     sscanf(args, "%d 0x%x", &step, &addr);
 
-    pmem[0] = 0;
+    for (int i = 0; i < step; ++i)
+    {
+        // data = vaddr_read(addr + i * 4, 4);
+        // printf("0x%08x: 0x%08x\n", addr + i * 4, data);
+
+        printf("0x%08x: 0x%08x\n", addr, vaddr_read(addr, 4));
+        addr += 4;
+    }
 
     return 0;
 }
