@@ -73,13 +73,12 @@ static int cmd_info(char* args)
 
 static int cmd_x(char* args)
 {
-    int step = 0;
-    char expr_str[256];
+    int n = 0;
+    char* endptr = NULL;
 
-    sscanf(args, "%d %s", &step, expr_str);
-    Assert(step > 0, "Invalid step \"%d\" for x", step);
+    n = strtol(args, &endptr, 10);
 
-    Log("step = %d, expr_str = %s", step, expr_str);
+    Log("n = %d, endptr = %s", n, endptr);
 
     return 0;
 }
