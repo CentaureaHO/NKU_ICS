@@ -23,39 +23,36 @@
 #define MAIN_H
 
 #include "_common.h"
-#include "util.h"
-#include "palcommon.h"
+#include "battle.h"
+#include "ending.h"
+#include "fight.h"
 #include "font.h"
+#include "game.h"
 #include "global.h"
-#include "map.h"
-#include "res.h"
-#include "scene.h"
-#include "rixplay.h"
-#include "sound.h"
-#include "video.h"
 #include "input.h"
+#include "itemmenu.h"
+#include "magicmenu.h"
+#include "map.h"
+#include "palcommon.h"
+#include "palette.h"
+#include "play.h"
+#include "res.h"
+#include "rixplay.h"
+#include "rngplay.h"
+#include "scene.h"
+#include "script.h"
+#include "sound.h"
 #include "text.h"
 #include "ui.h"
-#include "uigame.h"
 #include "uibattle.h"
-#include "magicmenu.h"
-#include "itemmenu.h"
-#include "palette.h"
-#include "rngplay.h"
-#include "ending.h"
-#include "script.h"
-#include "battle.h"
-#include "fight.h"
-#include "play.h"
-#include "game.h"
+#include "uigame.h"
+#include "util.h"
+#include "video.h"
 
 #ifdef PAL_HAS_NATIVEMIDI
 #include "midi.h"
 #endif
 
-VOID
-PAL_Shutdown(
-   VOID
-);
+VOID PAL_Shutdown(VOID);
 
 #endif

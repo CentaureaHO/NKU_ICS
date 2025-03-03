@@ -21,8 +21,8 @@
 static char sccsid[] = "%W% (Berkeley) %G%";
 #endif /* LIBC_SCCS and not lint */
 
-#include <stdio.h>
 #include "local.h"
+#include <stdio.h>
 
 /*
  * Handle getc() when the buffer ran out:
@@ -30,14 +30,11 @@ static char sccsid[] = "%W% (Berkeley) %G%";
  * in the newly-filled buffer.
  */
 
-int
-__srget (fp)
-     register FILE *fp;
+int __srget(fp) register FILE* fp;
 {
-  if (__srefill (fp) == 0)
-    {
-      fp->_r--;
-      return *fp->_p++;
+    if (__srefill(fp) == 0) {
+        fp->_r--;
+        return *fp->_p++;
     }
-  return EOF;
+    return EOF;
 }

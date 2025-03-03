@@ -3,17 +3,17 @@ FUNCTION
    <<atoi>>, <<atol>>---string to integer
 
 INDEX
-	atoi
+        atoi
 INDEX
-	atol
+        atol
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
+        #include <stdlib.h>
         int atoi(const char *<[s]>);
-	long atol(const char *<[s]>);
+        long atol(const char *<[s]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
+        #include <stdlib.h>
        int atoi(<[s]>)
        char *<[s]>;
 
@@ -42,18 +42,8 @@ No supporting OS subroutines are required.
  * Andy Wilson, 2-Oct-89.
  */
 
-#include <stdlib.h>
 #include <_ansi.h>
+#include <stdlib.h>
 
-int
-_DEFUN (atoi, (s),
-	_CONST char *s)
-{
-  return (int) strtol (s, NULL, 10);
-}
-long
-_DEFUN (atol, (s),
-	_CONST char *s)
-{
-  return strtol (s, NULL, 10);
-}
+int _DEFUN(atoi, (s), _CONST char* s) { return (int)strtol(s, NULL, 10); }
+long _DEFUN(atol, (s), _CONST char* s) { return strtol(s, NULL, 10); }

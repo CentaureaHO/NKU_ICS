@@ -13,11 +13,11 @@ extern "C" {
 #endif
 
 #ifndef NULL
-#define NULL  ((void*)0)
+#define NULL ((void*)0)
 #endif
 
-void *kalloc(size_t);
-void kfree(void*);
+void* kalloc(size_t);
+void  kfree(void*);
 
 // string.h
 void* memset(void* v, int c, size_t n);
@@ -30,9 +30,9 @@ char* strcpy(char* dst, const char* src);
 char* strncpy(char* dst, const char* src, size_t n);
 int strcmp(const char* s1, const char* s2);
 int strncmp(const char* s1, const char* s2, size_t n);
-char* strtok(char* s,const char* delim);
-char *strstr(const char *, const char *);
-const char *strchr(const char *s, int c);
+char* strtok(char* s, const char* delim);
+char*       strstr(const char*, const char*);
+const char* strchr(const char* s, int c);
 
 // stdlib.h
 int atoi(const char* nptr);
@@ -45,24 +45,25 @@ int rand();
 int printf(const char* fmt, ...);
 int sprintf(char* out, const char* format, ...);
 int snprintf(char* s, size_t n, const char* format, ...);
-int vsprintf(char *str, const char *format, va_list ap);
-int vsnprintf(char *str, size_t size, const char *format, va_list ap);
-int sscanf(const char *str, const char *format, ...);
+int vsprintf(char* str, const char* format, va_list ap);
+int vsnprintf(char* str, size_t size, const char* format, va_list ap);
+int sscanf(const char* str, const char* format, ...);
 
-void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *));
+void qsort(void* base, size_t nmemb, size_t size, int (*compar)(const void*, const void*));
 
 #define printk printf
 
 // assert.h
 #ifdef NDEBUG
-  #define assert(ignore) ((void)0)
+#define assert(ignore) ((void)0)
 #else
-  #define assert(cond) \
-    do { \
-      if (!(cond)) { \
-        printk("Assertion fail at %s:%d\n", __FILE__, __LINE__); \
-        _halt(1); \
-      } \
+#define assert(cond)                                                 \
+    do                                                               \
+    {                                                                \
+        if (!(cond)) {                                               \
+            printk("Assertion fail at %s:%d\n", __FILE__, __LINE__); \
+            _halt(1);                                                \
+        }                                                            \
     } while (0)
 #endif
 

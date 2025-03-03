@@ -2,7 +2,7 @@
 FUNCTION
         <<siprintf>>---write formatted output (integer only)
 INDEX
-	siprintf
+        siprintf
 
 ANSI_SYNOPSIS
         #include <stdio.h>
@@ -35,36 +35,35 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 #else
 #include <varargs.h>
 #endif
-#include <limits.h>
-#include <_ansi.h>
-#include <reent.h>
 #include "local.h"
+#include <_ansi.h>
+#include <limits.h>
+#include <reent.h>
 
 int
 #ifdef _HAVE_STDC
 _DEFUN (siprintf, (str, fmt), char *str _AND _CONST char *fmt _DOTS)
 #else
-siprintf (str, fmt, va_alist)
-     char *str;
-     _CONST char *fmt;
-     va_dcl
+    siprintf(str, fmt, va_alist) char* str;
+_CONST char* fmt;
+va_dcl
 #endif
 {
-  int ret;
-  va_list ap;
-  FILE f;
+    int     ret;
+    va_list ap;
+    FILE    f;
 
-  f._flags = __SWR | __SSTR;
-  f._bf._base = f._p = (unsigned char *) str;
-  f._bf._size = f._w = INT_MAX;
-  f._data = _REENT;
+    f._flags    = __SWR | __SSTR;
+    f._bf._base = f._p = (unsigned char*)str;
+    f._bf._size = f._w = INT_MAX;
+    f._data            = _REENT;
 #ifdef _HAVE_STDC
-  va_start (ap, fmt);
+    va_start(ap, fmt);
 #else
-  va_start (ap);
+    va_start(ap);
 #endif
-  ret = vfiprintf (&f, fmt, ap);
-  va_end (ap);
-  *f._p = 0;
-  return (ret);
+    ret = vfiprintf(&f, fmt, ap);
+    va_end(ap);
+    *f._p = 0;
+    return (ret);
 }

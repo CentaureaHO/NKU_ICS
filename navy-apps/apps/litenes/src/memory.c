@@ -1,11 +1,12 @@
-#include <memory.h>
 #include <cpu.h>
+#include <memory.h>
 #include <ppu.h>
 #include <psg.h>
 
 byte memory_readb(word address)
 {
-    switch (address >> 13) {
+    switch (address >> 13)
+    {
         case 0: return cpu_ram_read(address & 0x07FF);
         case 1: return ppu_io_read(address);
         case 2: return psg_io_read(address);
@@ -24,7 +25,8 @@ void memory_writeb(word address, byte data)
         }
         return;
     }
-    switch (address >> 13) {
+    switch (address >> 13)
+    {
         case 0: return cpu_ram_write(address & 0x07FF, data);
         case 1: return ppu_io_write(address, data);
         case 2: return psg_io_write(address, data);
@@ -33,10 +35,7 @@ void memory_writeb(word address, byte data)
     }
 }
 
-word memory_readw(word address)
-{
-    return memory_readb(address) + (memory_readb(address + 1) << 8);
-}
+word memory_readw(word address) { return memory_readb(address) + (memory_readb(address + 1) << 8); }
 
 void memory_writew(word address, word data)
 {
