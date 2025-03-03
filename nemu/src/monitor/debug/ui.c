@@ -44,7 +44,7 @@ static int cmd_si(char* args)
     }
 
     int n = 0;
-    Assert((n = atoi(args)) > 0, "Invalid argument");
+    Assert((n = atoi(args)) >= 1, "Argument for si must be at least 1");
     
     cpu_exec(n);
 
