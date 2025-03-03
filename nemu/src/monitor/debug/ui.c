@@ -35,6 +35,22 @@ static int cmd_c(char* args)
     return 0;
 }
 
+static int cmd_si(char* args)
+{
+    if (args == NULL) 
+    {
+        cpu_exec(1);
+        return 0;
+    }
+
+    int n = 0;
+    Assert((n = atoi(args)) > 0, "Invalid argument");
+    
+    cpu_exec(n);
+
+    return 0;
+}
+
 static int cmd_q(char* args) { return -1; }
 
 static int cmd_help(char* args);
@@ -47,6 +63,7 @@ static struct
 } cmd_table[] = {
     {"help", "Display informations about all supported commands", cmd_help},
     {"c", "Continue the execution of the program", cmd_c},
+    {"si", "Execute the program step by step", cmd_si},
     {"q", "Exit NEMU", cmd_q},
 
     /* TODO: Add more commands */
