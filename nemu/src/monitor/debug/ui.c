@@ -73,6 +73,18 @@ static int cmd_info(char* args)
     return 0;
 }
 
+static int cmd_x(char* args)
+{
+    // Currently, we only support a number as expression
+
+    int      step = 0;
+    uint32_t addr = 0;
+
+    sscanf(args, "%d 0x%x", &step, &addr);
+
+    return 0;
+}
+
 static int cmd_help(char* args);
 
 static struct
@@ -86,6 +98,7 @@ static struct
     {"q", "Exit NEMU", cmd_q},
     {"si", "Execute the program step by step", cmd_si},
     {"info", "Print the information of registers", cmd_info},
+    {"x", "Scan memory", cmd_x},
 
     /* TODO: Add more commands */
 
