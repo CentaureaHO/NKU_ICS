@@ -37,7 +37,6 @@ static int cmd_c(char* args)
 
 static int cmd_q(char* args) 
 { 
-    
     return -1; 
 }
 
@@ -108,6 +107,18 @@ static int cmd_p(char* args)
     return 0;
 }
 
+static int cmd_w(char* args)
+{
+    WP* wp = create_wp(args);
+    if (wp == NULL) {
+        Log("Failed to create watchpoint for expression \"%s\"", args);
+        return 0;
+    }
+
+    printf("Watchpoint %d: %s 0x%08x\n", wp->NO, wp->expr_str, wp->prev_val);
+    return 0;
+}
+
 static int cmd_help(char* args);
 
 static struct
@@ -123,6 +134,7 @@ static struct
     {"info", "Print the information of registers", cmd_info},
     {"x", "Scan memory", cmd_x},
     {"p", "Evaluate expression", cmd_p},
+    {"w", "Set watchpoint", cmd_w},
 
     /* TODO: Add more commands */
 

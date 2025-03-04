@@ -187,7 +187,5 @@ void destroy_wp_pool();
 
 void resource_clean()
 {
-    Log("Free the resources.");
-
     destroy_wp_pool();
 }
