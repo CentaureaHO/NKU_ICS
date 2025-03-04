@@ -219,24 +219,7 @@ static uint32_t eval_operand(int* pos);
 // UnaryOp -> TK_NOT
 // static uint32_t eval_unary_op(int* pos);
 
-static bool check_parentheses_balance()
-{
-    int count = 0;
-    for (int i = 0; i < nr_token; i++) {
-        if (tokens[i].type == TK_LPARAN) {
-            ++count;
-        }
-        else if (tokens[i].type == TK_RPARAN)
-        {
-            --count;
-            if (count < 0) {
-                return false;
-            }
-        }
-    }
-
-    return count == 0;
-}
+static bool expr_has_error = false;
 
 uint32_t expr(char* e, bool* success)
 {
@@ -245,20 +228,18 @@ uint32_t expr(char* e, bool* success)
         return 0;
     }
 
-    /* TODO: Insert codes to evaluate the expression. */
-    // TODO();
-
-    if (!check_parentheses_balance()) {
-        Log("parentheses not balanced");
-        *success = false;
-        return 0;
-    }
+    expr_has_error = false;
 
     int      pos = 0;
     uint32_t val = eval_expr(&pos);
 
     if (pos < nr_token) {
         Log("Syntax error at token %s", tokens[pos].str);
+        *success = false;
+        return 0;
+    }
+
+    if (expr_has_error) {
         *success = false;
         return 0;
     }
@@ -420,6 +401,7 @@ static uint32_t eval_factor(int* pos)
         else
         {
             Log("missing right parantheses");
+            expr_has_error = true;
             return 0;
         }
     }
