@@ -182,3 +182,12 @@ int init_monitor(int argc, char* argv[])
 
     return is_batch_mode;
 }
+
+void destroy_wp_pool();
+
+void resource_clean()
+{
+    Log("Free the resources.");
+
+    destroy_wp_pool();
+}
