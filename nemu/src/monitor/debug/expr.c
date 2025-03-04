@@ -392,6 +392,7 @@ static uint32_t eval_factor(int* pos)
     }
 
     if (check_token(*pos, TK_LPARAN)) {
+        int pos_backup = *pos;
         ++(*pos);
         uint32_t val = eval_expr(pos);
         if (*pos < nr_token && check_token(*pos, TK_RPARAN)) {
@@ -400,7 +401,7 @@ static uint32_t eval_factor(int* pos)
         }
         else
         {
-            Log("missing right parantheses");
+            Log("missing right parantheses for left parantheses at %d", pos_backup);
             expr_has_error = true;
             return 0;
         }
