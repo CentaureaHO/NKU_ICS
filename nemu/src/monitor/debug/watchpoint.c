@@ -118,7 +118,7 @@ void print_wp()
 
     printf("NO\tEXPR\tVALUE\n");
     while (p != NULL) {
-        printf("%d\t%s\t%d\n", p->NO, p->expr_str, p->prev_val);
+        printf("%d\t%s\t0x%08x\n", p->NO, p->expr_str, p->prev_val);
         p = p->next;
     }
 }
