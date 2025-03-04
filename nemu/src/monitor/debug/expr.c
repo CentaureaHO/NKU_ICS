@@ -10,6 +10,7 @@
 
 #define REPLACE_REG_TO_PTR
 // #define EXPRDBG_LOG_ENABLE
+#define PRINT_AST
 
 #ifndef X86_REGS
 #define X86_REGS \
@@ -270,6 +271,41 @@ static ASTNode* build_operand(int* pos);
 
 static bool ast_has_error = false;
 
+#ifdef PRINT_AST
+void print_ast(ASTNode* node, int depth)
+{
+    if (node == NULL) return;
+
+    for (int i = 0; i < depth; ++i) printf("  ");
+    switch (node->type)
+    {
+        case AST_OPERATOR:
+            switch (node->data.op.op)
+            {
+                case OP_ADD: printf("ADD\n"); break;
+                case OP_SUB: printf("SUB\n"); break;
+                case OP_MUL: printf("MUL\n"); break;
+                case OP_DIV: printf("DIV\n"); break;
+                case OP_EQ: printf("EQ\n"); break;
+                case OP_NEQ: printf("NEQ\n"); break;
+                case OP_AND: printf("AND\n"); break;
+                case OP_OR: printf("OR\n"); break;
+                case OP_NOT: printf("NOT\n"); break;
+                case OP_DEREF: printf("DEREF\n"); break;
+                default: printf("UNKNOWN OP\n"); break;
+            }
+            print_ast(node->data.op.left, depth + 1);
+            print_ast(node->data.op.right, depth + 1);
+            break;
+        case AST_NUMBER: printf("NUMBER: %u\n", node->data.val); break;
+        case AST_POINTER: printf("POINTER: %p\n", node->data.ptr.ptr); break;
+        case AST_REGISTER: printf("REGISTER: %s\n", node->data.reg_name); break;
+        case AST_VARIABLE: printf("VARIABLE: %s\n", node->data.var_name); break;
+        default: printf("UNKNOWN NODE\n"); break;
+    }
+}
+#endif
+
 ASTNode* build_ast(char* e, bool* success)
 {
     if (!make_token(e)) {
@@ -293,6 +329,11 @@ ASTNode* build_ast(char* e, bool* success)
         free_ast(root);
         return NULL;
     }
+
+#ifdef PRINT_AST
+    Log("AST:");
+    print_ast(root, 0);
+#endif
 
     *success = true;
     return root;
