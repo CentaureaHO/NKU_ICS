@@ -234,7 +234,7 @@ uint32_t expr(char* e, bool* success)
     uint32_t val = eval_expr(&pos);
 
     if (pos < nr_token) {
-        Log("Syntax error at token %s", tokens[pos].str);
+        Log("Syntax error at token %s, at position %d", tokens[pos].str, pos);
         *success = false;
         return 0;
     }
@@ -345,9 +345,11 @@ static uint32_t eval_mul_div_expr(int* pos)
         else if (check_token(*pos, TK_DIV))
         {
             ++(*pos);
+            int pos_backup = *pos;
             uint32_t rval = eval_unary_expr(pos);
             if (rval == 0) {
-                Log("divided by zero");
+                Log("divided by zero at %d", pos_backup);
+                expr_has_error = true;
                 return 0;
             }
             val /= rval;
