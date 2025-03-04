@@ -12,10 +12,10 @@ void init_wp_pool()
 {
     int i;
     for (i = 0; i < NR_WP; ++i) {
-        wp_pool[i].NO   = i;
-        wp_pool[i].next = &wp_pool[i + 1];
+        wp_pool[i].NO       = i;
+        wp_pool[i].next     = &wp_pool[i + 1];
         wp_pool[i].expr_str = NULL;
-        wp_pool[i].ast = NULL;
+        wp_pool[i].ast      = NULL;
     }
     wp_pool[NR_WP - 1].next = NULL;
 
@@ -32,8 +32,6 @@ void destroy_wp_pool()
     }
 }
 
-/* TODO: Implement the functionality of watchpoint */
-
 WP* new_wp()
 {
     if (free_ == NULL) {
@@ -41,10 +39,10 @@ WP* new_wp()
         return NULL;
     }
 
-    WP* wp = free_;
-    free_ = free_->next;
+    WP* wp   = free_;
+    free_    = free_->next;
     wp->next = head;
-    head = wp;
+    head     = wp;
 
     return wp;
 }
@@ -58,23 +56,21 @@ void free_wp(WP* wp)
 
     WP* p = head;
     if (p == wp) {
-        head = head->next;
+        head     = head->next;
         wp->next = free_;
-        free_ = wp;
+        free_    = wp;
         return;
     }
 
-    while (p != NULL)
-    {
-        if (p->next != wp)
-        {
+    while (p != NULL) {
+        if (p->next != wp) {
             p = p->next;
             continue;
         }
 
-        p->next = wp->next;
+        p->next  = wp->next;
         wp->next = free_;
-        free_ = wp;
+        free_    = wp;
         return;
     }
 
@@ -83,8 +79,8 @@ void free_wp(WP* wp)
 
 WP* create_wp(char* es)
 {
-    bool success = true;
-    ASTNode* ast = build_ast(es, &success);
+    bool     success = true;
+    ASTNode* ast     = build_ast(es, &success);
     if (!success || ast == NULL) {
         Log("Failed to build AST for expression");
         return NULL;
@@ -100,9 +96,9 @@ WP* create_wp(char* es)
     }
 
     wp->expr_str = strdup(es);
-    wp->ast = ast;
+    wp->ast      = ast;
     wp->prev_val = val;
-    
+
     return wp;
 }
 
@@ -119,12 +115,12 @@ void destroy_wp(int n)
         free(wp_pool[n].expr_str);
         wp_pool[n].expr_str = NULL;
     }
-    
+
     if (wp_pool[n].ast != NULL) {
         free_ast(wp_pool[n].ast);
         wp_pool[n].ast = NULL;
     }
-    
+
     wp_pool[n].prev_val = 0;
 }
 
@@ -145,18 +141,15 @@ void print_wp()
 
 bool check_wp()
 {
-    WP* p = head;
+    WP*  p       = head;
     bool changed = false;
-    
-    while (p != NULL)
-    {
+
+    while (p != NULL) {
         uint32_t val = eval_ast(p->ast);
 
         if (val != p->prev_val) {
             changed = true;
-            printf("Watchpoint %d: %s\n", p->NO, p->expr_str);
-            printf("Old value = 0x%08x\n", p->prev_val);
-            printf("New value = 0x%08x\n", val);
+            printf("Watchpoint %d: %s: 0x%08x -> 0x%08x\n", p->NO, p->expr_str, p->prev_val, val);
             p->prev_val = val;
         }
 

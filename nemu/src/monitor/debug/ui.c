@@ -137,12 +137,12 @@ static struct
     {"help", "Display informations about all supported commands", cmd_help},
     {"c", "Continue the execution of the program", cmd_c},
     {"q", "Exit NEMU", cmd_q},
-    {"si", "Execute the program step by step", cmd_si},
-    {"info", "Print the information of registers", cmd_info},
-    {"x", "Scan memory", cmd_x},
-    {"p", "Evaluate expression", cmd_p},
-    {"w", "Set watchpoint", cmd_w},
-    {"d", "Delete watchpoint", cmd_d},
+    {"si", "Execute the program step by step: si [N]", cmd_si},
+    {"info", "Print the information of registers or watchpoints: info [r/w]", cmd_info},
+    {"x", "Scan memory: x [N] [EXPR]", cmd_x},
+    {"p", "Evaluate expression: p [EXPR]", cmd_p},
+    {"w", "Set watchpoint: w [EXPR]", cmd_w},
+    {"d", "Delete watchpoint: d [N]", cmd_d},
 
     /* TODO: Add more commands */
 

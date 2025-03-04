@@ -13,31 +13,31 @@
 
 #ifndef X86_REGS
 #define X86_REGS \
-X(eax, 32) \
-X(ecx, 32) \
-X(edx, 32) \
-X(ebx, 32) \
-X(esp, 32) \
-X(ebp, 32) \
-X(esi, 32) \
-X(edi, 32) \
-X(eip, 32) \
-X(ax, 16) \
-X(cx, 16) \
-X(dx, 16) \
-X(bx, 16) \
-X(sp, 16) \
-X(bp, 16) \
-X(si, 16) \
-X(di, 16) \
-X(al, 8) \
-X(cl, 8) \
-X(dl, 8) \
-X(bl, 8) \
-X(ah, 8) \
-X(ch, 8) \
-X(dh, 8) \
-X(bh, 8)
+    X(eax, 32)   \
+    X(ecx, 32)   \
+    X(edx, 32)   \
+    X(ebx, 32)   \
+    X(esp, 32)   \
+    X(ebp, 32)   \
+    X(esi, 32)   \
+    X(edi, 32)   \
+    X(eip, 32)   \
+    X(ax, 16)    \
+    X(cx, 16)    \
+    X(dx, 16)    \
+    X(bx, 16)    \
+    X(sp, 16)    \
+    X(bp, 16)    \
+    X(si, 16)    \
+    X(di, 16)    \
+    X(al, 8)     \
+    X(cl, 8)     \
+    X(dl, 8)     \
+    X(bl, 8)     \
+    X(ah, 8)     \
+    X(ch, 8)     \
+    X(dh, 8)     \
+    X(bh, 8)
 #endif
 
 #define MAX_TOKEN_LEN 32
@@ -95,7 +95,7 @@ static struct rule
     {"\\+", '+'},       // plus
     {"==", TK_EQ}       // equal
     */
-    {"0x[0-9a-fA-F]+", TK_HEXNUM},      // hex number
+    {"0[xX][0-9a-fA-F]+", TK_HEXNUM},   // hex number
     {"[0-9]+", TK_DECNUM},              // decimal number
     {"\\$[a-zA-Z]+", TK_REG},           // register
     {"\\(", TK_LPARAN},                 // left parantheses
@@ -206,37 +206,41 @@ Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
     return true;
 }
 
-static ASTNode* make_op_node(OperatorType op, ASTNode* left, ASTNode* right) {
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    node->type = AST_OPERATOR;
-    node->data.op.op = op;
-    node->data.op.left = left;
+static ASTNode* make_op_node(OperatorType op, ASTNode* left, ASTNode* right)
+{
+    ASTNode* node       = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type          = AST_OPERATOR;
+    node->data.op.op    = op;
+    node->data.op.left  = left;
     node->data.op.right = right;
     return node;
 }
 
-static ASTNode* make_number_node(uint32_t val) {
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    node->type = AST_NUMBER;
+static ASTNode* make_number_node(uint32_t val)
+{
+    ASTNode* node  = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type     = AST_NUMBER;
     node->data.val = val;
     return node;
 }
 
 #ifdef REPLACE_REG_TO_PTR
 
-static ASTNode* make_pointer_node(void* ptr, uint8_t bits) {
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    node->type = AST_POINTER;
-    node->data.ptr.ptr = ptr;
+static ASTNode* make_pointer_node(void* ptr, uint8_t bits)
+{
+    ASTNode* node            = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type               = AST_POINTER;
+    node->data.ptr.ptr       = ptr;
     node->data.ptr.bit_width = bits;
     return node;
 }
 
 #else
 
-static ASTNode* make_register_node(const char* reg) {
+static ASTNode* make_register_node(const char* reg)
+{
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    node->type = AST_REGISTER;
+    node->type    = AST_REGISTER;
     strncpy(node->data.reg_name, reg, 7);
     node->data.reg_name[7] = '\0';
     return node;
@@ -244,9 +248,10 @@ static ASTNode* make_register_node(const char* reg) {
 
 #endif
 
-static ASTNode* make_variable_node(const char* var) {
+static ASTNode* make_variable_node(const char* var)
+{
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    node->type = AST_VARIABLE;
+    node->type    = AST_VARIABLE;
     strncpy(node->data.var_name, var, 31);
     node->data.var_name[31] = '\0';
     return node;
@@ -265,14 +270,15 @@ static ASTNode* build_operand(int* pos);
 
 static bool ast_has_error = false;
 
-ASTNode* build_ast(char* e, bool* success) {
+ASTNode* build_ast(char* e, bool* success)
+{
     if (!make_token(e)) {
         *success = false;
         return NULL;
     }
 
     ast_has_error = false;
-    int pos = 0;
+    int      pos  = 0;
     ASTNode* root = build_expr(&pos);
 
     if (pos < nr_token) {
@@ -292,30 +298,33 @@ ASTNode* build_ast(char* e, bool* success) {
     return root;
 }
 
-void free_ast(ASTNode* node) {
+void free_ast(ASTNode* node)
+{
     if (node == NULL) return;
-    
+
     if (node->type == AST_OPERATOR) {
         free_ast(node->data.op.left);
         free_ast(node->data.op.right);
     }
-    
+
     free(node);
 }
 
-uint32_t eval_ast(ASTNode* node) {
+uint32_t eval_ast(ASTNode* node)
+{
     if (node == NULL) return 0;
-    
-    switch (node->type) {
-        case AST_OPERATOR: {
-            switch (node->data.op.op) {
-                case OP_ADD:
-                    return eval_ast(node->data.op.left) + eval_ast(node->data.op.right);
-                case OP_SUB:
-                    return eval_ast(node->data.op.left) - eval_ast(node->data.op.right);
-                case OP_MUL:
-                    return eval_ast(node->data.op.left) * eval_ast(node->data.op.right);
-                case OP_DIV: {
+
+    switch (node->type)
+    {
+        case AST_OPERATOR:
+        {
+            switch (node->data.op.op)
+            {
+                case OP_ADD: return eval_ast(node->data.op.left) + eval_ast(node->data.op.right);
+                case OP_SUB: return eval_ast(node->data.op.left) - eval_ast(node->data.op.right);
+                case OP_MUL: return eval_ast(node->data.op.left) * eval_ast(node->data.op.right);
+                case OP_DIV:
+                {
                     uint32_t divisor = eval_ast(node->data.op.right);
                     if (divisor == 0) {
                         Log("divided by zero");
@@ -323,105 +332,90 @@ uint32_t eval_ast(ASTNode* node) {
                     }
                     return eval_ast(node->data.op.left) / divisor;
                 }
-                case OP_EQ:
-                    return eval_ast(node->data.op.left) == eval_ast(node->data.op.right);
-                case OP_NEQ:
-                    return eval_ast(node->data.op.left) != eval_ast(node->data.op.right);
-                case OP_AND:
-                    return eval_ast(node->data.op.left) && eval_ast(node->data.op.right);
-                case OP_OR:
-                    return eval_ast(node->data.op.left) || eval_ast(node->data.op.right);
-                case OP_NOT:
-                    return !eval_ast(node->data.op.right);
-                case OP_DEREF: {
+                case OP_EQ: return eval_ast(node->data.op.left) == eval_ast(node->data.op.right);
+                case OP_NEQ: return eval_ast(node->data.op.left) != eval_ast(node->data.op.right);
+                case OP_AND: return eval_ast(node->data.op.left) && eval_ast(node->data.op.right);
+                case OP_OR: return eval_ast(node->data.op.left) || eval_ast(node->data.op.right);
+                case OP_NOT: return !eval_ast(node->data.op.right);
+                case OP_DEREF:
+                {
                     uint32_t addr = eval_ast(node->data.op.right);
-                    uint32_t val = vaddr_read(addr, 4);
+                    uint32_t val  = vaddr_read(addr, 4);
                     Log("read memory at 0x%08x: 0x%08x", addr, val);
                     return val;
                 }
-                default:
-                    Log("unknown operator");
-                    return 0;
+                default: Log("unknown operator"); return 0;
             }
         }
-        case AST_NUMBER:
-            return node->data.val;
+        case AST_NUMBER: return node->data.val;
         case AST_POINTER:
-            // return *(node->data.ptr);
-            switch (node->data.ptr.bit_width) {
-                case 8:
-                    return *(uint8_t*)node->data.ptr.ptr;
-                case 16:
-                    return *(uint16_t*)node->data.ptr.ptr;
-                case 32:
-                    return *(uint32_t*)node->data.ptr.ptr;
-                default:
-                    Log("unknown pointer bits");
-                    return 0;
+            switch (node->data.ptr.bit_width)
+            {
+                case 8: return *(uint8_t*)node->data.ptr.ptr;
+                case 16: return *(uint16_t*)node->data.ptr.ptr;
+                case 32: return *(uint32_t*)node->data.ptr.ptr;
+                default: Log("unknown pointer bits"); return 0;
             }
-        case AST_REGISTER: {
-            const char* reg_name = node->data.reg_name;
+        case AST_REGISTER: { const char* reg_name = node->data.reg_name;
 
-            #define X(name, bits) \
-                if (strcmp(reg_name, #name) == 0) return cpu.name;
+#define X(name, bits) \
+    if (strcmp(reg_name, #name) == 0) return cpu.name;
             X86_REGS
-            #undef X
+#undef X
 
             Log("unknown register %s", reg_name);
             return 0;
         }
-        case AST_VARIABLE:
-            Log("Variable not supported: %s", node->data.var_name);
-            return 0;
-        default:
-            Log("unknown AST node type");
-            return 0;
+        case AST_VARIABLE: Log("Variable not supported: %s", node->data.var_name); return 0;
+        default: Log("unknown AST node type"); return 0;
     }
 }
 
 inline bool check_token(int pos, TokenType type) { return pos < nr_token && tokens[pos].type == type; }
 
-static ASTNode* build_expr(int* pos) { 
-    return build_logical_or_expr(pos); 
-}
+static ASTNode* build_expr(int* pos) { return build_logical_or_expr(pos); }
 
-static ASTNode* build_logical_or_expr(int* pos) {
+static ASTNode* build_logical_or_expr(int* pos)
+{
     ASTNode* node = build_logical_and_expr(pos);
 
     while (*pos < nr_token && tokens[*pos].type == TK_OR) {
         ++(*pos);
         ASTNode* right = build_logical_and_expr(pos);
-        node = make_op_node(OP_OR, node, right);
+        node           = make_op_node(OP_OR, node, right);
     }
 
     return node;
 }
 
-static ASTNode* build_logical_and_expr(int* pos) {
+static ASTNode* build_logical_and_expr(int* pos)
+{
     ASTNode* node = build_equality_expr(pos);
 
     while (*pos < nr_token && tokens[*pos].type == TK_AND) {
         ++(*pos);
         ASTNode* right = build_equality_expr(pos);
-        node = make_op_node(OP_AND, node, right);
+        node           = make_op_node(OP_AND, node, right);
     }
 
     return node;
 }
 
-static ASTNode* build_equality_expr(int* pos) {
+static ASTNode* build_equality_expr(int* pos)
+{
     ASTNode* node = build_relational_expr(pos);
 
     while (*pos < nr_token) {
         if (check_token(*pos, TK_EQ)) {
             ++(*pos);
             ASTNode* right = build_relational_expr(pos);
-            node = make_op_node(OP_EQ, node, right);
+            node           = make_op_node(OP_EQ, node, right);
         }
-        else if (check_token(*pos, TK_NEQ)) {
+        else if (check_token(*pos, TK_NEQ))
+        {
             ++(*pos);
             ASTNode* right = build_relational_expr(pos);
-            node = make_op_node(OP_NEQ, node, right);
+            node           = make_op_node(OP_NEQ, node, right);
         }
         else
             break;
@@ -430,23 +424,23 @@ static ASTNode* build_equality_expr(int* pos) {
     return node;
 }
 
-static ASTNode* build_relational_expr(int* pos) {
-    return build_add_sub_expr(pos);
-}
+static ASTNode* build_relational_expr(int* pos) { return build_add_sub_expr(pos); }
 
-static ASTNode* build_add_sub_expr(int* pos) {
+static ASTNode* build_add_sub_expr(int* pos)
+{
     ASTNode* node = build_mul_div_expr(pos);
 
     while (*pos < nr_token) {
         if (check_token(*pos, TK_ADD)) {
             ++(*pos);
             ASTNode* right = build_mul_div_expr(pos);
-            node = make_op_node(OP_ADD, node, right);
+            node           = make_op_node(OP_ADD, node, right);
         }
-        else if (check_token(*pos, TK_SUB)) {
+        else if (check_token(*pos, TK_SUB))
+        {
             ++(*pos);
             ASTNode* right = build_mul_div_expr(pos);
-            node = make_op_node(OP_SUB, node, right);
+            node           = make_op_node(OP_SUB, node, right);
         }
         else
             break;
@@ -455,19 +449,21 @@ static ASTNode* build_add_sub_expr(int* pos) {
     return node;
 }
 
-static ASTNode* build_mul_div_expr(int* pos) {
+static ASTNode* build_mul_div_expr(int* pos)
+{
     ASTNode* node = build_unary_expr(pos);
 
     while (*pos < nr_token) {
         if (check_token(*pos, TK_STAR)) {
             ++(*pos);
             ASTNode* right = build_unary_expr(pos);
-            node = make_op_node(OP_MUL, node, right);
+            node           = make_op_node(OP_MUL, node, right);
         }
-        else if (check_token(*pos, TK_DIV)) {
+        else if (check_token(*pos, TK_DIV))
+        {
             ++(*pos);
             ASTNode* right = build_unary_expr(pos);
-            node = make_op_node(OP_DIV, node, right);
+            node           = make_op_node(OP_DIV, node, right);
         }
         else
             break;
@@ -476,18 +472,21 @@ static ASTNode* build_mul_div_expr(int* pos) {
     return node;
 }
 
-static ASTNode* build_unary_expr(int* pos) {
+static ASTNode* build_unary_expr(int* pos)
+{
     if (check_token(*pos, TK_ADD)) {
         ++(*pos);
         return build_unary_expr(pos);
     }
-    else if (check_token(*pos, TK_SUB)) {
+    else if (check_token(*pos, TK_SUB))
+    {
         ++(*pos);
         ASTNode* expr = build_unary_expr(pos);
         ASTNode* zero = make_number_node(0);
         return make_op_node(OP_SUB, zero, expr);
     }
-    else if (check_token(*pos, TK_NOT)) {
+    else if (check_token(*pos, TK_NOT))
+    {
         ++(*pos);
         ASTNode* expr = build_unary_expr(pos);
         return make_op_node(OP_NOT, NULL, expr);
@@ -496,7 +495,8 @@ static ASTNode* build_unary_expr(int* pos) {
         return build_factor(pos);
 }
 
-static ASTNode* build_factor(int* pos) {
+static ASTNode* build_factor(int* pos)
+{
     if (check_token(*pos, TK_STAR)) {
         ++(*pos);
         ASTNode* expr = build_expr(pos);
@@ -511,7 +511,8 @@ static ASTNode* build_factor(int* pos) {
             ++(*pos);
             return expr;
         }
-        else {
+        else
+        {
             Log("missing right parantheses for left parantheses at %d", pos_backup);
             ast_has_error = true;
             return NULL;
@@ -521,26 +522,29 @@ static ASTNode* build_factor(int* pos) {
     return build_operand(pos);
 }
 
-static ASTNode* build_operand(int* pos) {
+static ASTNode* build_operand(int* pos)
+{
     if (check_token(*pos, TK_DECNUM)) {
         uint32_t val = 0;
         sscanf(tokens[*pos].str, "%u", &val);
         ++(*pos);
         return make_number_node(val);
     }
-    else if (check_token(*pos, TK_HEXNUM)) {
+    else if (check_token(*pos, TK_HEXNUM))
+    {
         uint32_t val = 0;
         sscanf(tokens[*pos].str, "%x", &val);
         ++(*pos);
         return make_number_node(val);
     }
-    else if (check_token(*pos, TK_REG)) {
+    else if (check_token(*pos, TK_REG))
+    {
         char* reg_name = tokens[*pos].str + 1;
         ++(*pos);
-        
+
 #ifdef REPLACE_REG_TO_PTR
 #define X(name, bits) \
-        if (strcmp(reg_name, #name) == 0) return make_pointer_node((void*)&cpu.name, bits);
+    if (strcmp(reg_name, #name) == 0) return make_pointer_node((void*)&cpu.name, bits);
         X86_REGS
 #undef X
 #else
@@ -551,7 +555,8 @@ static ASTNode* build_operand(int* pos) {
         ast_has_error = true;
         return NULL;
     }
-    else if (check_token(*pos, TK_VAR)) {
+    else if (check_token(*pos, TK_VAR))
+    {
         char* var_name = tokens[*pos].str;
         ++(*pos);
         return make_variable_node(var_name);
@@ -562,12 +567,13 @@ static ASTNode* build_operand(int* pos) {
     return NULL;
 }
 
-uint32_t expr(char* e, bool* success) {
+uint32_t expr(char* e, bool* success)
+{
     ASTNode* root = build_ast(e, success);
     if (!*success) {
         return 0;
     }
-    
+
     uint32_t result = eval_ast(root);
     free_ast(root);
     return result;
