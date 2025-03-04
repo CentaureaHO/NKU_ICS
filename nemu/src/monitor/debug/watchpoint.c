@@ -9,7 +9,7 @@ static WP *head, *free_;
 void init_wp_pool()
 {
     int i;
-    for (i = 0; i < NR_WP; i++) {
+    for (i = 0; i < NR_WP; ++i) {
         wp_pool[i].NO   = i;
         wp_pool[i].next = &wp_pool[i + 1];
     }
@@ -20,3 +20,46 @@ void init_wp_pool()
 }
 
 /* TODO: Implement the functionality of watchpoint */
+
+WP* new_wp()
+{
+    if (free_ == NULL) {
+        Log("No more watchpoint available");
+        return NULL;
+    }
+
+    WP* wp = free_;
+    free_ = free_->next;
+    wp->next = head;
+    head = wp;
+
+    return wp;
+}
+
+void free_wp(WP* wp)
+{
+    if (wp == NULL) {
+        Log("Invalid watchpoint");
+        return;
+    }
+
+    WP* p = head;
+    if (p == wp) {
+        head = head->next;
+        wp->next = free_;
+        free_ = wp;
+        return;
+    }
+
+    while (p->next != NULL) {
+        if (p->next == wp) {
+            p->next = wp->next;
+            wp->next = free_;
+            free_ = wp;
+            return;
+        }
+        p = p->next;
+    }
+
+    Log("Target watchpoint not found");
+}
