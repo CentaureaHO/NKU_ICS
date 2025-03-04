@@ -69,6 +69,8 @@ static int cmd_info(char* args)
         printf("edi\t0x%08x\t%d\n", cpu.edi, cpu.edi);
         printf("eip\t0x%08x\t%d\n", cpu.eip, cpu.eip);
     }
+    else if (strcmp(args, "w") == 0)
+        print_wp();
     else
         Assert(false, "Unknown argument \"%s\" for info", args);
 
@@ -119,13 +121,6 @@ static int cmd_w(char* args)
     return 0;
 }
 
-static int cmd_sw(char* args)
-{
-    print_wp();
-
-    return 0;
-}
-
 static int cmd_d(char* args)
 {
     int n = atoi(args);
@@ -150,7 +145,6 @@ static struct
     {"x", "Scan memory", cmd_x},
     {"p", "Evaluate expression", cmd_p},
     {"w", "Set watchpoint", cmd_w},
-    {"sw", "Show watchpoints", cmd_sw},
     {"d", "Delete watchpoint", cmd_d},
 
     /* TODO: Add more commands */
