@@ -35,7 +35,11 @@ static int cmd_c(char* args)
     return 0;
 }
 
-static int cmd_q(char* args) { return -1; }
+static int cmd_q(char* args) 
+{ 
+    
+    return -1; 
+}
 
 static int cmd_si(char* args)
 {
