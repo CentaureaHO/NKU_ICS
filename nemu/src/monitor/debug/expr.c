@@ -425,6 +425,24 @@ static uint32_t eval_operand(int* pos)
         if (strcmp(reg_name, "edi") == 0) return cpu.edi;
         if (strcmp(reg_name, "eip") == 0) return cpu.eip;
 
+        if (strcmp(reg_name, "ax") == 0) return cpu.ax;
+        if (strcmp(reg_name, "cx") == 0) return cpu.cx;
+        if (strcmp(reg_name, "dx") == 0) return cpu.dx;
+        if (strcmp(reg_name, "bx") == 0) return cpu.bx;
+        if (strcmp(reg_name, "sp") == 0) return cpu.sp;
+        if (strcmp(reg_name, "bp") == 0) return cpu.bp;
+        if (strcmp(reg_name, "si") == 0) return cpu.si;
+        if (strcmp(reg_name, "di") == 0) return cpu.di;
+
+        if (strcmp(reg_name, "al") == 0) return cpu.al;
+        if (strcmp(reg_name, "cl") == 0) return cpu.cl;
+        if (strcmp(reg_name, "dl") == 0) return cpu.dl;
+        if (strcmp(reg_name, "bl") == 0) return cpu.bl;
+        if (strcmp(reg_name, "ah") == 0) return cpu.ah;
+        if (strcmp(reg_name, "ch") == 0) return cpu.ch;
+        if (strcmp(reg_name, "dh") == 0) return cpu.dh;
+        if (strcmp(reg_name, "bh") == 0) return cpu.bh;
+
         Log("unknown register %s", reg_name);
         return 0;
     }
