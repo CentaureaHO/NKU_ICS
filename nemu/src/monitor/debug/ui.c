@@ -126,6 +126,14 @@ static int cmd_sw(char* args)
     return 0;
 }
 
+static int cmd_d(char* args)
+{
+    int n = atoi(args);
+    destroy_wp(n);
+
+    return 0;
+}
+
 static int cmd_help(char* args);
 
 static struct
@@ -143,6 +151,7 @@ static struct
     {"p", "Evaluate expression", cmd_p},
     {"w", "Set watchpoint", cmd_w},
     {"sw", "Show watchpoints", cmd_sw},
+    {"d", "Delete watchpoint", cmd_d},
 
     /* TODO: Add more commands */
 
