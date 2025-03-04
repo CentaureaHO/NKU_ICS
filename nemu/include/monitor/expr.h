@@ -21,7 +21,8 @@ typedef enum {
   AST_OPERATOR,
   AST_NUMBER,
   AST_REGISTER,
-  AST_VARIABLE
+  AST_VARIABLE,
+  AST_POINTER
 } ASTNodeType;
 
 typedef struct ASTNode {
