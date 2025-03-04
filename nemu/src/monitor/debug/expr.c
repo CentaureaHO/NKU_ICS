@@ -8,6 +8,38 @@
 #include <sys/types.h>
 #include <stdlib.h>
 
+#define REPLACE_REG_TO_PTR
+// #define EXPRDBG_LOG_ENABLE
+
+#ifndef X86_REGS
+#define X86_REGS \
+X(eax, 32) \
+X(ecx, 32) \
+X(edx, 32) \
+X(ebx, 32) \
+X(esp, 32) \
+X(ebp, 32) \
+X(esi, 32) \
+X(edi, 32) \
+X(eip, 32) \
+X(ax, 16) \
+X(cx, 16) \
+X(dx, 16) \
+X(bx, 16) \
+X(sp, 16) \
+X(bp, 16) \
+X(si, 16) \
+X(di, 16) \
+X(al, 8) \
+X(cl, 8) \
+X(dl, 8) \
+X(bl, 8) \
+X(ah, 8) \
+X(ch, 8) \
+X(dh, 8) \
+X(bh, 8)
+#endif
+
 #define MAX_TOKEN_LEN 32
 
 #define TOKENS                         \
@@ -111,8 +143,6 @@ typedef struct token
 Token tokens[MAX_TOKEN_LEN];
 int   nr_token;
 
-// #define EXPRDBG_LOG_ENABLE
-
 static bool make_token(char* e)
 {
     int        position = 0;
@@ -149,17 +179,6 @@ Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
 #endif
 
                 position += substr_len;
-
-                /* DONE: Now a new token is recognized with rules[i]. Add codes
-                 * to record the token in the array `tokens'. For certain types
-                 * of tokens, some extra actions should be performed.
-                 */
-                /*
-                                switch (rules[i].token_type)
-                                {
-                                    default:
-                                }
-                */
 
                 if (rules[i].token_type == TK_NOTYPE) break;
 
@@ -203,6 +222,18 @@ static ASTNode* make_number_node(uint32_t val) {
     return node;
 }
 
+#ifdef REPLACE_REG_TO_PTR
+
+static ASTNode* make_pointer_node(void* ptr, uint8_t bits) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = AST_POINTER;
+    node->data.ptr.ptr = ptr;
+    node->data.ptr.bit_width = bits;
+    return node;
+}
+
+#else
+
 static ASTNode* make_register_node(const char* reg) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->type = AST_REGISTER;
@@ -210,6 +241,8 @@ static ASTNode* make_register_node(const char* reg) {
     node->data.reg_name[7] = '\0';
     return node;
 }
+
+#endif
 
 static ASTNode* make_variable_node(const char* var) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
@@ -313,36 +346,26 @@ uint32_t eval_ast(ASTNode* node) {
         }
         case AST_NUMBER:
             return node->data.val;
+        case AST_POINTER:
+            // return *(node->data.ptr);
+            switch (node->data.ptr.bit_width) {
+                case 8:
+                    return *(uint8_t*)node->data.ptr.ptr;
+                case 16:
+                    return *(uint16_t*)node->data.ptr.ptr;
+                case 32:
+                    return *(uint32_t*)node->data.ptr.ptr;
+                default:
+                    Log("unknown pointer bits");
+                    return 0;
+            }
         case AST_REGISTER: {
             const char* reg_name = node->data.reg_name;
-            
-            if (strcmp(reg_name, "eax") == 0) return cpu.eax;
-            if (strcmp(reg_name, "ecx") == 0) return cpu.ecx;
-            if (strcmp(reg_name, "edx") == 0) return cpu.edx;
-            if (strcmp(reg_name, "ebx") == 0) return cpu.ebx;
-            if (strcmp(reg_name, "esp") == 0) return cpu.esp;
-            if (strcmp(reg_name, "ebp") == 0) return cpu.ebp;
-            if (strcmp(reg_name, "esi") == 0) return cpu.esi;
-            if (strcmp(reg_name, "edi") == 0) return cpu.edi;
-            if (strcmp(reg_name, "eip") == 0) return cpu.eip;
 
-            if (strcmp(reg_name, "ax") == 0) return cpu.ax;
-            if (strcmp(reg_name, "cx") == 0) return cpu.cx;
-            if (strcmp(reg_name, "dx") == 0) return cpu.dx;
-            if (strcmp(reg_name, "bx") == 0) return cpu.bx;
-            if (strcmp(reg_name, "sp") == 0) return cpu.sp;
-            if (strcmp(reg_name, "bp") == 0) return cpu.bp;
-            if (strcmp(reg_name, "si") == 0) return cpu.si;
-            if (strcmp(reg_name, "di") == 0) return cpu.di;
-
-            if (strcmp(reg_name, "al") == 0) return cpu.al;
-            if (strcmp(reg_name, "cl") == 0) return cpu.cl;
-            if (strcmp(reg_name, "dl") == 0) return cpu.dl;
-            if (strcmp(reg_name, "bl") == 0) return cpu.bl;
-            if (strcmp(reg_name, "ah") == 0) return cpu.ah;
-            if (strcmp(reg_name, "ch") == 0) return cpu.ch;
-            if (strcmp(reg_name, "dh") == 0) return cpu.dh;
-            if (strcmp(reg_name, "bh") == 0) return cpu.bh;
+            #define X(name, bits) \
+                if (strcmp(reg_name, #name) == 0) return cpu.name;
+            X86_REGS
+            #undef X
 
             Log("unknown register %s", reg_name);
             return 0;
@@ -514,7 +537,19 @@ static ASTNode* build_operand(int* pos) {
     else if (check_token(*pos, TK_REG)) {
         char* reg_name = tokens[*pos].str + 1;
         ++(*pos);
+        
+#ifdef REPLACE_REG_TO_PTR
+#define X(name, bits) \
+        if (strcmp(reg_name, #name) == 0) return make_pointer_node((void*)&cpu.name, bits);
+        X86_REGS
+#undef X
+#else
         return make_register_node(reg_name);
+#endif
+
+        Log("unknown register %s", reg_name);
+        ast_has_error = true;
+        return NULL;
     }
     else if (check_token(*pos, TK_VAR)) {
         char* var_name = tokens[*pos].str;
