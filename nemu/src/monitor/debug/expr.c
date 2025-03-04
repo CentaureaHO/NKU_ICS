@@ -1,10 +1,12 @@
 #include "nemu.h"
+#include "monitor/expr.h"
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
 #include <sys/types.h>
+#include <stdlib.h>
 
 #define MAX_TOKEN_LEN 32
 
@@ -25,17 +27,6 @@
     X(TK_NOT, not, 13)                 \
     X(TK_STAR, star, 14)               \
     X(TK_VAR, variable, 15)
-
-/*
-typedef enum
-{
-    TK_NOTYPE = 256,
-    TK_EQ
-
-    // DONE: Add more token types
-
-} TokenType;
-*/
 
 typedef enum {
 #define X(cn, name, id) cn = id,
@@ -196,279 +187,353 @@ Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
     return true;
 }
 
-// Expr -> LogicalOrExpr
-static uint32_t eval_expr(int* pos);
-// LogicalOrExpr -> LogicalAndExpr | LogicalOrExpr TK_OR LogicalAndExpr
-static uint32_t eval_logical_or_expr(int* pos);
-// LogicalAndExpr -> EqualityExpr | LogicalAndExpr TK_AND EqualityExpr
-static uint32_t eval_logical_and_expr(int* pos);
-// EqualityExpr -> RelationalExpr | EqualityExpr TK_EQ RelationalExpr | EqualityExpr TK_NEQ RelationalExpr
-static uint32_t eval_equality_expr(int* pos);
-// RelationalExpr -> AddSubExpr
-static uint32_t eval_relational_expr(int* pos);
-// AddSubExpr -> MulDivExpr | AddSubExpr TK_ADD MulDivExpr | AddSubExpr TK_SUB MulDivExpr
-static uint32_t eval_add_sub_expr(int* pos);
-// MulDivExpr -> UnaryExpr | MulDivExpr TK_STAR UnaryExpr | MulDivExpr TK_DIV UnaryExpr
-static uint32_t eval_mul_div_expr(int* pos);
-// UnaryExpr -> Factor | TK_ADD UnaryExpr | TK_SUB UnaryExpr | TK_NOT UnaryExpr
-static uint32_t eval_unary_expr(int* pos);
-// Factor -> Operand | (Expr) | TK_STAR Expr
-static uint32_t eval_factor(int* pos);
-// Operand -> TK_DECNUM | TK_HEXNUM | TK_REG | TK_VAR
-static uint32_t eval_operand(int* pos);
-// UnaryOp -> TK_NOT
-// static uint32_t eval_unary_op(int* pos);
+static ASTNode* make_op_node(OperatorType op, ASTNode* left, ASTNode* right) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = AST_OPERATOR;
+    node->data.op.op = op;
+    node->data.op.left = left;
+    node->data.op.right = right;
+    return node;
+}
 
-static bool expr_has_error = false;
+static ASTNode* make_number_node(uint32_t val) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = AST_NUMBER;
+    node->data.val = val;
+    return node;
+}
 
-uint32_t expr(char* e, bool* success)
-{
+static ASTNode* make_register_node(const char* reg) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = AST_REGISTER;
+    strncpy(node->data.reg_name, reg, 7);
+    node->data.reg_name[7] = '\0';
+    return node;
+}
+
+static ASTNode* make_variable_node(const char* var) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = AST_VARIABLE;
+    strncpy(node->data.var_name, var, 31);
+    node->data.var_name[31] = '\0';
+    return node;
+}
+
+static ASTNode* build_expr(int* pos);
+static ASTNode* build_logical_or_expr(int* pos);
+static ASTNode* build_logical_and_expr(int* pos);
+static ASTNode* build_equality_expr(int* pos);
+static ASTNode* build_relational_expr(int* pos);
+static ASTNode* build_add_sub_expr(int* pos);
+static ASTNode* build_mul_div_expr(int* pos);
+static ASTNode* build_unary_expr(int* pos);
+static ASTNode* build_factor(int* pos);
+static ASTNode* build_operand(int* pos);
+
+static bool ast_has_error = false;
+
+ASTNode* build_ast(char* e, bool* success) {
     if (!make_token(e)) {
         *success = false;
-        return 0;
+        return NULL;
     }
 
-    expr_has_error = false;
-
-    int      pos = 0;
-    uint32_t val = eval_expr(&pos);
+    ast_has_error = false;
+    int pos = 0;
+    ASTNode* root = build_expr(&pos);
 
     if (pos < nr_token) {
         Log("Syntax error at token %s, at position %d", tokens[pos].str, pos);
         *success = false;
-        return 0;
+        free_ast(root);
+        return NULL;
     }
 
-    if (expr_has_error) {
+    if (ast_has_error) {
         *success = false;
-        return 0;
+        free_ast(root);
+        return NULL;
     }
 
     *success = true;
-    return val;
+    return root;
+}
+
+void free_ast(ASTNode* node) {
+    if (node == NULL) return;
+    
+    if (node->type == AST_OPERATOR) {
+        free_ast(node->data.op.left);
+        free_ast(node->data.op.right);
+    }
+    
+    free(node);
+}
+
+uint32_t eval_ast(ASTNode* node) {
+    if (node == NULL) return 0;
+    
+    switch (node->type) {
+        case AST_OPERATOR: {
+            switch (node->data.op.op) {
+                case OP_ADD:
+                    return eval_ast(node->data.op.left) + eval_ast(node->data.op.right);
+                case OP_SUB:
+                    return eval_ast(node->data.op.left) - eval_ast(node->data.op.right);
+                case OP_MUL:
+                    return eval_ast(node->data.op.left) * eval_ast(node->data.op.right);
+                case OP_DIV: {
+                    uint32_t divisor = eval_ast(node->data.op.right);
+                    if (divisor == 0) {
+                        Log("divided by zero");
+                        return 0;
+                    }
+                    return eval_ast(node->data.op.left) / divisor;
+                }
+                case OP_EQ:
+                    return eval_ast(node->data.op.left) == eval_ast(node->data.op.right);
+                case OP_NEQ:
+                    return eval_ast(node->data.op.left) != eval_ast(node->data.op.right);
+                case OP_AND:
+                    return eval_ast(node->data.op.left) && eval_ast(node->data.op.right);
+                case OP_OR:
+                    return eval_ast(node->data.op.left) || eval_ast(node->data.op.right);
+                case OP_NOT:
+                    return !eval_ast(node->data.op.right);
+                case OP_DEREF: {
+                    uint32_t addr = eval_ast(node->data.op.right);
+                    uint32_t val = vaddr_read(addr, 4);
+                    Log("read memory at 0x%08x: 0x%08x", addr, val);
+                    return val;
+                }
+                default:
+                    Log("unknown operator");
+                    return 0;
+            }
+        }
+        case AST_NUMBER:
+            return node->data.val;
+        case AST_REGISTER: {
+            const char* reg_name = node->data.reg_name;
+            
+            if (strcmp(reg_name, "eax") == 0) return cpu.eax;
+            if (strcmp(reg_name, "ecx") == 0) return cpu.ecx;
+            if (strcmp(reg_name, "edx") == 0) return cpu.edx;
+            if (strcmp(reg_name, "ebx") == 0) return cpu.ebx;
+            if (strcmp(reg_name, "esp") == 0) return cpu.esp;
+            if (strcmp(reg_name, "ebp") == 0) return cpu.ebp;
+            if (strcmp(reg_name, "esi") == 0) return cpu.esi;
+            if (strcmp(reg_name, "edi") == 0) return cpu.edi;
+            if (strcmp(reg_name, "eip") == 0) return cpu.eip;
+
+            if (strcmp(reg_name, "ax") == 0) return cpu.ax;
+            if (strcmp(reg_name, "cx") == 0) return cpu.cx;
+            if (strcmp(reg_name, "dx") == 0) return cpu.dx;
+            if (strcmp(reg_name, "bx") == 0) return cpu.bx;
+            if (strcmp(reg_name, "sp") == 0) return cpu.sp;
+            if (strcmp(reg_name, "bp") == 0) return cpu.bp;
+            if (strcmp(reg_name, "si") == 0) return cpu.si;
+            if (strcmp(reg_name, "di") == 0) return cpu.di;
+
+            if (strcmp(reg_name, "al") == 0) return cpu.al;
+            if (strcmp(reg_name, "cl") == 0) return cpu.cl;
+            if (strcmp(reg_name, "dl") == 0) return cpu.dl;
+            if (strcmp(reg_name, "bl") == 0) return cpu.bl;
+            if (strcmp(reg_name, "ah") == 0) return cpu.ah;
+            if (strcmp(reg_name, "ch") == 0) return cpu.ch;
+            if (strcmp(reg_name, "dh") == 0) return cpu.dh;
+            if (strcmp(reg_name, "bh") == 0) return cpu.bh;
+
+            Log("unknown register %s", reg_name);
+            return 0;
+        }
+        case AST_VARIABLE:
+            Log("Variable not supported: %s", node->data.var_name);
+            return 0;
+        default:
+            Log("unknown AST node type");
+            return 0;
+    }
 }
 
 inline bool check_token(int pos, TokenType type) { return pos < nr_token && tokens[pos].type == type; }
 
-static uint32_t eval_expr(int* pos) { return eval_logical_or_expr(pos); }
+static ASTNode* build_expr(int* pos) { 
+    return build_logical_or_expr(pos); 
+}
 
-static uint32_t eval_logical_or_expr(int* pos)
-{
-    uint32_t val = eval_logical_and_expr(pos);
+static ASTNode* build_logical_or_expr(int* pos) {
+    ASTNode* node = build_logical_and_expr(pos);
 
     while (*pos < nr_token && tokens[*pos].type == TK_OR) {
         ++(*pos);
-        uint32_t rval = eval_logical_and_expr(pos);
-        val           = val || rval;
+        ASTNode* right = build_logical_and_expr(pos);
+        node = make_op_node(OP_OR, node, right);
     }
 
-    return val;
+    return node;
 }
 
-static uint32_t eval_logical_and_expr(int* pos)
-{
-    uint32_t val = eval_equality_expr(pos);
+static ASTNode* build_logical_and_expr(int* pos) {
+    ASTNode* node = build_equality_expr(pos);
 
     while (*pos < nr_token && tokens[*pos].type == TK_AND) {
         ++(*pos);
-        uint32_t rval = eval_equality_expr(pos);
-        val           = val && rval;
+        ASTNode* right = build_equality_expr(pos);
+        node = make_op_node(OP_AND, node, right);
     }
 
-    return val;
+    return node;
 }
 
-static uint32_t eval_equality_expr(int* pos)
-{
-    uint32_t val = eval_relational_expr(pos);
+static ASTNode* build_equality_expr(int* pos) {
+    ASTNode* node = build_relational_expr(pos);
 
     while (*pos < nr_token) {
         if (check_token(*pos, TK_EQ)) {
             ++(*pos);
-            uint32_t rval = eval_relational_expr(pos);
-            val           = (val == rval);
+            ASTNode* right = build_relational_expr(pos);
+            node = make_op_node(OP_EQ, node, right);
         }
-        else if (check_token(*pos, TK_NEQ))
-        {
+        else if (check_token(*pos, TK_NEQ)) {
             ++(*pos);
-            uint32_t rval = eval_relational_expr(pos);
-            val           = (val != rval);
+            ASTNode* right = build_relational_expr(pos);
+            node = make_op_node(OP_NEQ, node, right);
         }
         else
             break;
     }
 
-    return val;
+    return node;
 }
 
-static uint32_t eval_relational_expr(int* pos)
-{
-    // 此文法来自于上一学期我的编译原理作业
-    // 其中显然会有关系运算符
-    // 虽然此处实际没有关系运算符，但既然已经有这个文法了，那就带上了
-    return eval_add_sub_expr(pos);
+static ASTNode* build_relational_expr(int* pos) {
+    return build_add_sub_expr(pos);
 }
 
-static uint32_t eval_add_sub_expr(int* pos)
-{
-    uint32_t val = eval_mul_div_expr(pos);
+static ASTNode* build_add_sub_expr(int* pos) {
+    ASTNode* node = build_mul_div_expr(pos);
 
     while (*pos < nr_token) {
         if (check_token(*pos, TK_ADD)) {
             ++(*pos);
-            uint32_t rval = eval_mul_div_expr(pos);
-            val += rval;
+            ASTNode* right = build_mul_div_expr(pos);
+            node = make_op_node(OP_ADD, node, right);
         }
-        else if (check_token(*pos, TK_SUB))
-        {
+        else if (check_token(*pos, TK_SUB)) {
             ++(*pos);
-            uint32_t rval = eval_mul_div_expr(pos);
-            val -= rval;
+            ASTNode* right = build_mul_div_expr(pos);
+            node = make_op_node(OP_SUB, node, right);
         }
         else
             break;
     }
 
-    return val;
+    return node;
 }
 
-static uint32_t eval_mul_div_expr(int* pos)
-{
-    uint32_t val = eval_unary_expr(pos);
+static ASTNode* build_mul_div_expr(int* pos) {
+    ASTNode* node = build_unary_expr(pos);
 
     while (*pos < nr_token) {
         if (check_token(*pos, TK_STAR)) {
             ++(*pos);
-            uint32_t rval = eval_unary_expr(pos);
-            val *= rval;
+            ASTNode* right = build_unary_expr(pos);
+            node = make_op_node(OP_MUL, node, right);
         }
-        else if (check_token(*pos, TK_DIV))
-        {
+        else if (check_token(*pos, TK_DIV)) {
             ++(*pos);
-            int      pos_backup = *pos;
-            uint32_t rval       = eval_unary_expr(pos);
-            if (rval == 0) {
-                Log("divided by zero at %d", pos_backup);
-                expr_has_error = true;
-                return 0;
-            }
-            val /= rval;
+            ASTNode* right = build_unary_expr(pos);
+            node = make_op_node(OP_DIV, node, right);
         }
         else
             break;
     }
 
-    return val;
+    return node;
 }
 
-static uint32_t eval_unary_expr(int* pos)
-{
+static ASTNode* build_unary_expr(int* pos) {
     if (check_token(*pos, TK_ADD)) {
         ++(*pos);
-        return eval_unary_expr(pos);
+        return build_unary_expr(pos);
     }
-    else if (check_token(*pos, TK_SUB))
-    {
+    else if (check_token(*pos, TK_SUB)) {
         ++(*pos);
-        return -eval_unary_expr(pos);
+        ASTNode* expr = build_unary_expr(pos);
+        ASTNode* zero = make_number_node(0);
+        return make_op_node(OP_SUB, zero, expr);
     }
-    else if (check_token(*pos, TK_NOT))
-    {
+    else if (check_token(*pos, TK_NOT)) {
         ++(*pos);
-        return !eval_unary_expr(pos);
+        ASTNode* expr = build_unary_expr(pos);
+        return make_op_node(OP_NOT, NULL, expr);
     }
     else
-        return eval_factor(pos);
+        return build_factor(pos);
 }
 
-static uint32_t eval_factor(int* pos)
-{
+static ASTNode* build_factor(int* pos) {
     if (check_token(*pos, TK_STAR)) {
         ++(*pos);
-
-        // return vaddr_read(eval_expr(pos), 4);
-        uint32_t addr = eval_expr(pos);
-        uint32_t val  = vaddr_read(addr, 4);
-        Log("read memory at 0x%08x: 0x%08x", addr, val);
-        return val;
+        ASTNode* expr = build_expr(pos);
+        return make_op_node(OP_DEREF, NULL, expr);
     }
 
     if (check_token(*pos, TK_LPARAN)) {
         int pos_backup = *pos;
         ++(*pos);
-        uint32_t val = eval_expr(pos);
+        ASTNode* expr = build_expr(pos);
         if (*pos < nr_token && check_token(*pos, TK_RPARAN)) {
             ++(*pos);
-            return val;
+            return expr;
         }
-        else
-        {
+        else {
             Log("missing right parantheses for left parantheses at %d", pos_backup);
-            expr_has_error = true;
-            return 0;
+            ast_has_error = true;
+            return NULL;
         }
     }
 
-    return eval_operand(pos);
+    return build_operand(pos);
 }
 
-static uint32_t eval_operand(int* pos)
-{
+static ASTNode* build_operand(int* pos) {
     if (check_token(*pos, TK_DECNUM)) {
         uint32_t val = 0;
         sscanf(tokens[*pos].str, "%u", &val);
         ++(*pos);
-        return val;
+        return make_number_node(val);
     }
-    else if (check_token(*pos, TK_HEXNUM))
-    {
+    else if (check_token(*pos, TK_HEXNUM)) {
         uint32_t val = 0;
         sscanf(tokens[*pos].str, "%x", &val);
         ++(*pos);
-        return val;
+        return make_number_node(val);
     }
-    else if (check_token(*pos, TK_REG))
-    {
+    else if (check_token(*pos, TK_REG)) {
         char* reg_name = tokens[*pos].str + 1;
         ++(*pos);
-
-        if (strcmp(reg_name, "eax") == 0) return cpu.eax;
-        if (strcmp(reg_name, "ecx") == 0) return cpu.ecx;
-        if (strcmp(reg_name, "edx") == 0) return cpu.edx;
-        if (strcmp(reg_name, "ebx") == 0) return cpu.ebx;
-        if (strcmp(reg_name, "esp") == 0) return cpu.esp;
-        if (strcmp(reg_name, "ebp") == 0) return cpu.ebp;
-        if (strcmp(reg_name, "esi") == 0) return cpu.esi;
-        if (strcmp(reg_name, "edi") == 0) return cpu.edi;
-        if (strcmp(reg_name, "eip") == 0) return cpu.eip;
-
-        if (strcmp(reg_name, "ax") == 0) return cpu.ax;
-        if (strcmp(reg_name, "cx") == 0) return cpu.cx;
-        if (strcmp(reg_name, "dx") == 0) return cpu.dx;
-        if (strcmp(reg_name, "bx") == 0) return cpu.bx;
-        if (strcmp(reg_name, "sp") == 0) return cpu.sp;
-        if (strcmp(reg_name, "bp") == 0) return cpu.bp;
-        if (strcmp(reg_name, "si") == 0) return cpu.si;
-        if (strcmp(reg_name, "di") == 0) return cpu.di;
-
-        if (strcmp(reg_name, "al") == 0) return cpu.al;
-        if (strcmp(reg_name, "cl") == 0) return cpu.cl;
-        if (strcmp(reg_name, "dl") == 0) return cpu.dl;
-        if (strcmp(reg_name, "bl") == 0) return cpu.bl;
-        if (strcmp(reg_name, "ah") == 0) return cpu.ah;
-        if (strcmp(reg_name, "ch") == 0) return cpu.ch;
-        if (strcmp(reg_name, "dh") == 0) return cpu.dh;
-        if (strcmp(reg_name, "bh") == 0) return cpu.bh;
-
-        Log("unknown register %s", reg_name);
-        return 0;
+        return make_register_node(reg_name);
     }
-    else if (check_token(*pos, TK_VAR))
-    {
-        TODO();
-        return 0;
+    else if (check_token(*pos, TK_VAR)) {
+        char* var_name = tokens[*pos].str;
+        ++(*pos);
+        return make_variable_node(var_name);
     }
 
     Log("unexpected token %s", tokens[*pos].str);
-    return 0;
+    ast_has_error = true;
+    return NULL;
+}
+
+uint32_t expr(char* e, bool* success) {
+    ASTNode* root = build_ast(e, success);
+    if (!*success) {
+        return 0;
+    }
+    
+    uint32_t result = eval_ast(root);
+    free_ast(root);
+    return result;
 }
