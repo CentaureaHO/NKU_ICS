@@ -387,7 +387,7 @@ uint32_t eval_ast(ASTNode* node)
                         return 0;
                     }
 
-                    uint32_t val  = vaddr_read(addr, 4);
+                    uint32_t val = vaddr_read(addr, 4);
                     Log("read memory at 0x%08x: 0x%08x", addr, val);
                     return val;
                 }
