@@ -55,15 +55,16 @@ static int cmd_si(char* args)
 static int cmd_info(char* args)
 {
     if (strcmp(args, "r") == 0) {
+        printf("reg\tvalue(hex)\tvalue(dec)\n");
         printf("eax\t0x%08x\t%d\n", cpu.eax, cpu.eax);
         printf("ecx\t0x%08x\t%d\n", cpu.ecx, cpu.ecx);
         printf("edx\t0x%08x\t%d\n", cpu.edx, cpu.edx);
         printf("ebx\t0x%08x\t%d\n", cpu.ebx, cpu.ebx);
-        printf("esp\t0x%08x\t0x%08x\n", cpu.esp, cpu.esp);
-        printf("ebp\t0x%08x\t0x%08x\n", cpu.ebp, cpu.ebp);
-        printf("esi\t0x%08x\t0x%08x\n", cpu.esi, cpu.esi);
-        printf("edi\t0x%08x\t0x%08x\n", cpu.edi, cpu.edi);
-        printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
+        printf("esp\t0x%08x\t%d\n", cpu.esp, cpu.esp);
+        printf("ebp\t0x%08x\t%d\n", cpu.ebp, cpu.ebp);
+        printf("esi\t0x%08x\t%d\n", cpu.esi, cpu.esi);
+        printf("edi\t0x%08x\t%d\n", cpu.edi, cpu.edi);
+        printf("eip\t0x%08x\t%d\n", cpu.eip, cpu.eip);
     }
     else
         Assert(false, "Unknown argument \"%s\" for info", args);
@@ -95,13 +96,8 @@ static int cmd_p(char* args)
 {
     bool     success = false;
     uint32_t result  = expr(args, &success);
-    if (success) {
-        printf("Result: %u\n", result);
-    }
-    else
-    {
-        printf("Failed to evaluate expression \"%s\"\n", args);
-    }
+    if (success) printf("Result: 0x%08x %d\n", result, result);
+    else printf("Failed to evaluate expression \"%s\"\n", args);
 
     return 0;
 }
