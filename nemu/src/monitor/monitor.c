@@ -185,7 +185,4 @@ int init_monitor(int argc, char* argv[])
 
 void destroy_wp_pool();
 
-void resource_clean()
-{
-    destroy_wp_pool();
-}
+void resource_clean() { destroy_wp_pool(); }

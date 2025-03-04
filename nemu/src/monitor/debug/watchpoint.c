@@ -38,10 +38,10 @@ WP* new_wp()
         return NULL;
     }
 
-    WP* wp = free_;
-    free_ = free_->next;
+    WP* wp   = free_;
+    free_    = free_->next;
     wp->next = head;
-    head = wp;
+    head     = wp;
 
     return wp;
 }
@@ -55,23 +55,21 @@ void free_wp(WP* wp)
 
     WP* p = head;
     if (p == wp) {
-        head = head->next;
+        head     = head->next;
         wp->next = free_;
-        free_ = wp;
+        free_    = wp;
         return;
     }
 
-    while (p != NULL)
-    {
-        if (p->next != wp)
-        {
+    while (p != NULL) {
+        if (p->next != wp) {
             p = p->next;
             continue;
         }
 
-        p->next = wp->next;
+        p->next  = wp->next;
         wp->next = free_;
-        free_ = wp;
+        free_    = wp;
         return;
     }
 
@@ -80,8 +78,8 @@ void free_wp(WP* wp)
 
 WP* create_wp(char* es)
 {
-    bool success = true;
-    uint32_t val = expr(es, &success);
+    bool     success = true;
+    uint32_t val     = expr(es, &success);
     if (!success) {
         Log("Failed to evaluate expression");
         return NULL;
@@ -95,7 +93,7 @@ WP* create_wp(char* es)
 
     wp->expr_str = strdup(es);
     wp->prev_val = val;
-    
+
     return wp;
 }
 
@@ -129,11 +127,10 @@ void print_wp()
 
 bool check_wp()
 {
-    WP* p = head;
+    WP*  p       = head;
     bool changed = false;
     bool success = true;
-    while (p != NULL)
-    {
+    while (p != NULL) {
         uint32_t val = expr(p->expr_str, &success);
 
         if (val != p->prev_val) {

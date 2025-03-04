@@ -345,8 +345,8 @@ static uint32_t eval_mul_div_expr(int* pos)
         else if (check_token(*pos, TK_DIV))
         {
             ++(*pos);
-            int pos_backup = *pos;
-            uint32_t rval = eval_unary_expr(pos);
+            int      pos_backup = *pos;
+            uint32_t rval       = eval_unary_expr(pos);
             if (rval == 0) {
                 Log("divided by zero at %d", pos_backup);
                 expr_has_error = true;
