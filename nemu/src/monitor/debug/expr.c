@@ -423,6 +423,7 @@ static uint32_t eval_operand(int* pos)
         if (strcmp(reg_name, "ebp") == 0) return cpu.ebp;
         if (strcmp(reg_name, "esi") == 0) return cpu.esi;
         if (strcmp(reg_name, "edi") == 0) return cpu.edi;
+        if (strcmp(reg_name, "eip") == 0) return cpu.eip;
 
         Log("unknown register %s", reg_name);
         return 0;
