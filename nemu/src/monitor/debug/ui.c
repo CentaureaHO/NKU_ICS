@@ -119,6 +119,13 @@ static int cmd_w(char* args)
     return 0;
 }
 
+static int cmd_sw(char* args)
+{
+    print_wp();
+
+    return 0;
+}
+
 static int cmd_help(char* args);
 
 static struct
@@ -135,6 +142,7 @@ static struct
     {"x", "Scan memory", cmd_x},
     {"p", "Evaluate expression", cmd_p},
     {"w", "Set watchpoint", cmd_w},
+    {"sw", "Show watchpoints", cmd_sw},
 
     /* TODO: Add more commands */
 

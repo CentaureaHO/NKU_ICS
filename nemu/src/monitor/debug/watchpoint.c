@@ -107,3 +107,18 @@ void destroy_wp(int n)
     if (wp_pool[n].expr_str != NULL) free(wp_pool[n].expr_str);
     wp_pool[n].prev_val = 0;
 }
+
+void print_wp()
+{
+    WP* p = head;
+    if (p == NULL) {
+        Log("No watchpoint");
+        return;
+    }
+
+    printf("NO\tEXPR\tVALUE\n");
+    while (p != NULL) {
+        printf("%d\t%s\t%d\n", p->NO, p->expr_str, p->prev_val);
+        p = p->next;
+    }
+}

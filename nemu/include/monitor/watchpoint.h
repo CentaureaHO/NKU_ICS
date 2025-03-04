@@ -15,5 +15,6 @@ typedef struct watchpoint
 
 WP*  create_wp(char* es);
 void destroy_wp(int n);
+void print_wp();
 
 #endif
