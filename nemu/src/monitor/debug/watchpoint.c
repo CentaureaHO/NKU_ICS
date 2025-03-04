@@ -53,24 +53,6 @@ void free_wp(WP* wp)
         return;
     }
 
-    Log("Free watchpoint %d", wp->NO);
-
-    WP* check = head;
-    bool found = false;
-    
-    while (check != NULL) {
-        if (check == wp) {
-            found = true;
-            break;
-        }
-        check = check->next;
-    }
-    
-    if (!found) {
-        Log("Error: Watchpoint %d is not active and cannot be freed", wp->NO);
-        return;
-    }
-
     WP* p = head;
     if (p == wp) {
         head = head->next;
@@ -79,19 +61,20 @@ void free_wp(WP* wp)
         return;
     }
 
-    Log("Target watchpoint not head");
-
-    while (p->next != NULL) {
-        if (p->next == wp) {
-            p->next = wp->next;
-            wp->next = free_;
-            free_ = wp;
-            return;
+    while (p != NULL)
+    {
+        if (p->next != wp)
+        {
+            p = p->next;
+            continue;
         }
-        p = p->next;
+
+        p->next = wp->next;
+        wp->next = free_;
+        free_ = wp;
+        return;
     }
 
-    // 这一行在添加了前面的检查后理论上不会执行到
     Log("Target watchpoint not found");
 }
 
