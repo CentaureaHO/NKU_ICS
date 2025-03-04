@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+#define PMEM_SIZE (128 * 1024 * 1024)
+
 extern uint8_t pmem[];
 
 /* convert the guest physical address in the guest program to host virtual

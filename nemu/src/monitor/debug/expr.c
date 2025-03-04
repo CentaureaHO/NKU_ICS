@@ -381,6 +381,12 @@ uint32_t eval_ast(ASTNode* node)
                 case OP_DEREF:
                 {
                     uint32_t addr = eval_ast(node->data.op.right);
+
+                    if (addr > PMEM_SIZE - 4) {
+                        Log("invalid memory address 0x%08x", addr);
+                        return 0;
+                    }
+
                     uint32_t val  = vaddr_read(addr, 4);
                     Log("read memory at 0x%08x: 0x%08x", addr, val);
                     return val;
