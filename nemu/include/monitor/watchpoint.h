@@ -9,8 +9,11 @@ typedef struct watchpoint
     struct watchpoint* next;
 
     /* TODO: Add more members if necessary */
-    char* expr;
-
+    uint32_t prev_val;
+    char*    expr_str;
 } WP;
+
+WP*  create_wp(char* es);
+void destroy_wp(int n);
 
 #endif

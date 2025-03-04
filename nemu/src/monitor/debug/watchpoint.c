@@ -1,6 +1,8 @@
 #include "monitor/watchpoint.h"
 #include "monitor/expr.h"
 
+#include <stdlib.h>
+
 #define NR_WP 32
 
 static WP  wp_pool[NR_WP];
@@ -62,4 +64,38 @@ void free_wp(WP* wp)
     }
 
     Log("Target watchpoint not found");
+}
+
+WP* create_wp(char* es)
+{
+    bool success = true;
+    uint32_t val = expr(es, &success);
+    if (!success) {
+        Log("Failed to evaluate expression");
+        return NULL;
+    }
+
+    WP* wp = new_wp();
+    if (wp == NULL) {
+        Log("Failed to create watchpoint");
+        return NULL;
+    }
+
+    wp->expr_str = strdup(es);
+    wp->prev_val = val;
+    
+    return wp;
+}
+
+void destroy_wp(int n)
+{
+    if (n < 0 || n >= NR_WP) {
+        Log("Invalid watchpoint number");
+        return;
+    }
+
+    free_wp(&wp_pool[n]);
+
+    if (wp_pool[n].expr_str != NULL) free(wp_pool[n].expr_str);
+    wp_pool[n].prev_val = 0;
 }
