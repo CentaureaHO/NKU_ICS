@@ -126,3 +126,26 @@ void print_wp()
         p = p->next;
     }
 }
+
+bool check_wp()
+{
+    WP* p = head;
+    bool changed = false;
+    bool success = true;
+    while (p != NULL)
+    {
+        uint32_t val = expr(p->expr_str, &success);
+
+        if (val != p->prev_val) {
+            changed = true;
+            printf("Watchpoint %d: %s\n", p->NO, p->expr_str);
+            printf("Old value = 0x%08x\n", p->prev_val);
+            printf("New value = 0x%08x\n", val);
+            p->prev_val = val;
+        }
+
+        p = p->next;
+    }
+
+    return changed;
+}
