@@ -96,8 +96,10 @@ static int cmd_p(char* args)
 {
     bool     success = false;
     uint32_t result  = expr(args, &success);
-    if (success) printf("Result: 0x%08x %d\n", result, result);
-    else printf("Failed to evaluate expression \"%s\"\n", args);
+    if (success)
+        printf("Result: 0x%08x %d\n", result, result);
+    else
+        printf("Failed to evaluate expression \"%s\"\n", args);
 
     return 0;
 }

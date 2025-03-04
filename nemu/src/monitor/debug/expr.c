@@ -219,6 +219,25 @@ static uint32_t eval_operand(int* pos);
 // UnaryOp -> TK_NOT
 // static uint32_t eval_unary_op(int* pos);
 
+static bool check_parentheses_balance()
+{
+    int count = 0;
+    for (int i = 0; i < nr_token; i++) {
+        if (tokens[i].type == TK_LPARAN) {
+            ++count;
+        }
+        else if (tokens[i].type == TK_RPARAN)
+        {
+            --count;
+            if (count < 0) {
+                return false;
+            }
+        }
+    }
+
+    return count == 0;
+}
+
 uint32_t expr(char* e, bool* success)
 {
     if (!make_token(e)) {
@@ -228,6 +247,13 @@ uint32_t expr(char* e, bool* success)
 
     /* TODO: Insert codes to evaluate the expression. */
     // TODO();
+
+    if (!check_parentheses_balance()) {
+        Log("parentheses not balanced");
+        *success = false;
+        return 0;
+    }
+
     int      pos = 0;
     uint32_t val = eval_expr(&pos);
 
