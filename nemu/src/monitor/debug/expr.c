@@ -231,6 +231,12 @@ uint32_t expr(char* e, bool* success)
     int      pos = 0;
     uint32_t val = eval_expr(&pos);
 
+    if (pos < nr_token) {
+        Log("Syntax error at token %s", tokens[pos].str);
+        *success = false;
+        return 0;
+    }
+
     *success = true;
     return val;
 }
