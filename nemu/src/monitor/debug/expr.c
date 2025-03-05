@@ -231,8 +231,8 @@ static ASTNode* make_pointer_node(void* ptr, uint8_t bits)
 {
     ASTNode* node            = (ASTNode*)malloc(sizeof(ASTNode));
     node->type               = AST_POINTER;
-    node->data.ptr.ptr       = ptr;
-    node->data.ptr.bit_width = bits;
+    node->data.ptr       = ptr;
+    node->data.bit_width = bits;
     return node;
 }
 
@@ -298,7 +298,7 @@ void print_ast(ASTNode* node, int depth)
             print_ast(node->data.op.right, depth + 1);
             break;
         case AST_NUMBER: printf("NUMBER: %u\n", node->data.val); break;
-        case AST_POINTER: printf("POINTER: %p\n", node->data.ptr.ptr); break;
+        case AST_POINTER: printf("POINTER: %p\n", node->data.ptr); break;
         case AST_REGISTER: printf("REGISTER: %s\n", node->data.reg_name); break;
         case AST_VARIABLE: printf("VARIABLE: %s\n", node->data.var_name); break;
         default: printf("UNKNOWN NODE\n"); break;
@@ -396,11 +396,11 @@ uint32_t eval_ast(ASTNode* node)
         }
         case AST_NUMBER: return node->data.val;
         case AST_POINTER:
-            switch (node->data.ptr.bit_width)
+            switch (node->data.bit_width)
             {
-                case 8: return *(uint8_t*)node->data.ptr.ptr;
-                case 16: return *(uint16_t*)node->data.ptr.ptr;
-                case 32: return *(uint32_t*)node->data.ptr.ptr;
+                case 8: return *(uint8_t*)node->data.ptr;
+                case 16: return *(uint16_t*)node->data.ptr;
+                case 32: return *(uint32_t*)node->data.ptr;
                 default: Log("unknown pointer bits"); return 0;
             }
         case AST_REGISTER: { const char* reg_name = node->data.reg_name;

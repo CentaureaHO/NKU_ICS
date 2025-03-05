@@ -26,7 +26,7 @@ typedef struct ASTNode
         {
             void*   ptr;
             uint8_t bit_width;
-        } ptr;
+        };
     } data;
 } ASTNode;
 
