@@ -296,7 +296,7 @@ make_group(gp1, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY)
         EMPTY,
         EMPTY,
         EMPTY,
-        /* 0xe8 */ EMPTY,
+        /* 0xe8 */ IDEX(J, call),
         EMPTY,
         EMPTY,
         EMPTY,

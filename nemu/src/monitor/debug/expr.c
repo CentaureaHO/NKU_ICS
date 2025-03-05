@@ -209,8 +209,8 @@ Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
 
 static ASTNode* make_op_node(OperatorType op, ASTNode* left, ASTNode* right)
 {
-    ASTNode* node       = (ASTNode*)malloc(sizeof(ASTNode));
-    node->type          = AST_OPERATOR;
+    ASTNode* node    = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type       = AST_OPERATOR;
     node->data.op    = op;
     node->data.left  = left;
     node->data.right = right;
@@ -229,8 +229,8 @@ static ASTNode* make_number_node(uint32_t val)
 
 static ASTNode* make_pointer_node(void* ptr, uint8_t bits)
 {
-    ASTNode* node            = (ASTNode*)malloc(sizeof(ASTNode));
-    node->type               = AST_POINTER;
+    ASTNode* node        = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type           = AST_POINTER;
     node->data.ptr       = ptr;
     node->data.bit_width = bits;
     return node;
