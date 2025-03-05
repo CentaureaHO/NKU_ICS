@@ -211,9 +211,9 @@ static ASTNode* make_op_node(OperatorType op, ASTNode* left, ASTNode* right)
 {
     ASTNode* node       = (ASTNode*)malloc(sizeof(ASTNode));
     node->type          = AST_OPERATOR;
-    node->data.op.op    = op;
-    node->data.op.left  = left;
-    node->data.op.right = right;
+    node->data.op    = op;
+    node->data.left  = left;
+    node->data.right = right;
     return node;
 }
 
@@ -280,7 +280,7 @@ void print_ast(ASTNode* node, int depth)
     switch (node->type)
     {
         case AST_OPERATOR:
-            switch (node->data.op.op)
+            switch (node->data.op)
             {
                 case OP_ADD: printf("ADD\n"); break;
                 case OP_SUB: printf("SUB\n"); break;
@@ -294,8 +294,8 @@ void print_ast(ASTNode* node, int depth)
                 case OP_DEREF: printf("DEREF\n"); break;
                 default: printf("UNKNOWN OP\n"); break;
             }
-            print_ast(node->data.op.left, depth + 1);
-            print_ast(node->data.op.right, depth + 1);
+            print_ast(node->data.left, depth + 1);
+            print_ast(node->data.right, depth + 1);
             break;
         case AST_NUMBER: printf("NUMBER: %u\n", node->data.val); break;
         case AST_POINTER: printf("POINTER: %p\n", node->data.ptr); break;
@@ -344,8 +344,8 @@ void free_ast(ASTNode* node)
     if (node == NULL) return;
 
     if (node->type == AST_OPERATOR) {
-        free_ast(node->data.op.left);
-        free_ast(node->data.op.right);
+        free_ast(node->data.left);
+        free_ast(node->data.right);
     }
 
     free(node);
@@ -359,28 +359,28 @@ uint32_t eval_ast(ASTNode* node)
     {
         case AST_OPERATOR:
         {
-            switch (node->data.op.op)
+            switch (node->data.op)
             {
-                case OP_ADD: return eval_ast(node->data.op.left) + eval_ast(node->data.op.right);
-                case OP_SUB: return eval_ast(node->data.op.left) - eval_ast(node->data.op.right);
-                case OP_MUL: return eval_ast(node->data.op.left) * eval_ast(node->data.op.right);
+                case OP_ADD: return eval_ast(node->data.left) + eval_ast(node->data.right);
+                case OP_SUB: return eval_ast(node->data.left) - eval_ast(node->data.right);
+                case OP_MUL: return eval_ast(node->data.left) * eval_ast(node->data.right);
                 case OP_DIV:
                 {
-                    uint32_t divisor = eval_ast(node->data.op.right);
+                    uint32_t divisor = eval_ast(node->data.right);
                     if (divisor == 0) {
                         Log("divided by zero");
                         return 0;
                     }
-                    return eval_ast(node->data.op.left) / divisor;
+                    return eval_ast(node->data.left) / divisor;
                 }
-                case OP_EQ: return eval_ast(node->data.op.left) == eval_ast(node->data.op.right);
-                case OP_NEQ: return eval_ast(node->data.op.left) != eval_ast(node->data.op.right);
-                case OP_AND: return eval_ast(node->data.op.left) && eval_ast(node->data.op.right);
-                case OP_OR: return eval_ast(node->data.op.left) || eval_ast(node->data.op.right);
-                case OP_NOT: return !eval_ast(node->data.op.right);
+                case OP_EQ: return eval_ast(node->data.left) == eval_ast(node->data.right);
+                case OP_NEQ: return eval_ast(node->data.left) != eval_ast(node->data.right);
+                case OP_AND: return eval_ast(node->data.left) && eval_ast(node->data.right);
+                case OP_OR: return eval_ast(node->data.left) || eval_ast(node->data.right);
+                case OP_NOT: return !eval_ast(node->data.right);
                 case OP_DEREF:
                 {
-                    uint32_t addr = eval_ast(node->data.op.right);
+                    uint32_t addr = eval_ast(node->data.right);
 
                     if (addr > PMEM_SIZE - 4) {
                         Log("invalid memory address 0x%08x", addr);

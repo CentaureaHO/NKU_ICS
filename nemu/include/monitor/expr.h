@@ -17,7 +17,7 @@ typedef struct ASTNode
             OperatorType    op;
             struct ASTNode* left;
             struct ASTNode* right;
-        } op;
+        };
         uint32_t val;
         char     reg_name[8];
         char     var_name[32];
