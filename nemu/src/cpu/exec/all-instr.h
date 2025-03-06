@@ -12,7 +12,8 @@ make_EHelper(nemu_trap);
 make_EHelper(call);
 
 // group 1
-#define MAKE_ARITH_EHELPER(name) make_EHelper(concat3(arith, _, name))
+// #define MAKE_ARITH_EHELPER(name) make_EHelper(concat3(arith, _, name))
+#define MAKE_ARITH_EHELPER(name) make_EHelper(name)
 
 MAKE_ARITH_EHELPER(add);
 MAKE_ARITH_EHELPER(or);
