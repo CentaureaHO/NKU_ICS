@@ -11,8 +11,9 @@ make_EHelper(sub)
 {
     Log("id_dest->val = %d, id_src->val = %d", id_dest->val, id_src->val);
     Log("Enter sub");
+    Log("Need to implement sub");
 
-    TODO();
+    // TODO();
 
     print_asm_template2(sub);
 }
