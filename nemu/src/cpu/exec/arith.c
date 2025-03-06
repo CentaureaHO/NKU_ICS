@@ -9,6 +9,9 @@ make_EHelper(add)
 
 make_EHelper(sub)
 {
+    Log("id_dest->val = %d, id_src->val = %d", id_dest->val, id_src->val);
+    Log("Enter sub");
+
     TODO();
 
     print_asm_template2(sub);
