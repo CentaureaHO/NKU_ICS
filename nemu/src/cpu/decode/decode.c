@@ -41,13 +41,17 @@ static inline make_DopHelper(SI)
      *
      op->simm = ???
      */
-    TODO();
+    // TODO();
+    Log("Here follows the function decode_op_SI");
+    op->imm  = instr_fetch(eip, op->width);
 
     rtl_li(&op->val, op->simm);
 
 #ifdef DEBUG
     snprintf(op->str, OP_STR_SIZE, "$0x%x", op->simm);
 #endif
+
+    Log("Here ends the function decode_op_SI");
 }
 
 /* I386 manual does not contain this abbreviation.
