@@ -538,7 +538,7 @@ static ASTNode* build_unary_expr(int* pos)
         ASTNode* expr = build_unary_expr(pos);
         return make_op_node(OP_NOT, NULL, expr);
     }
-    else if (check_token(*pos, TK_STAR)) 
+    else if (check_token(*pos, TK_STAR))
     {
         ++(*pos);
         ASTNode* expr = build_unary_expr(pos);
