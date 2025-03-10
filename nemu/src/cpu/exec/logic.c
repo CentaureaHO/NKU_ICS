@@ -19,7 +19,7 @@ make_EHelper (xor)
     // TODO();
     Log("id_dest->val = %d, id_src->val = %d", id_dest->val, id_src->val);
     Log("Enter xor");
-    Log("Need to implement sub");
+    Log("Need to implement xor");
 
     print_asm_template2 (xor);
 }
