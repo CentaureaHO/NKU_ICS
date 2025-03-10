@@ -538,18 +538,18 @@ static ASTNode* build_unary_expr(int* pos)
         ASTNode* expr = build_unary_expr(pos);
         return make_op_node(OP_NOT, NULL, expr);
     }
+    else if (check_token(*pos, TK_STAR)) 
+    {
+        ++(*pos);
+        ASTNode* expr = build_unary_expr(pos);
+        return make_op_node(OP_DEREF, NULL, expr);
+    }
     else
         return build_factor(pos);
 }
 
 static ASTNode* build_factor(int* pos)
 {
-    if (check_token(*pos, TK_STAR)) {
-        ++(*pos);
-        ASTNode* expr = build_expr(pos);
-        return make_op_node(OP_DEREF, NULL, expr);
-    }
-
     if (check_token(*pos, TK_LPARAN)) {
         int pos_backup = *pos;
         ++(*pos);
