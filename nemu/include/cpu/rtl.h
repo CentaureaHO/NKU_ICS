@@ -166,16 +166,20 @@ static inline void rtl_update_ZF(const rtlreg_t* result, int width)
 {
     // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
     // TODO();
-    if ((*result & ((1u << (width * 8)) - 1)) == 0) cpu.ZF = 1;
-    else cpu.ZF = 0;
+    if ((*result & ((1u << (width * 8)) - 1)) == 0)
+        cpu.ZF = 1;
+    else
+        cpu.ZF = 0;
 }
 
 static inline void rtl_update_SF(const rtlreg_t* result, int width)
 {
     // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
     // TODO();
-    if (*result & (1u << ((width << 3) - 1))) cpu.SF = 1;
-    else cpu.SF = 0;
+    if (*result & (1u << ((width << 3) - 1)))
+        cpu.SF = 1;
+    else
+        cpu.SF = 0;
 }
 
 static inline void rtl_update_ZFSF(const rtlreg_t* result, int width)
