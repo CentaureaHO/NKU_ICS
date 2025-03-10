@@ -99,7 +99,8 @@ typedef struct
 
     vaddr_t eip;
 
-    union {
+    union
+    {
         uint32_t eflags;
         struct
         {

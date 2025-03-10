@@ -43,7 +43,7 @@ static inline make_DopHelper(SI)
      */
     // TODO();
     Log("Here follows the function decode_op_SI");
-    op->imm  = instr_fetch(eip, op->width);
+    op->imm = instr_fetch(eip, op->width);
 
     rtl_li(&op->val, op->simm);
 
