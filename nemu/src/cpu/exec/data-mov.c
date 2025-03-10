@@ -18,7 +18,8 @@ make_EHelper(pop)
 {
     // TODO();
     rtl_pop(&t0);
-    operand_write(id_dest, &t0);
+    // operand_write(id_dest, &t0);
+    rtl_sr(id_dest->reg, id_dest->width, &t0);
 
     print_asm_template1(pop);
 }
