@@ -35,7 +35,14 @@ make_EHelper(call)
 
 make_EHelper(ret)
 {
-    TODO();
+    Log("Enter ret");
+    Log("Before ret: eip = 0x%x", cpu.eip);
+
+    rtl_pop(&t0);
+    decoding.jmp_eip = t0;
+    decoding.is_jmp  = 1;
+
+    // TODO();
 
     print_asm("ret");
 }

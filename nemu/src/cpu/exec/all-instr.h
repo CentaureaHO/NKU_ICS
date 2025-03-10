@@ -9,19 +9,17 @@ make_EHelper(operand_size);
 make_EHelper(inv);
 make_EHelper(nemu_trap);
 
+// control
 make_EHelper(call);
+make_EHelper(ret);
 
 // group 1
-// #define MAKE_ARITH_EHELPER(name) make_EHelper(concat3(arith, _, name))
-#define MAKE_ARITH_EHELPER(name) make_EHelper(name)
+make_EHelper(add);
+make_EHelper(or);
+make_EHelper(adc);
+make_EHelper(sbb);
+make_EHelper(and);
+make_EHelper(sub);
+make_EHelper (xor);
+make_EHelper(cmp);
 
-MAKE_ARITH_EHELPER(add);
-MAKE_ARITH_EHELPER(or);
-MAKE_ARITH_EHELPER(adc);
-MAKE_ARITH_EHELPER(sbb);
-MAKE_ARITH_EHELPER(and);
-MAKE_ARITH_EHELPER(sub);
-MAKE_ARITH_EHELPER (xor);
-MAKE_ARITH_EHELPER(cmp);
-
-#undef MAKE_ARITH_EHELPER
