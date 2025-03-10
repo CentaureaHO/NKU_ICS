@@ -19,7 +19,13 @@ make_EHelper (xor)
     // TODO();
     Log("id_dest->val = %d, id_src->val = %d", id_dest->val, id_src->val);
     Log("Enter xor");
-    Log("Need to implement xor");
+    // Log("Need to implement xor");
+
+    rtl_xor(&t0, &id_dest->val, &id_src->val);
+
+    rtl_update_ZFSF(&t0, id_dest->width);
+
+    operand_write(id_dest, &t0);
 
     print_asm_template2 (xor);
 }
