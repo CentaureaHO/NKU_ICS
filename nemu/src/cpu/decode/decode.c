@@ -51,7 +51,7 @@ static inline make_DopHelper(SI)
     snprintf(op->str, OP_STR_SIZE, "$0x%x", op->simm);
 #endif
 
-    Log("Here ends the function decode_op_SI");
+    // Log("Here ends the function decode_op_SI");
 }
 
 /* I386 manual does not contain this abbreviation.
