@@ -201,7 +201,10 @@ static inline void rtl_update_SF(const rtlreg_t* result, int width)
 {
     // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
     // TODO();
-   // rtl_msb(&cpu.SF, result, width);
+    if (*result & SIGNED_BIT_MASK(width))
+        rtl_set_SF(enable);
+    else
+        rtl_set_SF(disable);
 }
 
 static inline void rtl_update_ZFSF(const rtlreg_t* result, int width)
