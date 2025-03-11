@@ -9,6 +9,10 @@
 extern rtlreg_t       t0, t1, t2, t3;
 extern const rtlreg_t tzero;
 
+static const rtlreg_t ENABLE = 1, DISABLE = 0;
+static const rtlreg_t* enable = &ENABLE;
+static const rtlreg_t* disable = &DISABLE;
+
 /* RTL basic instructions */
 
 static inline void rtl_li(rtlreg_t* dest, uint32_t imm) { *dest = imm; }
@@ -188,19 +192,16 @@ static inline void rtl_update_ZF(const rtlreg_t* result, int width)
     // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
     // TODO();
     if ((*result & TRUNCATE_MASK(width)) == 0)
-        cpu.ZF = 1;
+        rtl_set_ZF(enable);
     else
-        cpu.ZF = 0;
+        rtl_set_ZF(disable);
 }
 
 static inline void rtl_update_SF(const rtlreg_t* result, int width)
 {
     // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
     // TODO();
-    if (*result & SIGNED_BIT_MASK(width))
-        cpu.SF = 1;
-    else
-        cpu.SF = 0;
+   // rtl_msb(&cpu.SF, result, width);
 }
 
 static inline void rtl_update_ZFSF(const rtlreg_t* result, int width)
