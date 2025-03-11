@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 
-#define REPLACE_REG_TO_PTR
+// #define REPLACE_REG_TO_PTR
 // #define EXPRDBG_LOG_ENABLE
 #define PRINT_AST
 
@@ -38,8 +38,22 @@
     X(ah, 8)     \
     X(ch, 8)     \
     X(dh, 8)     \
-    X(bh, 8)
-#endif
+    X(bh, 8)     \
+    X(eflags, 32) \
+    X(CF, 1)     \
+    X(PF, 1)     \
+    X(AF, 1)     \
+    X(ZF, 1)     \
+    X(SF, 1)     \
+    X(TF, 1)     \
+    X(IF, 1)     \
+    X(DF, 1)     \
+    X(OF, 1)     \
+    X(IOPL, 2)   \
+    X(NT, 1)     \
+    X(RF, 1)     \
+    X(VM, 1)
+#endif  
 
 #define MAX_TOKEN_LEN 32
 
