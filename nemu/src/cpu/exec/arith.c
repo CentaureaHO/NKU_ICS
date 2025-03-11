@@ -82,7 +82,25 @@ make_EHelper(sub)
 
 make_EHelper(cmp)
 {
-    TODO();
+    if (id_src->width == 1 && id_dest->width > 1)
+        rtl_sext(&t0, &id_src->val, id_src->width);
+    else
+        rtl_mv(&t0, &id_src->val);
+
+    rtl_sub(&t1, &id_dest->val, &t0);
+    
+    rtl_update_ZFSF(&t1, id_dest->width);
+    
+    rtl_sltu(&t0, &id_dest->val, &t0);
+    rtl_set_CF(&t0);
+    
+    rtl_update_PF(&t1);
+    
+    rtl_xor(&t0, &id_dest->val, &t0);  // t0 = dest ^ src
+    rtl_xor(&t1, &id_dest->val, &t1);  // t1 = dest ^ result 
+    rtl_and(&t0, &t0, &t1);            // t0 = (dest^src) & (dest^result)
+    rtl_msb(&t0, &t0, id_dest->width);
+    rtl_set_OF(&t0);
 
     print_asm_template2(cmp);
 }
