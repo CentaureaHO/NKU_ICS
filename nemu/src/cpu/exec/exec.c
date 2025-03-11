@@ -210,7 +210,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         IDEX(lea_M2G, lea),
         EMPTY,
         EMPTY,
-        /* 0x90 */ EMPTY,
+        /* 0x90 */ EX(nop),
         EMPTY,
         EMPTY,
         EMPTY,
