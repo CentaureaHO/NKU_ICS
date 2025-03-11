@@ -31,7 +31,11 @@ void cpu_exec(uint64_t n)
         exec_wrapper(print_flag);
 
 #ifdef DEBUG
-        if (check_wp()) nemu_state = NEMU_STOP;
+        if (check_wp())
+        {
+            printf("Current eip: 0x%08x\n", cpu.eip);
+            nemu_state = NEMU_STOP;
+        }
 
 #endif
 
