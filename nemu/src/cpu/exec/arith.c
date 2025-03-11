@@ -2,7 +2,36 @@
 
 make_EHelper(add)
 {
-    TODO();
+    // OF, SF, ZF, AF, CF, and PF as described in Appendix C
+
+    if (id_src->width == 1 && id_dest->width > 1) {
+        Log("Src is byte, dest is word or dword. Sign extend src to dest width %d", id_dest->width);
+        rtl_sext(&t0, &id_src->val, id_src->width);
+    }
+    else
+        rtl_mv(&t0, &id_src->val);
+
+    Log("id_dest->val = 0x%x, id_src->val = 0x%x", id_dest->val, id_src->val);
+
+    rtl_add(&t1, &id_dest->val, &t0);
+
+    Log("Add result: 0x%x", t1);
+
+    operand_write(id_dest, &t1);
+
+    rtl_update_ZFSF(&t1, id_dest->width);
+
+    rtl_sltu(&t2, &t1, &id_dest->val);
+    rtl_set_CF(&t2);
+
+    rtl_update_PF(&t1);
+
+    rtl_xor(&t0, &t1, &id_dest->val);           // t0 = result ^ dest
+    rtl_xor(&t2, &id_dest->val, &id_src->val);  // t2 = dest ^ src
+    rtl_not(&t2);                               // t2 = ~(dest ^ src)
+    rtl_and(&t0, &t0, &t2);                     // t0 = (result ^ dest) & ~(dest ^ src)
+    rtl_msb(&t0, &t0, id_dest->width);
+    rtl_set_OF(&t0);
 
     print_asm_template2(add);
 }
