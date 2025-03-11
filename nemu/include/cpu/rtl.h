@@ -3,6 +3,9 @@
 
 #include "nemu.h"
 
+#define TRUNCATE_MASK(width) (~0u >> ((4 - width) << 3))
+#define SIGNED_BIT_MASK(width) (1u << ((width << 3) - 1))
+
 extern rtlreg_t       t0, t1, t2, t3;
 extern const rtlreg_t tzero;
 
@@ -177,22 +180,14 @@ static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width)
 {
     // dest <- src1[width * 8 - 1]
     // TODO();
-    *dest = (*src1 & (1u << ((width << 3) - 1)));
+    *dest = (*src1 & SIGNED_BIT_MASK(width)) ? 1 : 0;
 }
 
 static inline void rtl_update_ZF(const rtlreg_t* result, int width)
 {
     // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
     // TODO();
-    width = 2;
-
-    uint32_t mask = ~0u >> ((4 - width) << 3);
-
-    Log("mask = 0x%x", mask);
-    Log("result = 0x%x", *result);
-    Log("result & mask = 0x%x", *result & mask);
-
-    if ((*result & mask) == 0)
+    if ((*result & TRUNCATE_MASK(width)) == 0)
         cpu.ZF = 1;
     else
         cpu.ZF = 0;
@@ -202,7 +197,7 @@ static inline void rtl_update_SF(const rtlreg_t* result, int width)
 {
     // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
     // TODO();
-    if (*result & (1u << ((width << 3) - 1)))
+    if (*result & SIGNED_BIT_MASK(width))
         cpu.SF = 1;
     else
         cpu.SF = 0;

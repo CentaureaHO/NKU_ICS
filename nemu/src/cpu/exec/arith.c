@@ -9,6 +9,16 @@ make_EHelper(add)
 
 make_EHelper(sub)
 {
+    /*
+        To update: 
+            OF
+            SF  (done)
+            ZF  (done)
+            AF
+            PF
+            CF  (done)
+    */
+
     if (id_src->width == 1 && id_dest->width > 1) {
         Log("Src is byte, dest is word or dword. Sign extend src to dest width %d", id_dest->width);
         rtl_sext(&t0, &id_src->val, id_src->width);
