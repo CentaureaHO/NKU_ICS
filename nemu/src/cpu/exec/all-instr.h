@@ -24,3 +24,13 @@ make_EHelper(and);
 make_EHelper(sub);
 make_EHelper (xor);
 make_EHelper(cmp);
+
+// group 5
+make_EHelper(inc);
+make_EHelper(dec);
+// make_EHelper(call); declared at control
+// make_EHelper(call); declared at control
+make_EHelper(jmp);
+// make_EHelper(jmp); declared at group 5
+// make_EHelper(push); declared at data-mov
+// Empty
