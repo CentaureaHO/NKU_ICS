@@ -185,18 +185,13 @@ static inline void rtl_update_ZF(const rtlreg_t* result, int width)
     // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
     // TODO();
 
-    uint32_t mask;
-    if (width == 4)
-        mask = ~0u;
-    else
-        mask = (1u << (width << 3)) - 1;
-    
-    uint32_t masked_result = *result & mask;
-    
-    Log("result = 0x%x, width = %d", *result, width);
-    Log("Masked result = 0x%x", masked_result);
-    
-    if (masked_result == 0)
+    uint32_t mask = ~0u >> ((4 - width) << 3);
+
+    Log("mask = 0x%x", mask);
+    Log("result = 0x%x", *result);
+    Log("result & mask = 0x%x", *result & mask);
+
+    if ((*result & mask) == 0)
         cpu.ZF = 1;
     else
         cpu.ZF = 0;
