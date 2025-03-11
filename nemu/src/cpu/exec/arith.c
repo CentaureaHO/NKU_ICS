@@ -9,6 +9,22 @@ make_EHelper(add)
 
 make_EHelper(sub)
 {
+    if (id_src->width == 1 && id_dest->width > 1) {
+        Log("Src is byte, dest is word or dword. Sign extend src to dest width %d", id_dest->width);
+        rtl_sext(&t0, &id_src->val, id_src->width);
+    }
+    else
+        rtl_mv(&t0, &id_src->val);
+
+    rtl_sub(&t1, &id_dest->val, &t0);
+    operand_write(id_dest, &t1);
+
+    rtl_update_ZFSF(&t1, id_dest->width);
+
+    rtl_sltu(&t2, &t1, &t0);
+    rtl_set_CF(&t2);
+
+    /*
     Log("id_dest->val = %d, id_src->val = %d", id_dest->val, id_src->val);
     Log("id_dest->width = %d, id_src->width = %d", id_dest->width, id_src->width);
     Log("Enter sub");
@@ -27,6 +43,7 @@ make_EHelper(sub)
     rtl_and(&t0, &t0, &t1);
     rtl_msb(&t0, &t0, id_dest->width);
     rtl_set_OF(&t0);
+    */
 
     print_asm_template2(sub);
 }

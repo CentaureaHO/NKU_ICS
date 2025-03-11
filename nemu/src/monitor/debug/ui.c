@@ -65,6 +65,17 @@ static int cmd_info(char* args)
         printf("esi\t0x%08x\t%d\n", cpu.esi, cpu.esi);
         printf("edi\t0x%08x\t%d\n", cpu.edi, cpu.edi);
         printf("eip\t0x%08x\t%d\n", cpu.eip, cpu.eip);
+        printf("eflags\t0x%08x\t%d\n", cpu.eflags, cpu.eflags);
+        printf("\tCF: %d\tPF: %d\tAF: %d\tZF: %d\tSF: %d\tTF: %d\tIF: %d\tDF: %d\tOF: %d\n",
+            cpu.CF,
+            cpu.PF,
+            cpu.AF,
+            cpu.ZF,
+            cpu.SF,
+            cpu.TF,
+            cpu.IF,
+            cpu.DF,
+            cpu.OF);
     }
     else if (strcmp(args, "w") == 0)
         print_wp();
