@@ -225,6 +225,8 @@ static inline void rtl_update_PF(const rtlreg_t* result)
         ++cnt;
     }
 
+    Log("cnt = %d", cnt);
+
     if (cnt % 2 == 0)
         rtl_set_PF(enable);
     else
