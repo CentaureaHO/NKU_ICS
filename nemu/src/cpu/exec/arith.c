@@ -10,6 +10,7 @@ make_EHelper(add)
 make_EHelper(sub)
 {
     Log("id_dest->val = %d, id_src->val = %d", id_dest->val, id_src->val);
+    Log("id_dest->width = %d, id_src->width = %d", id_dest->width, id_src->width);
     Log("Enter sub");
 
     rtl_sub(&t2, &id_dest->val, &id_src->val);
