@@ -9,8 +9,8 @@
 extern rtlreg_t       t0, t1, t2, t3;
 extern const rtlreg_t tzero;
 
-static const rtlreg_t ENABLE = 1, DISABLE = 0;
-static const rtlreg_t* enable = &ENABLE;
+static const rtlreg_t  ENABLE = 1, DISABLE = 0;
+static const rtlreg_t* enable  = &ENABLE;
 static const rtlreg_t* disable = &DISABLE;
 
 /* RTL basic instructions */
@@ -108,9 +108,10 @@ static inline void rtl_sr(int r, int width, const rtlreg_t* src1)
     static inline void concat(rtl_set_, f)(const rtlreg_t* src) { cpu.f = *src; } \
     static inline void concat(rtl_get_, f)(rtlreg_t * dest) { *dest = cpu.f; }
 
-make_rtl_setget_eflags(CF) make_rtl_setget_eflags(OF) make_rtl_setget_eflags(ZF) make_rtl_setget_eflags(SF) make_rtl_setget_eflags(PF)
+make_rtl_setget_eflags(CF) make_rtl_setget_eflags(OF) make_rtl_setget_eflags(ZF) make_rtl_setget_eflags(SF)
+    make_rtl_setget_eflags(PF)
 
-    static inline void rtl_mv(rtlreg_t* dest, const rtlreg_t* src1)
+        static inline void rtl_mv(rtlreg_t* dest, const rtlreg_t* src1)
 {
     // dest <- src1
     // TODO();
@@ -215,17 +216,16 @@ static inline void rtl_update_ZFSF(const rtlreg_t* result, int width)
 
 static inline void rtl_update_PF(const rtlreg_t* result)
 {
-    Log("rtl_update_PF method has not been tested");
+    // Log("rtl_update_PF method has not been tested");
 
     uint8_t src = *result & TRUNCATE_MASK(1);
-    int cnt = 0;
-    while (src)
-    {
+    int     cnt = 0;
+    while (src) {
         src &= src - 1;
         ++cnt;
     }
 
-    Log("cnt = %d", cnt);
+    // Log("cnt = %d", cnt);
 
     if (cnt % 2 == 0)
         rtl_set_PF(enable);

@@ -13,47 +13,47 @@
 #define PRINT_AST
 
 #ifndef X86_REGS
-#define X86_REGS \
-    X(eax, 32)   \
-    X(ecx, 32)   \
-    X(edx, 32)   \
-    X(ebx, 32)   \
-    X(esp, 32)   \
-    X(ebp, 32)   \
-    X(esi, 32)   \
-    X(edi, 32)   \
-    X(eip, 32)   \
-    X(ax, 16)    \
-    X(cx, 16)    \
-    X(dx, 16)    \
-    X(bx, 16)    \
-    X(sp, 16)    \
-    X(bp, 16)    \
-    X(si, 16)    \
-    X(di, 16)    \
-    X(al, 8)     \
-    X(cl, 8)     \
-    X(dl, 8)     \
-    X(bl, 8)     \
-    X(ah, 8)     \
-    X(ch, 8)     \
-    X(dh, 8)     \
-    X(bh, 8)     \
+#define X86_REGS  \
+    X(eax, 32)    \
+    X(ecx, 32)    \
+    X(edx, 32)    \
+    X(ebx, 32)    \
+    X(esp, 32)    \
+    X(ebp, 32)    \
+    X(esi, 32)    \
+    X(edi, 32)    \
+    X(eip, 32)    \
+    X(ax, 16)     \
+    X(cx, 16)     \
+    X(dx, 16)     \
+    X(bx, 16)     \
+    X(sp, 16)     \
+    X(bp, 16)     \
+    X(si, 16)     \
+    X(di, 16)     \
+    X(al, 8)      \
+    X(cl, 8)      \
+    X(dl, 8)      \
+    X(bl, 8)      \
+    X(ah, 8)      \
+    X(ch, 8)      \
+    X(dh, 8)      \
+    X(bh, 8)      \
     X(eflags, 32) \
-    X(CF, 1)     \
-    X(PF, 1)     \
-    X(AF, 1)     \
-    X(ZF, 1)     \
-    X(SF, 1)     \
-    X(TF, 1)     \
-    X(IF, 1)     \
-    X(DF, 1)     \
-    X(OF, 1)     \
-    X(IOPL, 2)   \
-    X(NT, 1)     \
-    X(RF, 1)     \
+    X(CF, 1)      \
+    X(PF, 1)      \
+    X(AF, 1)      \
+    X(ZF, 1)      \
+    X(SF, 1)      \
+    X(TF, 1)      \
+    X(IF, 1)      \
+    X(DF, 1)      \
+    X(OF, 1)      \
+    X(IOPL, 2)    \
+    X(NT, 1)      \
+    X(RF, 1)      \
     X(VM, 1)
-#endif  
+#endif
 
 #define MAX_TOKEN_LEN 32
 
