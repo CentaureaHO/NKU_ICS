@@ -36,14 +36,17 @@ make_EHelper(sub)
     rtl_sltu(&t2, &t1, &t0);
     rtl_set_CF(&t2);
 
+    // set PF
+    rtl_update_PF(&t1);
+
+    // set AF: not implemented
+
     // set OF
     rtl_xor(&t0, &id_dest->val, &t0);    // t0 = dest ^ src
     rtl_xor(&t1, &id_dest->val, &t1);    // t1 = dest ^ result
     rtl_and(&t0, &t0, &t1);              // t0 = (dest^src) & (dest^result)
     rtl_msb(&t0, &t0, id_dest->width);
     rtl_set_OF(&t0);
-
-    // set AF & PF: not implemented
 
     print_asm_template2(sub);
 }

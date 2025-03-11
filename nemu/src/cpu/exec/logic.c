@@ -16,14 +16,14 @@ make_EHelper(and)
 
 make_EHelper (xor)
 {
-    // TODO();
-    Log("id_dest->val = %d, id_src->val = %d", id_dest->val, id_src->val);
-    Log("Enter xor");
-    // Log("Need to implement xor");
+    // CF = 0, OF = 0; SF, ZF, and PF as described in Appendix C; AF is undefined
 
     rtl_xor(&t0, &id_dest->val, &id_src->val);
+    rtl_set_CF(&tzero);
+    rtl_set_OF(&tzero);
 
     rtl_update_ZFSF(&t0, id_dest->width);
+    rtl_update_PF(&t0);
 
     operand_write(id_dest, &t0);
 
