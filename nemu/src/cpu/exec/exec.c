@@ -312,7 +312,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX(xor), EX
         EMPTY,
         /* 0xf4 */ EMPTY,
         EMPTY,
-        EMPTY,
+        IDEXW(E, gp3, 1),
         IDEX(E, gp3),
         /* 0xf8 */ EMPTY,
         EMPTY,
