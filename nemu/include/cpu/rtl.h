@@ -98,7 +98,6 @@ static inline void rtl_sr(int r, int width, const rtlreg_t* src1)
     switch (width)
     {
         case 4: 
-            Log("r = %d, src1 = %u", r, *src1);
         rtl_sr_l(r, src1); return;
         case 1: rtl_sr_b(r, src1); return;
         case 2: rtl_sr_w(r, src1); return;
