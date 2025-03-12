@@ -32,9 +32,9 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode)
         case CC_O:
         case CC_B: TODO();
         case CC_E: rtl_get_ZF(dest); break;
-        case CC_BE:
-        case CC_S:
-        case CC_L:
+        case CC_BE:TODO();
+        case CC_S:TODO();
+        case CC_L:TODO();
         case CC_LE: TODO();
         default: panic("should not reach here");
         case CC_P: panic("n86 does not have PF");
