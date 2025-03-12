@@ -153,7 +153,7 @@ static int cmd_wr(char* args)
         return 0;
     }
 
-    int val = strtol(val_str, NULL, 0);
+    uint32_t val = strtoul(val_str, NULL, 0);
 
 #define X(name, width)                                      \
     if (strcmp(reg_ptr, #name) == 0) {                      \
