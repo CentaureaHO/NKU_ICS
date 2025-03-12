@@ -40,28 +40,28 @@ static make_EHelper(2byte_esc);
 
 #define make_group(name, item0, item1, item2, item3, item4, item5, item6, item7)       \
     static opcode_entry concat(opcode_table_, name)[8] = {                             \
-        /* 0x00 */ item0, item1, item2, item3, /* 0x04 */ item4, item5, item6, item7}; \
+        /* 0x00 */ EX(item0), EX(item1), EX(item2), EX(item3), /* 0x04 */ EX(item4), EX(item5), EX(item6), EX(item7)}; \
     static make_EHelper(name) { idex(eip, &concat(opcode_table_, name)[decoding.ext_opcode]); }
 
 /* 0x80, 0x81, 0x83 */
 // make_group(gp1, EX(arith_add), EX(arith_or), EX(arith_adc), EX(arith_sbb), EX(arith_and), EX(arith_sub),
 // EX(arith_xor), EX(arith_cmp))
-make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), EX(cmp))
+make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
 
     /* 0xc0, 0xc1, 0xd0, 0xd1, 0xd2, 0xd3 */
-    make_group(gp2, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY)
+    make_group(gp2, inv, inv, inv, inv, inv, inv, inv, inv)
 
     /* 0xf6, 0xf7 */
-    make_group(gp3, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY)
+    make_group(gp3, inv, inv, inv, inv, inv, inv, inv, inv)
 
     /* 0xfe */
-    make_group(gp4, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY)
+    make_group(gp4, inv, inv, inv, inv, inv, inv, inv, inv)
 
     /* 0xff */
-    make_group(gp5, EX(inc), EX(dec), EX(call), EX(call), EX(jmp), EX(jmp), EX(push), EMPTY)
+    make_group(gp5, inc, dec, call, call, jmp, jmp, push, inv)
 
     /* 0x0f 0x01*/
-    make_group(gp7, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY)
+    make_group(gp7, inv, inv, inv, inv, inv, inv, inv, inv)
 
     /* TODO: Add more instructions!!! */
 
