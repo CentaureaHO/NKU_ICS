@@ -359,7 +359,7 @@ uint32_t eval_ast(ASTNode* node)
                     }
 
                     uint32_t val = vaddr_read(addr, 4);
-                    Log("read memory at 0x%08x: 0x%08x", addr, val);
+                    // Log("read memory at 0x%08x: 0x%08x", addr, val);
                     return val;
                 }
                 default: Log("unknown operator"); return 0;
