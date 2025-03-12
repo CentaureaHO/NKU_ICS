@@ -5,17 +5,17 @@ make_EHelper(add)
     // OF, SF, ZF, AF, CF, and PF as described in Appendix C
 
     if (id_src->width == 1 && id_dest->width > 1) {
-        Log("Src is byte, dest is word or dword. Sign extend src to dest width %d", id_dest->width);
+        // Log("Src is byte, dest is word or dword. Sign extend src to dest width %d", id_dest->width);
         rtl_sext(&t0, &id_src->val, id_src->width);
     }
     else
         rtl_mv(&t0, &id_src->val);
 
-    Log("id_dest->val = 0x%x, id_src->val = 0x%x", id_dest->val, id_src->val);
+    // Log("id_dest->val = 0x%x, id_src->val = 0x%x", id_dest->val, id_src->val);
 
     rtl_add(&t1, &id_dest->val, &t0);
 
-    Log("Add result: 0x%x", t1);
+    // Log("Add result: 0x%x", t1);
 
     operand_write(id_dest, &t1);
 
@@ -49,7 +49,7 @@ make_EHelper(sub)
     */
 
     if (id_src->width == 1 && id_dest->width > 1) {
-        Log("Src is byte, dest is word or dword. Sign extend src to dest width %d", id_dest->width);
+        // Log("Src is byte, dest is word or dword. Sign extend src to dest width %d", id_dest->width);
         rtl_sext(&t0, &id_src->val, id_src->width);
     }
     else
