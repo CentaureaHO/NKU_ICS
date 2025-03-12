@@ -500,7 +500,7 @@ make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
         /* 0xac */ EMPTY,
         EMPTY,
         EMPTY,
-        EMPTY,
+        IDEX(E2G, imul2),
         /* 0xb0 */ EMPTY,
         EMPTY,
         EMPTY,
