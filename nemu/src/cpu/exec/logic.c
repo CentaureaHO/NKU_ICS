@@ -67,7 +67,9 @@ make_EHelper(shl)
 make_EHelper(shr)
 {
     TODO();
+
     // unnecessary to update CF and OF in NEMU
+    // why?
 
     print_asm_template2(shr);
 }
