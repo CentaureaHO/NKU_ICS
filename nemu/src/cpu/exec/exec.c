@@ -55,7 +55,7 @@ make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
     make_group(gp3, inv, inv, inv, inv, inv, inv, inv, inv)
 
     /* 0xfe */
-    make_group(gp4, inv, inv, inv, inv, inv, inv, inv, inv)
+    make_group(gp4, inc, dec, inv, inv, inv, inv, inv, inv)
 
     /* 0xff */
     make_group(gp5, inc, dec, call, call, jmp, jmp, push, inv)
