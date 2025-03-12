@@ -198,7 +198,7 @@ make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
         IDEX(I2E, gp1),
         EMPTY,
         IDEX(SI2E, gp1),
-        /* 0x84 */ EMPTY,
+        /* 0x84 */ IDEXW(G2E, test, 1),
         IDEX(G2E, test),
         EMPTY,
         EMPTY,
