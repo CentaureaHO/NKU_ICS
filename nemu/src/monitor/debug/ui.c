@@ -140,31 +140,29 @@ static int cmd_d(char* args)
 static int cmd_wr(char* args)
 {
     char* reg_ptr = strtok(args, " ");
-    if (reg_ptr == NULL) 
-    {
+    if (reg_ptr == NULL) {
         printf("Usage: wr $REG VALUE\n");
         return 0;
     }
-    
+
     if (*reg_ptr == '$') ++reg_ptr;
-    
+
     char* val_str = strtok(NULL, " ");
-    if (val_str == NULL) 
-    {
+    if (val_str == NULL) {
         printf("Missing value. Usage: wr $REG VALUE\n");
         return 0;
     }
-    
+
     int val = strtol(val_str, NULL, 0);
 
-    #define X(name, width) \
-        if (strcmp(reg_ptr, #name) == 0) { \
-            cpu.name = val; \
-            Log("Set register \"%s\" to 0x%08x", reg_ptr, val); \
-            return 0; \
-        }
+#define X(name, width)                                      \
+    if (strcmp(reg_ptr, #name) == 0) {                      \
+        cpu.name = val;                                     \
+        Log("Set register \"%s\" to 0x%08x", reg_ptr, val); \
+        return 0;                                           \
+    }
     X86_REGS
-    #undef X
+#undef X
 
     Log("Unknown register \"%s\"", reg_ptr);
     return 0;
@@ -178,11 +176,10 @@ static int cmd_wm(char* args)
     }
 
     char* expr_str = NULL;
-    char* val_str = NULL;
-    
+    char* val_str  = NULL;
+
     val_str = strrchr(args, ' ');
-    if (val_str == NULL) 
-    {
+    if (val_str == NULL) {
         printf("Missing value. Usage: wm EXPR VALUE\n");
         return 0;
     }
@@ -190,24 +187,23 @@ static int cmd_wm(char* args)
     *val_str = '\0';
     expr_str = args;
     val_str++;
-    
-    bool success = false;
-    uint32_t addr = expr(expr_str, &success);
+
+    bool     success = false;
+    uint32_t addr    = expr(expr_str, &success);
     if (!success) {
         printf("Failed to evaluate address expression \"%s\"\n", expr_str);
         return 0;
     }
-    
+
     char* end_ptr;
-    int val = strtol(val_str, &end_ptr, 0);
-    if (*end_ptr != '\0') 
-    {
+    int   val = strtol(val_str, &end_ptr, 0);
+    if (*end_ptr != '\0') {
         printf("Invalid value format: \"%s\"\n", val_str);
         return 0;
     }
 
     vaddr_write(addr, 4, val);
-    
+
     Log("Write 0x%08x to %s: 0x%08x", val, expr_str, addr);
     return 0;
 }
