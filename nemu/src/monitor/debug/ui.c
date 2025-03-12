@@ -144,6 +144,8 @@ static int cmd_wr(char* args)
     reg_ptr       = strtok(args, " ") + 1;
     int   val     = strtol(reg_ptr + 1, &val_ptr, 0);
 
+    Log("Target register: %s, value: 0x%08x", reg_ptr, val);
+
     #define X(name, width) \
         if (strcmp(reg_ptr, #name) == 0) { \
             cpu.name = val; \
