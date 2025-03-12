@@ -156,8 +156,6 @@ static int cmd_wr(char* args)
     }
     
     int val = strtol(val_str, NULL, 0);
-    
-    Log("Target register: %s, value: 0x%08x", reg_ptr, val);
 
     #define X(name, width) \
         if (strcmp(reg_ptr, #name) == 0) { \
@@ -174,15 +172,43 @@ static int cmd_wr(char* args)
 
 static int cmd_wm(char* args)
 {
-    char* addr_ptr = NULL;
-    char* val_ptr  = NULL;
-    uint32_t addr  = strtol(args, &addr_ptr, 0);
-    int      val   = strtol(addr_ptr + 1, &val_ptr, 0);
+    if (args == NULL) {
+        printf("Usage: wm EXPR VALUE\n");
+        return 0;
+    }
+
+    char* expr_str = NULL;
+    char* val_str = NULL;
+    
+    val_str = strrchr(args, ' ');
+    if (val_str == NULL) 
+    {
+        printf("Missing value. Usage: wm EXPR VALUE\n");
+        return 0;
+    }
+
+    *val_str = '\0';
+    expr_str = args;
+    val_str++;
+    
+    bool success = false;
+    uint32_t addr = expr(expr_str, &success);
+    if (!success) {
+        printf("Failed to evaluate address expression \"%s\"\n", expr_str);
+        return 0;
+    }
+    
+    char* end_ptr;
+    int val = strtol(val_str, &end_ptr, 0);
+    if (*end_ptr != '\0') 
+    {
+        printf("Invalid value format: \"%s\"\n", val_str);
+        return 0;
+    }
 
     vaddr_write(addr, 4, val);
-
-    Log("Write 0x%08x to 0x%08x", val, addr);
-
+    
+    Log("Write 0x%08x to %s: 0x%08x", val, expr_str, addr);
     return 0;
 }
 
