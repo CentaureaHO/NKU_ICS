@@ -107,14 +107,34 @@ make_EHelper(cmp)
 
 make_EHelper(inc)
 {
-    TODO();
+    // OF, SF, ZF, AF, and PF as described in Appendix C
+    rtl_add(&t0, &id_dest->val, enable);    // enable is a constant with value 1,  
+                                            // borrowed here for increment operation
+
+    rtl_update_ZFSF(&t0, id_dest->width);
+    rtl_update_PF(&t0);
+
+    rtl_xor(&t1, &t0, &id_dest->val);
+    rtl_msb(&t1, &t1, id_dest->width);
+    rtl_set_OF(&t1);
 
     print_asm_template1(inc);
 }
 
 make_EHelper(dec)
 {
-    TODO();
+    // OF, SF, ZF, AF, and PF as described in Appendix C
+    rtl_sub(&t0, &id_dest->val, enable);    // enable is a constant with value 1, 
+                                            // borrowed here for decrement operation
+    
+    operand_write(id_dest, &t0);
+    
+    rtl_update_ZFSF(&t0, id_dest->width);
+    rtl_update_PF(&t0);
+
+    rtl_xor(&t1, &t0, &id_dest->val);
+    rtl_msb(&t1, &t1, id_dest->width);
+    rtl_set_OF(&t1);
 
     print_asm_template1(dec);
 }
