@@ -139,27 +139,51 @@ static int cmd_d(char* args)
 
 static int cmd_wr(char* args)
 {
-    char* reg_ptr = strtok(args, " ");
-    if (reg_ptr == NULL) {
-        printf("Usage: wr $REG VALUE\n");
+    if (args == NULL) {
+        printf("Usage: wr $REG, EXPR\n");
         return 0;
     }
+
+    char* comma = strchr(args, ',');
+    if (comma == NULL) {
+        printf("Missing comma separator. Usage: wr $REG, EXPR\n");
+        return 0;
+    }
+
+    *comma         = '\0';
+    char* reg_ptr  = args;
+    char* expr_str = comma + 1;
+
+    while (*reg_ptr && (*reg_ptr == ' ' || *reg_ptr == '\t')) ++reg_ptr;
+
+    char* reg_end                                                                 = reg_ptr + strlen(reg_ptr) - 1;
+    while (reg_end > reg_ptr && (*reg_end == ' ' || *reg_end == '\t')) *reg_end-- = '\0';
 
     if (*reg_ptr == '$') ++reg_ptr;
-
-    char* val_str = strtok(NULL, " ");
-    if (val_str == NULL) {
-        printf("Missing value. Usage: wr $REG VALUE\n");
+    if (*reg_ptr == '\0') {
+        printf("Missing register name. Usage: wr $REG, EXPR\n");
         return 0;
     }
 
-    uint32_t val = strtoul(val_str, NULL, 0);
+    while (*expr_str && (*expr_str == ' ' || *expr_str == '\t')) ++expr_str;
 
-#define X(name, width)                                      \
-    if (strcmp(reg_ptr, #name) == 0) {                      \
-        cpu.name = val;                                     \
-        Log("Set register \"%s\" to 0x%08x", reg_ptr, val); \
-        return 0;                                           \
+    if (*expr_str == '\0') {
+        printf("Missing expression. Usage: wr $REG, EXPR\n");
+        return 0;
+    }
+
+    bool     success = false;
+    uint32_t val     = expr(expr_str, &success);
+    if (!success) {
+        printf("Failed to evaluate expression \"%s\"\n", expr_str);
+        return 0;
+    }
+
+#define X(name, width)                                                              \
+    if (strcmp(reg_ptr, #name) == 0) {                                              \
+        cpu.name = val;                                                             \
+        Log("Set register \"%s\" to 0x%08x from expr: %s", reg_ptr, val, expr_str); \
+        return 0;                                                                   \
     }
     X86_REGS
 #undef X
@@ -171,40 +195,54 @@ static int cmd_wr(char* args)
 static int cmd_wm(char* args)
 {
     if (args == NULL) {
-        printf("Usage: wm EXPR VALUE\n");
+        printf("Usage: wm ADDR_EXPR, VALUE_EXPR\n");
         return 0;
     }
 
-    char* expr_str = NULL;
-    char* val_str  = NULL;
-
-    val_str = strrchr(args, ' ');
-    if (val_str == NULL) {
-        printf("Missing value. Usage: wm EXPR VALUE\n");
+    char* comma = strchr(args, ',');
+    if (comma == NULL) {
+        printf("Missing comma separator. Usage: wm ADDR_EXPR, VALUE_EXPR\n");
         return 0;
     }
 
-    *val_str = '\0';
-    expr_str = args;
-    val_str++;
+    *comma          = '\0';
+    char* addr_expr = args;
+    char* val_expr  = comma + 1;
+
+    while (*addr_expr && (*addr_expr == ' ' || *addr_expr == '\t')) ++addr_expr;
+
+    char* addr_end = addr_expr + strlen(addr_expr) - 1;
+    while (addr_end > addr_expr && (*addr_end == ' ' || *addr_end == '\t')) *addr_end-- = '\0';
+
+    if (*addr_expr == '\0') {
+        printf("Missing address expression. Usage: wm ADDR_EXPR, VALUE_EXPR\n");
+        return 0;
+    }
+
+    while (*val_expr && (*val_expr == ' ' || *val_expr == '\t')) ++val_expr;
+
+    if (*val_expr == '\0') {
+        printf("Missing value expression. Usage: wm ADDR_EXPR, VALUE_EXPR\n");
+        return 0;
+    }
 
     bool     success = false;
-    uint32_t addr    = expr(expr_str, &success);
+    uint32_t addr    = expr(addr_expr, &success);
     if (!success) {
-        printf("Failed to evaluate address expression \"%s\"\n", expr_str);
+        printf("Failed to evaluate address expression \"%s\"\n", addr_expr);
         return 0;
     }
 
-    char* end_ptr;
-    int   val = strtol(val_str, &end_ptr, 0);
-    if (*end_ptr != '\0') {
-        printf("Invalid value format: \"%s\"\n", val_str);
+    success      = false;
+    uint32_t val = expr(val_expr, &success);
+    if (!success) {
+        printf("Failed to evaluate value expression \"%s\"\n", val_expr);
         return 0;
     }
 
     vaddr_write(addr, 4, val);
 
-    Log("Write 0x%08x to %s: 0x%08x", val, expr_str, addr);
+    Log("Write 0x%08x to 0x%08x (addr_expr: \"%s\", val_expr: \"%s\")", val, addr, addr_expr, val_expr);
     return 0;
 }
 
@@ -225,8 +263,8 @@ static struct
     {"p", "Evaluate expression: p [EXPR]", cmd_p},
     {"w", "Set watchpoint: w [EXPR]", cmd_w},
     {"d", "Delete watchpoint: d [N]", cmd_d},
-    {"wr", "Write target register with value: wr [REG] [VALUE]", cmd_wr},
-    {"wm", "Write target byte at address: wm [ADDR] [VALUE]", cmd_wm},
+    {"wr", "Write target register with expression: wr $REG, EXPR", cmd_wr},
+    {"wm", "Write memory at address: wm ADDR_EXPR, VALUE_EXPR", cmd_wm},
 
     /* TODO: Add more commands */
 
