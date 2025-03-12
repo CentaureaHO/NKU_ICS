@@ -313,7 +313,7 @@ make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
         /* 0xf4 */ EMPTY,
         EMPTY,
         EMPTY,
-        IDEX(test_I, gp3),
+        IDEX(E, gp3),
         /* 0xf8 */ EMPTY,
         EMPTY,
         EMPTY,
