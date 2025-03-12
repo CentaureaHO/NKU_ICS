@@ -1,5 +1,14 @@
 #include "cpu/exec.h"
 
+// arith
+make_EHelper(add);
+make_EHelper(adc);
+make_EHelper(sbb);
+make_EHelper(sub);
+make_EHelper(cmp);
+make_EHelper(inc);
+make_EHelper(dec);
+
 // data-mov
 make_EHelper(mov);
 make_EHelper(push);
@@ -18,28 +27,11 @@ make_EHelper(nemu_trap);
 make_EHelper(call);
 make_EHelper(ret);
 make_EHelper(jcc);
+make_EHelper(jmp);
 
 // logic
-make_EHelper(setcc);
 make_EHelper(test);
-make_EHelper(or);
-
-// group 1
-make_EHelper(add);
-make_EHelper(or);
-make_EHelper(adc);
-make_EHelper(sbb);
 make_EHelper(and);
-make_EHelper(sub);
-make_EHelper (xor);
-make_EHelper(cmp);
-
-// group 5
-make_EHelper(inc);
-make_EHelper(dec);
-// make_EHelper(call); declared at control
-// make_EHelper(call); declared at control
-make_EHelper(jmp);
-// make_EHelper(jmp); declared at group 5
-// make_EHelper(push); declared at data-mov
-// Empty
+make_EHelper(xor);
+make_EHelper(setcc);
+make_EHelper(or);
