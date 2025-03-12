@@ -117,6 +117,8 @@ make_EHelper(inc)
     rtl_msb(&t1, &t1, id_dest->width);
     rtl_set_OF(&t1);
 
+    operand_write(id_dest, &t0);
+
     print_asm_template1(inc);
 }
 
@@ -133,6 +135,8 @@ make_EHelper(dec)
     rtl_xor(&t1, &t0, &id_dest->val);
     rtl_msb(&t1, &t1, id_dest->width);
     rtl_set_OF(&t1);
+
+    operand_write(id_dest, &t0);
 
     print_asm_template1(dec);
 }
