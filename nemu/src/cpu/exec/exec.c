@@ -299,7 +299,7 @@ make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
         EMPTY,
         EMPTY,
         /* 0xe8 */ IDEX(J, call),
-        EMPTY,
+        IDEX(J, jmp),
         EMPTY,
         EMPTY,
         /* 0xec */ EMPTY,
