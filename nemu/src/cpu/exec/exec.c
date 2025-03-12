@@ -100,7 +100,7 @@ make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
         EMPTY,
         /* 0x20 */ EMPTY,
         EMPTY,
-        EMPTY,
+        IDEXW(E2G, and, 1),
         EMPTY,
         /* 0x24 */ EMPTY,
         EMPTY,
