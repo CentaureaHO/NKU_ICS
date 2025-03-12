@@ -76,7 +76,7 @@ make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
         EMPTY,
         /* 0x08 */ EMPTY,
         IDEX(G2E, or),
-        IDEXW(G2E, or, 1),
+        IDEXW(E2G, or, 1),
         EMPTY,
         /* 0x0c */ EMPTY,
         EMPTY,
