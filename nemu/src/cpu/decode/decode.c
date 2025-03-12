@@ -45,6 +45,7 @@ static inline make_DopHelper(SI)
     // Log("Here follows the function decode_op_SI");
     // op->simm = instr_fetch(eip, op->width);
     uint32_t simm = instr_fetch(eip, op->width);
+    Log("Before sign extension, simm = %x", simm);
     rtl_sext(&op->val, &simm, op->width);
     op->simm = *(int32_t*)&op->val;
     Log("op->simm = %d", op->simm);
