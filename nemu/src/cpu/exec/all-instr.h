@@ -20,6 +20,7 @@ make_EHelper(ret);
 
 // logic
 make_EHelper(setcc);
+make_EHelper(test);
 
 // group 1
 make_EHelper(add);

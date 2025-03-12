@@ -199,7 +199,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         EMPTY,
         IDEX(SI2E, gp1),
         /* 0x84 */ EMPTY,
-        EMPTY,
+        IDEX(G2E, test),
         EMPTY,
         EMPTY,
         /* 0x88 */ IDEXW(mov_G2E, mov, 1),
