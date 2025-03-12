@@ -80,8 +80,6 @@ make_EHelper(setcc)
     rtl_setcc(&t2, subcode);
     operand_write(id_dest, &t2);
 
-    cpu.eax |= 0xffffff00;
-
     print_asm("set%s %s", get_cc_name(subcode), id_dest->str);
 }
 
