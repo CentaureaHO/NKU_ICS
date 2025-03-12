@@ -173,7 +173,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         /* 0x68 */ EMPTY,
         EMPTY,
         EMPTY,
-        EMPTY,
+        IDEXW(I, push, 1),
         /* 0x6c */ EMPTY,
         EMPTY,
         EMPTY,
