@@ -124,9 +124,9 @@ make_EHelper(dec)
 {
     // OF, SF, ZF, AF, and PF as described in Appendix C
     t0 = id_dest->val - 1;
-    
+
     operand_write(id_dest, &t0);
-    
+
     rtl_update_ZFSF(&t0, id_dest->width);
     rtl_update_PF(&t0);
 

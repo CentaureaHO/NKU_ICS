@@ -29,7 +29,7 @@ make_EHelper(jmp_rm)
 make_EHelper(call)
 {
     // Log("call to %x", decoding.jmp_eip);
-    
+
     decoding.is_jmp = 1;
     rtl_push(&decoding.seq_eip);
 

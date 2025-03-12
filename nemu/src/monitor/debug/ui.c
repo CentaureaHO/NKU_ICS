@@ -137,6 +137,41 @@ static int cmd_d(char* args)
     return 0;
 }
 
+static int cmd_wr(char* args)
+{
+    char* reg_ptr = NULL;
+    char* val_ptr = NULL;
+    reg_ptr       = strtok(args, " ");
+    int val       = strtol(reg_ptr + 1, &val_ptr, 0);
+
+#define X(name, width)                                      \
+    if (strcmp(reg_ptr, #name) == 0) {                      \
+        cpu.name = val;                                     \
+        Log("Set register \"%s\" to 0x%08x", reg_ptr, val); \
+        return 0;                                           \
+    }
+    X86_REGS
+#undef X
+
+    Log("Unknown register \"%s\"", reg_ptr);
+
+    return 0;
+}
+
+static int cmd_wm(char* args)
+{
+    char*    addr_ptr = NULL;
+    char*    val_ptr  = NULL;
+    uint32_t addr     = strtol(args, &addr_ptr, 0);
+    int      val      = strtol(addr_ptr + 1, &val_ptr, 0);
+
+    vaddr_write(addr, 4, val);
+
+    Log("Write 0x%08x to 0x%08x", val, addr);
+
+    return 0;
+}
+
 static int cmd_help(char* args);
 
 static struct
@@ -154,6 +189,8 @@ static struct
     {"p", "Evaluate expression: p [EXPR]", cmd_p},
     {"w", "Set watchpoint: w [EXPR]", cmd_w},
     {"d", "Delete watchpoint: d [N]", cmd_d},
+    {"wr", "Write target register with value: wr [REG] [VALUE]", cmd_wr},
+    {"wm", "Write target byte at address: wm [ADDR] [VALUE]", cmd_wm},
 
     /* TODO: Add more commands */
 

@@ -38,8 +38,8 @@ static inline void idex(vaddr_t* eip, opcode_entry* e)
 
 static make_EHelper(2byte_esc);
 
-#define make_group(name, item0, item1, item2, item3, item4, item5, item6, item7)       \
-    static opcode_entry concat(opcode_table_, name)[8] = {                             \
+#define make_group(name, item0, item1, item2, item3, item4, item5, item6, item7)                                       \
+    static opcode_entry concat(opcode_table_, name)[8] = {                                                             \
         /* 0x00 */ EX(item0), EX(item1), EX(item2), EX(item3), /* 0x04 */ EX(item4), EX(item5), EX(item6), EX(item7)}; \
     static make_EHelper(name) { idex(eip, &concat(opcode_table_, name)[decoding.ext_opcode]); }
 
