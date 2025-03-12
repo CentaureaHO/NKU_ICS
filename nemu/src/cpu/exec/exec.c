@@ -508,7 +508,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         /* 0xb4 */ EMPTY,
         EMPTY,
         IDEXW(mov_E2G, movzx, 1),
-        EMPTY,
+        IDEXW(mov_E2G, movzx, 2),
         /* 0xb8 */ EMPTY,
         EMPTY,
         EMPTY,
