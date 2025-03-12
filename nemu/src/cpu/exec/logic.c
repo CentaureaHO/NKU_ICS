@@ -52,8 +52,9 @@ make_EHelper (xor)
 make_EHelper(or)
 {
     // OF ← 0, CF ← 0; SF, ZF, and PF as described in Appendix C; AF is undefined
-
+    Log("id_dest->val = 0x%x, id_src->val = 0x%x", id_dest->val, id_src->val);
     rtl_or(&t0, &id_dest->val, &id_src->val);
+    Log("OR: t0 = 0x%x", t0);
 
     rtl_set_OF(&tzero);
     rtl_set_CF(&tzero);
