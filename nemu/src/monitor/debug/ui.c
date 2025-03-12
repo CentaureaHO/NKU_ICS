@@ -141,17 +141,17 @@ static int cmd_wr(char* args)
 {
     char* reg_ptr = NULL;
     char* val_ptr = NULL;
-    reg_ptr       = strtok(args, " ");
-    int val       = strtol(reg_ptr + 1, &val_ptr, 0);
+    reg_ptr       = strtok(args, " ") + 1;
+    int   val     = strtol(reg_ptr + 1, &val_ptr, 0);
 
-#define X(name, width)                                      \
-    if (strcmp(reg_ptr, #name) == 0) {                      \
-        cpu.name = val;                                     \
-        Log("Set register \"%s\" to 0x%08x", reg_ptr, val); \
-        return 0;                                           \
-    }
+    #define X(name, width) \
+        if (strcmp(reg_ptr, #name) == 0) { \
+            cpu.name = val; \
+            Log("Set register \"%s\" to 0x%08x", reg_ptr, val); \
+            return 0; \
+        }
     X86_REGS
-#undef X
+    #undef X
 
     Log("Unknown register \"%s\"", reg_ptr);
 
@@ -160,10 +160,10 @@ static int cmd_wr(char* args)
 
 static int cmd_wm(char* args)
 {
-    char*    addr_ptr = NULL;
-    char*    val_ptr  = NULL;
-    uint32_t addr     = strtol(args, &addr_ptr, 0);
-    int      val      = strtol(addr_ptr + 1, &val_ptr, 0);
+    char* addr_ptr = NULL;
+    char* val_ptr  = NULL;
+    uint32_t addr  = strtol(args, &addr_ptr, 0);
+    int      val   = strtol(addr_ptr + 1, &val_ptr, 0);
 
     vaddr_write(addr, 4, val);
 
