@@ -20,7 +20,7 @@ make_EHelper(and)
     // TODO();
     // CF = 0, OF = 0; PF, SF, and ZF as described in Appendix C
 
-    Log("id_dest->val = 0x%x, id_src->val = 0x%x", id_dest->val, id_src->val);
+    // Log("id_dest->val = 0x%x, id_src->val = 0x%x", id_dest->val, id_src->val);
 
     rtl_and(&t0, &id_dest->val, &id_src->val);
     operand_write(id_dest, &t0);
