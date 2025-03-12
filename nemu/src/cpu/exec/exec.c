@@ -75,7 +75,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         EMPTY,
         EMPTY,
         /* 0x08 */ EMPTY,
-        EMPTY,
+        IDEX(G2E, or),
         EMPTY,
         EMPTY,
         /* 0x0c */ EMPTY,

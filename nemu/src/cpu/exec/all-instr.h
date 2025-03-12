@@ -22,6 +22,7 @@ make_EHelper(jcc);
 // logic
 make_EHelper(setcc);
 make_EHelper(test);
+make_EHelper(or);
 
 // group 1
 make_EHelper(add);
