@@ -112,7 +112,7 @@ static struct rule
     */
     {"0[xX][0-9a-fA-F]+", TK_HEXNUM},   // hex number
     {"[0-9]+", TK_DECNUM},              // decimal number
-    {"\\[a-zA-Z]+", TK_REG},           // register
+    {"\\$[a-zA-Z]+", TK_REG},           // register
     {"\\(", TK_LPARAN},                 // left parantheses
     {"\\)", TK_RPARAN},                 // right parantheses
     {"\\+", TK_ADD},                    // add
