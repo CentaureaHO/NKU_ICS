@@ -127,25 +127,18 @@ static inline void rtl_not(rtlreg_t* dest)
 
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width)
 {
-    // dest <- signext(src1[(width * 8 - 1) .. 0])
-    // TODO();
-
-    uint32_t src_val = 0;
+    if (width == 4) 
+    {
+        *dest = *src1;
+        return;
+    }
+    
     switch (width)
     {
-        case 1: src_val = (int8_t)*src1; break;
-        case 2: src_val = (int16_t)*src1; break;
-        case 4: src_val = (int32_t)*src1; break;
+        case 1: *dest = (int8_t)(*src1 & 0xFF); break;
+        case 2: *dest = (int16_t)(*src1 & 0xFFFF); break;
         default: Assert(0, "Invalid width");
     }
-
-    int      bit_width = width << 3;
-    uint32_t sign_bit  = 1U << (bit_width - 1);
-
-    if (src_val & sign_bit)
-        *dest = src_val | (~0u << bit_width);
-    else
-        *dest = src_val;
 }
 
 static inline void rtl_push(const rtlreg_t* src1)
