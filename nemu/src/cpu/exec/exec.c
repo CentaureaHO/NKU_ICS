@@ -52,7 +52,7 @@ make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
     make_group(gp2, inv, inv, inv, inv, shl, shr, inv, sar)
 
     /* 0xf6, 0xf7 */
-    make_group(gp3, inv, inv, inv, inv, inv, inv, inv, inv)
+    make_group(gp3, inv, inv, not, inv, inv, inv, inv, inv)
 
     /* 0xfe */
     make_group(gp4, inc, dec, inv, inv, inv, inv, inv, inv)

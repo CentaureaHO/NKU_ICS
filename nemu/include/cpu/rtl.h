@@ -122,7 +122,9 @@ static inline void rtl_not(rtlreg_t* dest)
 {
     // dest <- ~dest
     // TODO();
+    Log("Not before: *dest = 0x%x", *dest);
     *dest = ~*dest;
+    Log("Not after: *dest = 0x%x", *dest);
 }
 
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width)
