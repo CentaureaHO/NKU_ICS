@@ -17,6 +17,9 @@ make_EHelper(nemu_trap);
 make_EHelper(call);
 make_EHelper(ret);
 
+// logic
+make_EHelper(setcc);
+
 // group 1
 make_EHelper(add);
 make_EHelper(or);
