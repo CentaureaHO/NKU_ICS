@@ -139,11 +139,24 @@ static int cmd_d(char* args)
 
 static int cmd_wr(char* args)
 {
-    char* reg_ptr = NULL;
-    char* val_ptr = NULL;
-    reg_ptr       = strtok(args, " ") + 1;
-    int   val     = strtol(reg_ptr + 1, &val_ptr, 0);
-
+    char* reg_ptr = strtok(args, " ");
+    if (reg_ptr == NULL) 
+    {
+        printf("Usage: wr $REG VALUE\n");
+        return 0;
+    }
+    
+    if (*reg_ptr == '$') ++reg_ptr;
+    
+    char* val_str = strtok(NULL, " ");
+    if (val_str == NULL) 
+    {
+        printf("Missing value. Usage: wr $REG VALUE\n");
+        return 0;
+    }
+    
+    int val = strtol(val_str, NULL, 0);
+    
     Log("Target register: %s, value: 0x%08x", reg_ptr, val);
 
     #define X(name, width) \
@@ -156,7 +169,6 @@ static int cmd_wr(char* args)
     #undef X
 
     Log("Unknown register \"%s\"", reg_ptr);
-
     return 0;
 }
 
