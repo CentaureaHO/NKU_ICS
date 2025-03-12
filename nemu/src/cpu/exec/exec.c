@@ -474,7 +474,7 @@ make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
         EMPTY,
         EMPTY,
         /* 0x94 */ IDEXW(E, setcc, 1),
-        EMPTY,
+        IDEXW(E, setcc, 1),
         EMPTY,
         EMPTY,
         /* 0x98 */ EMPTY,
