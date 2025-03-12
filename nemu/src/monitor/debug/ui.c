@@ -88,7 +88,7 @@ static int cmd_info(char* args)
 static int cmd_x(char* args)
 {
     char* expr_ptr = NULL;
-    int   n        = strtol(args, &expr_ptr, 10);
+    int   n        = strtol(args, &expr_ptr, 0);
 
     Assert(n > 0, "Got argument \"%s\" for x, but it should be a positive integer", args);
     Assert(*expr_ptr == ' ', "Got argument \"%s\" for x, but it should be followed by a space", args);
