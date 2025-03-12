@@ -49,7 +49,7 @@ static make_EHelper(2byte_esc);
 make_group(gp1, add, or, adc, sbb, and, sub, xor, cmp)
 
     /* 0xc0, 0xc1, 0xd0, 0xd1, 0xd2, 0xd3 */
-    make_group(gp2, inv, inv, inv, inv, inv, inv, inv, inv)
+    make_group(gp2, inv, inv, inv, inv, inv, inv, inv, sar)
 
     /* 0xf6, 0xf7 */
     make_group(gp3, inv, inv, inv, inv, inv, inv, inv, inv)

@@ -68,8 +68,17 @@ make_EHelper(or)
 
 make_EHelper(sar)
 {
-    TODO();
     // unnecessary to update CF and OF in NEMU
+    // why?
+    // OF for single shifts; OF is undefined for multiple shifts; CF, ZF, PF, and SF as described in Appendix C
+
+    rtl_li(&t2, id_dest->val);
+    rtl_sar(&t0, &t2, &id_src->val);
+
+    rtl_update_PF(&t0);
+    rtl_update_ZFSF(&t0, id_dest->width);
+
+    operand_write(id_dest, &t0);
 
     print_asm_template2(sar);
 }
