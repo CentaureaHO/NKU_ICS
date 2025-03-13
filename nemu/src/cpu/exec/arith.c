@@ -183,6 +183,13 @@ make_EHelper(sbb)
     rtl_msb(&t0, &t0, id_dest->width);
     rtl_set_OF(&t0);
 
+    rtl_andi(&t0, &id_dest->val, 0xF);
+    rtl_andi(&t1, &id_src->val, 0xF);
+    rtl_get_CF(&t3);
+    rtl_add(&t1, &t1, &t3);
+    rtl_sltu(&t0, &t0, &t1);
+    rtl_set_AF(&t0);  
+
     print_asm_template2(sbb);
 }
 
