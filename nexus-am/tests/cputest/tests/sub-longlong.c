@@ -84,6 +84,7 @@ long long ans[] = {0LL,
 int main()
 {
     int i, j, ans_idx = 0;
+    // 第三次出现错误
     for (i = 0; i < NR_DATA; i++) {
         for (j = 0; j < NR_DATA; j++) {
             nemu_assert(sub(test_data[i], test_data[j]) == ans[ans_idx++]);
