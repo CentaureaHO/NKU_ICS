@@ -33,6 +33,8 @@ make_EHelper(add)
     rtl_msb(&t0, &t0, id_dest->width);
     rtl_set_OF(&t0);
 
+    rtl_set_AF(disable);
+
     print_asm_template2(add);
 }
 
