@@ -38,23 +38,19 @@ make_EHelper(add)
 
 make_EHelper(sub)
 {
-    if (id_src->width == 1 && id_dest->width > 1) {
-        // Log("Src is byte, dest is word or dword. Sign extend src to dest width %d", id_dest->width);
+    if (id_src->width == 1 && id_dest->width > 1)
         rtl_sext(&t1, &id_src->val, id_src->width);
-    }
     else
         rtl_mv(&t1, &id_src->val);
 
     rtl_sub(&t2, &id_dest->val, &t1);
     rtl_update_PF(&t2);
-    rtl_sltu(&t3, &id_dest->val, &t2);
 
     operand_write(id_dest, &t2);
 
     rtl_update_ZFSF(&t2, id_dest->width);
 
-    rtl_sltu(&t0, &id_dest->val, &t2);
-    rtl_or(&t0, &t3, &t0);
+    rtl_sltu(&t0, &id_dest->val, &t1);
     rtl_set_CF(&t0);
 
     rtl_xor(&t0, &id_dest->val, &t1);
