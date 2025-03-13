@@ -55,8 +55,20 @@ make_EHelper(sub)
     else
         rtl_mv(&t0, &id_src->val);
 
-    rtl_sub(&t1, &id_dest->val, &t0);
+    rtl_mv(&t1, &id_dest->val);
+    rtl_sltu(&t2, &t1, &id_dest->val);      // t2 = dest < src
+
+    rtl_sub(&t1, &t1, &t0);                 // t1 = dest - src
     operand_write(id_dest, &t1);
+
+    rtl_update_ZFSF(&t1, id_dest->width);
+    rtl_set_CF(&t2);
+    rtl_update_PF(&t1);
+
+
+    /*
+    rtl_sub(&t1, &id_dest->val, &t0);       // t1 = dest - src
+    // operand_write(id_dest, &t1);
 
     // set ZF & SF
     rtl_update_ZFSF(&t1, id_dest->width);
@@ -76,6 +88,7 @@ make_EHelper(sub)
     rtl_and(&t0, &t0, &t1);            // t0 = (dest^src) & (dest^result)
     rtl_msb(&t0, &t0, id_dest->width);
     rtl_set_OF(&t0);
+    */
 
     print_asm_template2(sub);
 }
