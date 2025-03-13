@@ -46,6 +46,7 @@ make_EHelper(sub)
         rtl_mv(&t1, &id_src->val);
 
     rtl_sub(&t2, &id_dest->val, &t1);
+    rtl_update_PF(&t2);
     rtl_sltu(&t3, &id_dest->val, &t2);
 
     operand_write(id_dest, &t2);
