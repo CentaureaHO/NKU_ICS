@@ -161,42 +161,33 @@ make_EHelper(adc)
 
 make_EHelper(sbb)
 {
-    // 1. 处理源操作数宽度
     if (id_src->width == 1 && id_dest->width > 1)
-        rtl_sext(&t0, &id_src->val, id_src->width);
-    else
-        rtl_mv(&t0, &id_src->val);
-    
-    // 2. 获取CF值并与源操作数相加
-    rtl_get_CF(&t1);
-    rtl_add(&t3, &t0, &t1);  // t3 = src + CF
-    
-    // 3. 执行减法: dest - (src + CF)
-    rtl_sub(&t2, &id_dest->val, &t3);
-    rtl_update_PF(&t2);
-    
-    // 4. 写入结果
-    operand_write(id_dest, &t2);
-    
-    // 5. 更新标志位
-    rtl_update_ZFSF(&t2, id_dest->width);
-    
-    // 6. 正确设置CF: 当dest < (src+CF)时设置
-    rtl_sltu(&t0, &id_dest->val, &t3);
-    rtl_set_CF(&t0);
-    
-    // 7. 设置OF: 符号位意外变化时
-    rtl_xor(&t0, &id_dest->val, &t3);      // t0 = dest ^ (src+CF)
-    rtl_xor(&t1, &id_dest->val, &t2);      // t1 = dest ^ result
-    rtl_and(&t0, &t0, &t1);                // t0 = (dest^(src+CF)) & (dest^result)
-    rtl_msb(&t0, &t0, id_dest->width);
-    rtl_set_OF(&t0);
-    
-    // 8. 设置AF: 低4位需要借位时
-    rtl_andi(&t0, &id_dest->val, 0xF);     // 目标低4位
-    rtl_andi(&t1, &t3, 0xF);               // (src+CF)低4位
-    rtl_sltu(&t0, &t0, &t1);               // 检查低4位是否借位
-    rtl_set_AF(&t0);
+    rtl_sext(&t1, &id_src->val, id_src->width);
+else
+    rtl_mv(&t1, &id_src->val);
+
+rtl_sub(&t2, &id_dest->val, &t1);
+rtl_get_CF(&t0);
+rtl_sub(&t2, &t2, &t0);
+rtl_update_PF(&t2);
+
+operand_write(id_dest, &t2);
+
+rtl_update_ZFSF(&t2, id_dest->width);
+
+rtl_sltu(&t0, &id_dest->val, &t1);
+rtl_set_CF(&t0);
+
+rtl_xor(&t0, &id_dest->val, &t1);
+rtl_xor(&t1, &id_dest->val, &t2);
+rtl_and(&t0, &t0, &t1);
+rtl_msb(&t0, &t0, id_dest->width);
+rtl_set_OF(&t0);
+
+rtl_andi(&t0, &id_dest->val, 0xF);
+rtl_andi(&t1, &t1, 0xF);
+rtl_sltu(&t0, &t0, &t1);
+rtl_set_AF(&t0);
 
     print_asm_template2(sbb);
 }
