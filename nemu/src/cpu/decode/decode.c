@@ -279,6 +279,13 @@ make_DHelper(J)
     decoding.jmp_eip = id_dest->simm + *eip;
 }
 
+make_DHelper(gp5_J)
+{
+    Log("Here follows the function gp5_J");
+    Log("Jump target: %x", id_dest->val);
+    assert(false);
+}
+
 make_DHelper(push_SI) { decode_op_SI(eip, id_dest, true); }
 
 make_DHelper(in_I2a)
