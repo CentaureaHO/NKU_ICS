@@ -208,7 +208,22 @@ void difftest_step(uint32_t eip)
 
     // TODO: Check the registers state with QEMU.
     // Set `diff` as `true` if they are not the same.
-    TODO();
+    #define CHECK_REG_1(name)
+    #define CHECK_REG_2(name)
+    #define CHECK_REG_8(name)
+    #define CHECK_REG_16(name)
+    #define CHECK_REG_32(name) \
+    if (r.name != cpu.name) { \
+        Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.name, #name, cpu.name); \
+        diff = true; \
+    }
+    #define X(name, width) CHECK_REG_##width(name)
+        X86_REGS
+    #undef X
+    #undef CHECK_REG_1
+    #undef CHECK_REG_8
+    #undef CHECK_REG_16
+    #undef CHECK_REG_32
 
     if (diff) {
         nemu_state = NEMU_END;
