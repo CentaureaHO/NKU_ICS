@@ -226,6 +226,7 @@ void difftest_step(uint32_t eip)
     #undef CHECK_REG_32
 
     if (diff) {
+        Log("Diff test failed at eip = 0x%x", eip);
         nemu_state = NEMU_END;
     }
 }
