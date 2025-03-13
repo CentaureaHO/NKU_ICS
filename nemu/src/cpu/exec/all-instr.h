@@ -11,6 +11,7 @@ make_EHelper(dec);
 make_EHelper(imul1);
 make_EHelper(imul2);
 make_EHelper(idiv);
+make_EHelper(div);
 
 // data-mov
 make_EHelper(mov);
