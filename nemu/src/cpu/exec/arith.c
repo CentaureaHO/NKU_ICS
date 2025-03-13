@@ -82,8 +82,8 @@ make_EHelper(cmp)
     rtl_update_PF(&t1);
 
     rtl_xor(&t2, &id_dest->val, &id_src->val);  // t2 = dest ^ src
-    rtl_xor(&t3, &id_dest->val, &t1);          // t3 = dest ^ result
-    rtl_and(&t2, &t2, &t3);                    // t2 = (dest^src) & (dest^result)
+    rtl_xor(&t3, &id_dest->val, &t1);           // t3 = dest ^ result
+    rtl_and(&t2, &t2, &t3);                     // t2 = (dest^src) & (dest^result)
     rtl_msb(&t2, &t2, id_dest->width);
     rtl_set_OF(&t2);
 
