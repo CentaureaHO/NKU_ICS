@@ -46,7 +46,7 @@ make_EHelper(sub)
     rtl_sub(&t2, &id_dest->val, &t1);
     rtl_update_PF(&t2);
 
-   
+    operand_write(id_dest, &t2);
 
     rtl_update_ZFSF(&t2, id_dest->width);
 
@@ -63,8 +63,6 @@ make_EHelper(sub)
     rtl_andi(&t1, &t1, 0xF);
     rtl_sltu(&t0, &t0, &t1);
     rtl_set_AF(&t0);
-
-    operand_write(id_dest, &t2);
 
     print_asm_template2(sub);
 }
