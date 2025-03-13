@@ -195,8 +195,8 @@ void difftest_step(uint32_t eip)
         X86_FLAGS
 #undef X
 
-        eflags_mask |= CF_mask;
-        eflags_mask |= ZF_mask;
+        // eflags_mask |= CF_mask;
+        // eflags_mask |= ZF_mask;
 
         init_mask = true;
     }
