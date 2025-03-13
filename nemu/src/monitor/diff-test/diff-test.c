@@ -187,7 +187,7 @@ void init_qemu_reg()
 void difftest_step(uint32_t eip)
 {
     static uint32_t eflags_mask = 0x0;
-    static bool           init_mask   = false;
+    static bool     init_mask   = false;
     if (!init_mask) {
 #define X(name, shift)                                  \
     static const uint32_t name##_mask = (0x1 << shift); \

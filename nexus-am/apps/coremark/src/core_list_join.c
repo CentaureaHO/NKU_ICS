@@ -252,7 +252,7 @@ list_head* core_list_init(ee_u32 blksize, list_head* memblock, ee_s16 seed)
         ee_u16 datpat = ((ee_u16)(seed ^ i) & 0xf);
         ee_u16 dat    = (datpat << 3) | (i & 0x7); /* alternate between algorithms */
         info.data16   = (dat << 8) | dat;          /* fill the data with actual data and upper bits with
-                                                                 rebuild value */
+                                                                  rebuild value */
         core_list_insert_new(list, &info, &memblock, &datablock, memblock_end, datablock_end);
     }
     /* and now index the list so we know initial seed order of the list */
@@ -265,8 +265,8 @@ list_head* core_list_init(ee_u32 blksize, list_head* memblock, ee_s16 seed)
         {
             ee_u16 pat        = (ee_u16)(i++ ^ seed);               /* get a pseudo random number */
             finder->info->idx = 0x3fff & (((i & 0x07) << 8) | pat); /* make sure the mixed items end
-                                                                                 up after the ones in sequence
-                                                                                 */
+                                                                                  up after the ones in sequence
+                                                                                  */
         }
         finder = finder->next;
     }
