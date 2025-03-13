@@ -84,5 +84,5 @@ long long ans[] = {0LL,
 int main()
 {
 
-    nemu_assert(sub(0, 1) == 1);
+    nemu_assert(sub(0, 1) == 0xffffffffffffffffLL);
 }
