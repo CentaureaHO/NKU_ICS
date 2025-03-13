@@ -186,6 +186,19 @@ void init_qemu_reg()
 
 void difftest_step(uint32_t eip)
 {
+    static const uint32_t eflags_mask = 0x0;
+    static bool init_mask            = false;
+    if (!init_mask)
+    {
+        #define X(name, shift) \
+            static const uint32_t name##_mask = (0x1 << shift); \
+            (void)name##_mask;
+            X86_FLAGS
+        #undef X
+
+        init_mask = true;
+    }
+
     union gdb_regs r;
     bool           diff = false;
 
@@ -213,7 +226,13 @@ void difftest_step(uint32_t eip)
     #define CHECK_REG_8(name)
     #define CHECK_REG_16(name)
     #define CHECK_REG_32(name) \
-    if (r.name != cpu.name) { \
+    if (strcmp(#name, "eflags") == 0) { \
+        if ((r.eflags & eflags_mask) != (cpu.eflags & eflags_mask)) { \
+            Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.eflags, #name, cpu.eflags); \
+            diff = true; \
+        } \
+    } \
+    else if (r.name != cpu.name) { \
         Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.name, #name, cpu.name); \
         diff = true; \
     }
