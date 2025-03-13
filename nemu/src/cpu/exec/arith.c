@@ -188,7 +188,7 @@ make_EHelper(sbb)
     rtl_get_CF(&t3);
     rtl_add(&t1, &t1, &t3);
     rtl_sltu(&t0, &t0, &t1);
-    rtl_set_AF(&t0);  
+    rtl_set_AF(&t0);
 
     print_asm_template2(sbb);
 }

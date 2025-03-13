@@ -186,15 +186,17 @@ void init_qemu_reg()
 
 void difftest_step(uint32_t eip)
 {
-    static const uint32_t eflags_mask = 0x0;
-    static bool init_mask            = false;
-    if (!init_mask)
-    {
-        #define X(name, shift) \
-            static const uint32_t name##_mask = (0x1 << shift); \
-            (void)name##_mask;
-            X86_FLAGS
-        #undef X
+    static uint32_t eflags_mask = 0x0;
+    static bool           init_mask   = false;
+    if (!init_mask) {
+#define X(name, shift)                                  \
+    static const uint32_t name##_mask = (0x1 << shift); \
+    (void)name##_mask;
+        X86_FLAGS
+#undef X
+
+        eflags_mask |= CF_mask;
+        eflags_mask |= ZF_mask;
 
         init_mask = true;
     }
@@ -219,30 +221,31 @@ void difftest_step(uint32_t eip)
     gdb_si();
     gdb_getregs(&r);
 
-    // TODO: Check the registers state with QEMU.
-    // Set `diff` as `true` if they are not the same.
-    #define CHECK_REG_1(name)
-    #define CHECK_REG_2(name)
-    #define CHECK_REG_8(name)
-    #define CHECK_REG_16(name)
-    #define CHECK_REG_32(name) \
-    if (strcmp(#name, "eflags") == 0) { \
-        if ((r.eflags & eflags_mask) != (cpu.eflags & eflags_mask)) { \
+// TODO: Check the registers state with QEMU.
+// Set `diff` as `true` if they are not the same.
+#define CHECK_REG_1(name)
+#define CHECK_REG_2(name)
+#define CHECK_REG_8(name)
+#define CHECK_REG_16(name)
+#define CHECK_REG_32(name)                                                               \
+    if (strcmp(#name, "eflags") == 0) {                                                  \
+        if ((r.eflags & eflags_mask) != (cpu.eflags & eflags_mask)) {                    \
             Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.eflags, #name, cpu.eflags); \
-            diff = true; \
-        } \
-    } \
-    else if (r.name != cpu.name) { \
-        Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.name, #name, cpu.name); \
-        diff = true; \
+            diff = true;                                                                 \
+        }                                                                                \
+    }                                                                                    \
+    else if (r.name != cpu.name)                                                         \
+    {                                                                                    \
+        Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.name, #name, cpu.name);         \
+        diff = true;                                                                     \
     }
-    #define X(name, width) CHECK_REG_##width(name)
-        X86_REGS
-    #undef X
-    #undef CHECK_REG_1
-    #undef CHECK_REG_8
-    #undef CHECK_REG_16
-    #undef CHECK_REG_32
+#define X(name, width) CHECK_REG_##width(name)
+    X86_REGS
+#undef X
+#undef CHECK_REG_1
+#undef CHECK_REG_8
+#undef CHECK_REG_16
+#undef CHECK_REG_32
 
     if (diff) {
         Log("Diff test failed at eip = 0x%x", eip);

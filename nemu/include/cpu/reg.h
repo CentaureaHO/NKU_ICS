@@ -47,19 +47,19 @@
 #endif
 
 #define X86_FLAGS \
-    X(CF, 0)     \
-    X(PF, 2)     \
-    X(AF, 4)     \
-    X(ZF, 6)     \
-    X(SF, 7)     \
-    X(TF, 8)     \
-    X(IF, 9)     \
-    X(DF, 10)    \
-    X(OF, 11)    \
-    X(IOPL_L, 12)  \
-    X(IOPL_H, 13)  \
-    X(NT, 14)    \
-    X(RF, 16)    \
+    X(CF, 0)      \
+    X(PF, 2)      \
+    X(AF, 4)      \
+    X(ZF, 6)      \
+    X(SF, 7)      \
+    X(TF, 8)      \
+    X(IF, 9)      \
+    X(DF, 10)     \
+    X(OF, 11)     \
+    X(IOPL_L, 12) \
+    X(IOPL_H, 13) \
+    X(NT, 14)     \
+    X(RF, 16)     \
     X(VM, 17)
 
 enum
