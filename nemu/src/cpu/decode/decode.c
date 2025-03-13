@@ -281,9 +281,7 @@ make_DHelper(J)
 
 make_DHelper(gp5_J)
 {
-    Log("Here follows the function gp5_J");
-    Log("Jump target: %x", id_dest->val);
-    assert(false);
+    decoding.jmp_eip = id_dest->val;
 }
 
 make_DHelper(push_SI) { decode_op_SI(eip, id_dest, true); }
