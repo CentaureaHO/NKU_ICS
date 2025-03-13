@@ -81,7 +81,4 @@ int ans[]       = {0,
 
 #define NR_DATA (sizeof(test_data) / sizeof(test_data[0]))
 
-int main()
-{
-    nemu_assert(max(test_data[4], test_data[0]) == 0);
-}
+int main() { nemu_assert(max(test_data[4], test_data[0]) == 0); }

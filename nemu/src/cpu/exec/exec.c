@@ -58,7 +58,8 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
     make_group(gp4, EX(inc), EX(dec), EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY)
 
     /* 0xff */
-    make_group(gp5, EX(inc), EX(dec), IDEX(gp5_J, call), IDEX(gp5_J, call), IDEX(gp5_J, jmp), IDEX(gp5_J, jmp), EX(push), EMPTY)
+    make_group(gp5, EX(inc), EX(dec), IDEX(gp5_J, call), IDEX(gp5_J, call), IDEX(gp5_J, jmp), IDEX(gp5_J, jmp),
+        EX(push), EMPTY)
 
     /* 0x0f 0x01*/
     make_group(gp7, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY)
