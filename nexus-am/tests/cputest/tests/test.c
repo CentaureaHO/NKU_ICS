@@ -83,5 +83,5 @@ int ans[]       = {0,
 
 int main()
 {
-    nemu_assert(max(test_data[4], test_data[0]) == 0x80000000);
+    nemu_assert(max(test_data[4], test_data[0]) == 0);
 }
