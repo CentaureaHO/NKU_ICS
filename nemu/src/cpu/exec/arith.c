@@ -297,10 +297,14 @@ make_EHelper(sbb)
     rtl_eq0(r0, r0);
     rtl_eqi(r2, r2, 0x7fffffff);
     rtl_eqi(r3, r3, 0x1);
+    rtl_and(r2, r2, r3);
     rtl_and(r0, r0, r2);
-    rtl_and(r0, r0, r3);
     rtl_not(r0);
     rtl_and(r1, r1, r0);
+    rtl_li(r0, id_dest->val);
+    rtl_eqi(r0, r0, 0x80000000);
+    rtl_and(r0, r0, r2);
+    rtl_or(r1, r1, r0);
     rtl_set_OF(r1);
 
     print_asm_template2(sbb);
