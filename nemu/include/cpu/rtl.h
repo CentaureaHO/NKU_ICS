@@ -207,34 +207,6 @@ static inline void rtl_update_ZFSF(const rtlreg_t* result, int width)
     rtl_update_SF(result, width);
 }
 
-static inline void rtl_update_CF(const rtlreg_t* result, const rtlreg_t* dest, const rtlreg_t* src)
-{
-    // eflags.CF <- is_carry(dest + src)
-    rtl_sltu(&t0, result, dest);
-    rtl_set_CF(&t0);
-}
-
-static inline void rtl_update_OF(const rtlreg_t* result, const rtlreg_t* dest, const rtlreg_t* src, int width)
-{
-    // eflags.OF <- is_overflow(dest + src)
-    rtl_xor(&t0, result, dest);
-    rtl_xor(&t1, dest, src);
-    rtl_not(&t1);
-    rtl_and(&t0, &t0, &t1);
-    rtl_msb(&t0, &t0, width);
-    rtl_set_OF(&t0);
-}
-
-static inline void rtl_update_AF(const rtlreg_t* result, const rtlreg_t* dest, const rtlreg_t* src)
-{
-    // eflags.AF <- is_adjust_flag(dest + src)
-    rtl_andi(&t0, dest, 0xF);
-    rtl_andi(&t1, src, 0xF);
-    rtl_add(&t0, &t0, &t1);
-    rtl_sltu(&t0, &t0, &t1);
-    rtl_set_AF(&t0);
-}
-
 static inline void rtl_update_PF(const rtlreg_t* result)
 {
     // Log("rtl_update_PF method has not been tested");
