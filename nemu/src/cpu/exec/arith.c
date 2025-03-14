@@ -197,45 +197,49 @@ make_EHelper(neg)
 make_EHelper(adc)
 {
     // OF, SF, ZF, AF, CF, and PF as described in Appendix C
-
+    
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
     if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
 
+    uint32_t _dest = t0, _src = t1;
+    uint32_t* dest = &_dest;
+    uint32_t* src  = &_src;
+
+    rtl_add(r0, dest, src);     // r0 = dest + src
+    rtl_sltu(r1, r0, dest);     // r1 = (dest + src) < dest
+
     rtl_get_CF(r2);
-    rtl_add(r1, r1, r2);
+    rtl_add(r3, r0, r2);        // r3 = dest + src + CF
+    rtl_sltu(r2, r3, r0);       // r2 = (dest + src + CF) < (dest + src)
+    
+    /* r0: dest + src, r1: (dest + src) < dest, 
+       r2: (dest + src + CF) < (dest + src), r3: dest + src + CF */
 
-    /* r0: add src0, r1: add src1 */
+    uint32_t tmp0 = 0, tmp1 = 0;
+    uint32_t* p0 = &tmp0;
+    uint32_t* p1 = &tmp1;
+    rtl_andi(r0, dest, 0xf);
+    rtl_andi(p0, src, 0xf);
+    rtl_add(p0, r0, p0);
+    rtl_get_CF(p1);
+    rtl_add(p0, p0, p1);
+    rtl_andi(p1, p0, 0x10);
+    rtl_set_AF(p1);
 
-    // update AF:
-    rtl_andi(r2, r0, 0xf);   // low 4 bits of src0 -> r2
-    rtl_andi(r3, r1, 0xf);   // low 4 bits of src1 -> r3
-    rtl_add(r2, r2, r3);     // add res of low 4 bits -> r2
-    rtl_andi(r2, r2, 0x10);  // check if carry of low 4 bits -> r2
-    rtl_set_AF(r2);
+    rtl_or(r1, r1, r2);         // r1 = r1 || r2
+    rtl_set_CF(r1);             // CF = r1
 
-    rtl_add(r2, r0, r1);  // add src0 and src1 -> r2
+    rtl_update_PFZFSF(r3, id_dest->width);
 
-    /* r0: add src0, r1: add src1, r2: add res */
+    operand_write(id_dest, r3);
 
-    // write back
-    operand_write(id_dest, r2);
-
-    // update PF, ZF, SF:
-    rtl_update_PFZFSF(r2, id_dest->width);
-
-    // update CF: carry means res < src0 && res < src1
-    rtl_sltu(r3, r2, r0);
-    rtl_set_CF(r3);
-
-    // update OF: overflow only happens when src0 and src1 have the same sign,
-    //                                  while res has different sign
-    rtl_xor(r2, r0, r2);  // sign_bit(r2) = 1 if src0 has different sign with res else 0
-    rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if src0 has the same sign with src1 else 1
-    rtl_not(r3);          // sign_bit(r3) = 1 if src0 has the same sign with src1 else 0
-    rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
-    rtl_msb(r0, r1, id_dest->width);
-    rtl_set_OF(r0);
+    rtl_xor(r0, dest, src);     // r0 = dest ^ src
+    rtl_not(r0);                // r0 = ~(dest ^ src)
+    rtl_xor(r1, dest, r3);      // r1 = dest ^ (dest + src + CF)
+    rtl_and(r0, r0, r1);        // r0 = ~(dest ^ src) & (dest ^ (dest + src + CF))
+    rtl_msb(r0, r0, id_dest->width);
+    rtl_set_OF(r0);             // OF = msb(~(dest ^ src) & (dest ^ (dest + src + CF)))
 
     print_asm_template2(adc);
 }
