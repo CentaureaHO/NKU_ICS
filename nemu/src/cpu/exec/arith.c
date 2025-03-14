@@ -197,26 +197,26 @@ make_EHelper(neg)
 make_EHelper(adc)
 {
     // OF, SF, ZF, AF, CF, and PF as described in Appendix C
-    
+
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
     if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
 
-    uint32_t _dest = t0, _src = t1;
+    uint32_t  _dest = t0, _src = t1;
     uint32_t* dest = &_dest;
     uint32_t* src  = &_src;
 
-    rtl_add(r0, dest, src);     // r0 = dest + src
-    rtl_sltu(r1, r0, dest);     // r1 = (dest + src) < dest
+    rtl_add(r0, dest, src);  // r0 = dest + src
+    rtl_sltu(r1, r0, dest);  // r1 = (dest + src) < dest
 
     rtl_get_CF(r2);
-    rtl_add(r3, r0, r2);        // r3 = dest + src + CF
-    rtl_sltu(r2, r3, r0);       // r2 = (dest + src + CF) < (dest + src)
-    
-    /* r0: dest + src, r1: (dest + src) < dest, 
+    rtl_add(r3, r0, r2);   // r3 = dest + src + CF
+    rtl_sltu(r2, r3, r0);  // r2 = (dest + src + CF) < (dest + src)
+
+    /* r0: dest + src, r1: (dest + src) < dest,
        r2: (dest + src + CF) < (dest + src), r3: dest + src + CF */
 
-    uint32_t tmp0 = 0, tmp1 = 0;
+    uint32_t  tmp0 = 0, tmp1 = 0;
     uint32_t* p0 = &tmp0;
     uint32_t* p1 = &tmp1;
     rtl_andi(r0, dest, 0xf);
@@ -227,19 +227,19 @@ make_EHelper(adc)
     rtl_andi(p1, p0, 0x10);
     rtl_set_AF(p1);
 
-    rtl_or(r1, r1, r2);         // r1 = r1 || r2
-    rtl_set_CF(r1);             // CF = r1
+    rtl_or(r1, r1, r2);  // r1 = r1 || r2
+    rtl_set_CF(r1);      // CF = r1
 
     rtl_update_PFZFSF(r3, id_dest->width);
 
     operand_write(id_dest, r3);
 
-    rtl_xor(r0, dest, src);     // r0 = dest ^ src
-    rtl_not(r0);                // r0 = ~(dest ^ src)
-    rtl_xor(r1, dest, r3);      // r1 = dest ^ (dest + src + CF)
-    rtl_and(r0, r0, r1);        // r0 = ~(dest ^ src) & (dest ^ (dest + src + CF))
+    rtl_xor(r0, dest, src);  // r0 = dest ^ src
+    rtl_not(r0);             // r0 = ~(dest ^ src)
+    rtl_xor(r1, dest, r3);   // r1 = dest ^ (dest + src + CF)
+    rtl_and(r0, r0, r1);     // r0 = ~(dest ^ src) & (dest ^ (dest + src + CF))
     rtl_msb(r0, r0, id_dest->width);
-    rtl_set_OF(r0);             // OF = msb(~(dest ^ src) & (dest ^ (dest + src + CF)))
+    rtl_set_OF(r0);  // OF = msb(~(dest ^ src) & (dest ^ (dest + src + CF)))
 
     print_asm_template2(adc);
 }
@@ -247,26 +247,26 @@ make_EHelper(adc)
 make_EHelper(sbb)
 {
     // OF, SF, ZF, AF, PF, and CF as described in Appendix C
-    
+
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
     if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
 
-    uint32_t _dest = t0, _src = t1;
+    uint32_t  _dest = t0, _src = t1;
     uint32_t* dest = &_dest;
     uint32_t* src  = &_src;
 
-    rtl_sub(r0, dest, src);     // r0 = dest - src
-    rtl_sltu(r1, dest, r0);     // r1 = dest < (dest - src)
+    rtl_sub(r0, dest, src);  // r0 = dest - src
+    rtl_sltu(r1, dest, r0);  // r1 = dest < (dest - src)
 
     rtl_get_CF(r2);
-    rtl_sub(r3, r0, r2);        // r3 = dest - src - CF
-    rtl_sltu(r2, r0, r3);       // r2 = (dest - src) < (dest - src - CF)
-    
-    /* r0: dest - src, r1: dest < (dest - src), 
+    rtl_sub(r3, r0, r2);   // r3 = dest - src - CF
+    rtl_sltu(r2, r0, r3);  // r2 = (dest - src) < (dest - src - CF)
+
+    /* r0: dest - src, r1: dest < (dest - src),
        r2: (dest - src) < (dest - src - CF), r3: dest - src - CF */
 
-    uint32_t tmp0 = 0, tmp1 = 0;
+    uint32_t  tmp0 = 0, tmp1 = 0;
     uint32_t* p0 = &tmp0;
     uint32_t* p1 = &tmp1;
     rtl_andi(r0, dest, 0xf);
@@ -276,18 +276,18 @@ make_EHelper(sbb)
     rtl_sltu(p1, r0, p0);
     rtl_set_AF(p1);
 
-    rtl_or(r1, r1, r2);         // r1 = r1 || r2
-    rtl_set_CF(r1);             // CF = r1
+    rtl_or(r1, r1, r2);  // r1 = r1 || r2
+    rtl_set_CF(r1);      // CF = r1
 
     rtl_update_PFZFSF(r3, id_dest->width);
 
     operand_write(id_dest, r3);
 
-    rtl_xor(r0, dest, src);     // r0 = dest ^ src
-    rtl_xor(r1, dest, r3);      // r1 = dest ^ (dest - src - CF)
-    rtl_and(r0, r0, r1);        // r0 = (dest ^ src) & (dest ^ (dest - src - CF))
+    rtl_xor(r0, dest, src);  // r0 = dest ^ src
+    rtl_xor(r1, dest, r3);   // r1 = dest ^ (dest - src - CF)
+    rtl_and(r0, r0, r1);     // r0 = (dest ^ src) & (dest ^ (dest - src - CF))
     rtl_msb(r0, r0, id_dest->width);
-    rtl_set_OF(r0);             // OF = msb((dest ^ src) & (dest ^ (dest - src - CF)))
+    rtl_set_OF(r0);  // OF = msb((dest ^ src) & (dest ^ (dest - src - CF)))
 
     print_asm_template2(sbb);
 }
@@ -349,12 +349,6 @@ make_EHelper(imul1)
      */
     // OF and CF as described above; SF, ZF, AF, PF are undefined
 
-    Log("imul1 is not implemented for setting eflags");
-    rtl_set_SF(disable);
-    rtl_set_ZF(disable);
-    rtl_set_AF(disable);
-    rtl_set_PF(disable);
-
     rtl_lr(r0, R_EAX, id_dest->width);
     rtl_li(r1, id_dest->val);
     rtl_imul(r1, r0, r1, r0);
@@ -409,12 +403,6 @@ make_EHelper(imul2)
             r32 * r/m32 → r32:  exactly fits within r32
      */
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
-
-    Log("imul2 is not implemented for setting eflags");
-    rtl_set_SF(disable);
-    rtl_set_ZF(disable);
-    rtl_set_AF(disable);
-    rtl_set_PF(disable);
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);

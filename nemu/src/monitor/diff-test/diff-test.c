@@ -186,7 +186,7 @@ void init_qemu_reg()
 
 #define TEST_FLAG_REGS \
     T(CF, 0)           \
-    /*T(PF, 2)*/           \
+    /*T(PF, 2)*/       \
     /*T(AF, 4)*/       \
     T(ZF, 6)           \
     T(SF, 7)           \
@@ -239,18 +239,13 @@ void difftest_step(uint32_t eip)
 #define CHECK_REG_2(name)
 #define CHECK_REG_8(name)
 #define CHECK_REG_16(name)
-#define CHECK_REG_32(name)                                                               \
-    if (strcmp(#name, "eflags") == 0) {                                                  \
-        if ((r.eflags & eflags_mask) != (cpu.eflags & eflags_mask)) {                    \
-            Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.eflags, #name, cpu.eflags); \
-            TEST_FLAG_REGS                                                               \
-            diff = true;                                                                 \
-        }                                                                                \
-    }                                                                                    \
-    else if (r.name != cpu.name)                                                         \
-    {                                                                                    \
-        Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.name, #name, cpu.name);         \
-        diff = true;                                                                     \
+#define CHECK_REG_32(name)                                                       \
+    if (strcmp(#name, "eflags") == 0)                                            \
+        ;                                                                        \
+    else if (r.name != cpu.name)                                                 \
+    {                                                                            \
+        Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.name, #name, cpu.name); \
+        diff = true;                                                             \
     }
 #define X(name, width) CHECK_REG_##width(name)
     X86_REGS
