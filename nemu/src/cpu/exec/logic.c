@@ -12,8 +12,6 @@ make_EHelper(test)
     rtl_update_PF(&t0);
     rtl_update_ZFSF(&t0, id_dest->width);
 
-    rtl_set_AF(&tzero);
-
     print_asm_template2(test);
 }
 
@@ -44,8 +42,6 @@ make_EHelper (xor)
 
     rtl_update_ZFSF(&t0, id_dest->width);
     rtl_update_PF(&t0);
-
-    rtl_set_AF(&tzero);
 
     operand_write(id_dest, &t0);
 
