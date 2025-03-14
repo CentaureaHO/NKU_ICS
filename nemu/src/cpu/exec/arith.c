@@ -347,9 +347,13 @@ make_EHelper(imul1)
             AX * r/m16 → DX:AX: AX  ==  sext(AX, 4)
             EAX * r/m32 → EDX:EAX: EAX ==  sext(EAX, 4)
      */
-    // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
+    // OF and CF as described above; SF, ZF, AF, PF are undefined
 
     Log("imul1 is not implemented for setting eflags");
+    rtl_set_SF(disable);
+    rtl_set_ZF(disable);
+    rtl_set_AF(disable);
+    rtl_set_PF(disable);
 
     rtl_lr(r0, R_EAX, id_dest->width);
     rtl_li(r1, id_dest->val);
