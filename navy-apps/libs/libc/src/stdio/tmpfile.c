@@ -48,23 +48,23 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<getpid>>,
 #include <errno.h>
 #include <stdio.h>
 
-FILE* _DEFUN(_tmpfile_r, (ptr), struct _reent* ptr)
-{
-    FILE* fp;
-    int   e;
-    char* f;
-    char  buf[L_tmpnam];
+FILE *_DEFUN(_tmpfile_r, (ptr), struct _reent *ptr) {
+  FILE *fp;
+  int e;
+  char *f;
+  char buf[L_tmpnam];
 
-    if ((f = _tmpnam_r(ptr, buf)) == NULL) return NULL;
-    fp = fopen(f, "wb+");
-    e  = ptr->_errno;
-    _CAST_VOID remove(f);
-    ptr->_errno = e;
-    return fp;
+  if ((f = _tmpnam_r(ptr, buf)) == NULL)
+    return NULL;
+  fp = fopen(f, "wb+");
+  e = ptr->_errno;
+  _CAST_VOID remove(f);
+  ptr->_errno = e;
+  return fp;
 }
 
 #ifndef _REENT_ONLY
 
-FILE* _DEFUN_VOID(tmpfile) { return _tmpfile_r(_REENT); }
+FILE *_DEFUN_VOID(tmpfile) { return _tmpfile_r(_REENT); }
 
 #endif

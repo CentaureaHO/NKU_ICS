@@ -34,15 +34,16 @@ float hypotf(_R2 x, y) /* wrapper hypotf */
 #endif
 {
 #ifdef _IEEE_LIBM
-    return __ieee754_hypotf(x, y);
+  return __ieee754_hypotf(x, y);
 #else
-    float z;
-    z = __ieee754_hypotf(x, y);
-    if (_LIB_VERSION == _IEEE_) return z;
-    if ((!finitef(z)) && finitef(x) && finitef(y)) /* hypot overflow */
-        return (float)__kernel_standard(_R4, (double)x, (double)y, 104);
-    else
-        return z;
+  float z;
+  z = __ieee754_hypotf(x, y);
+  if (_LIB_VERSION == _IEEE_)
+    return z;
+  if ((!finitef(z)) && finitef(x) && finitef(y)) /* hypot overflow */
+    return (float)__kernel_standard(_R4, (double)x, (double)y, 104);
+  else
+    return z;
 #endif
 }
 

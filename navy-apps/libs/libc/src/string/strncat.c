@@ -44,14 +44,16 @@ QUICKREF
 
 #include <string.h>
 
-char* _DEFUN(strncat, (s1, s2, n), char* s1 _AND _CONST char* s2 _AND size_t n)
-{
-    char* s = s1;
+char *_DEFUN(strncat, (s1, s2, n),
+             char *s1 _AND _CONST char *s2 _AND size_t n) {
+  char *s = s1;
 
-    while (*s1) s1++;
-    while (n-- != 0 && (*s1++ = *s2++)) {
-        if (n == 0) *s1 = '\0';
-    }
+  while (*s1)
+    s1++;
+  while (n-- != 0 && (*s1++ = *s2++)) {
+    if (n == 0)
+      *s1 = '\0';
+  }
 
-    return s;
+  return s;
 }

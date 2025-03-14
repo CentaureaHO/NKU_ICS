@@ -40,10 +40,12 @@ effects vary with the locale.
 
 #include <stdlib.h>
 
-int _DEFUN(mbtowc, (pwc, s, n), wchar_t* pwc _AND const char* s _AND size_t n)
-{
-    if (s == NULL) return 0;
-    if (n == 0) return -1;
-    if (pwc) *pwc = (wchar_t)*s;
-    return (*s != '\0');
+int _DEFUN(mbtowc, (pwc, s, n), wchar_t *pwc _AND const char *s _AND size_t n) {
+  if (s == NULL)
+    return 0;
+  if (n == 0)
+    return -1;
+  if (pwc)
+    *pwc = (wchar_t)*s;
+  return (*s != '\0');
 }

@@ -33,16 +33,16 @@ float j0f(_R2 x) /* wrapper j0f */
 #endif
 {
 #ifdef _IEEE_LIBM
-    return __ieee754_j0f(x);
+  return __ieee754_j0f(x);
 #else
-    float z = __ieee754_j0f(x);
-    if (_LIB_VERSION == _IEEE_ || isnanf(x)) return z;
-    if (fabsf(x) > (float)X_TLOSS) {
-        /* j0f(|x|>X_TLOSS) */
-        return (float)__kernel_standard(_R4, (double)x, (double)x, 134);
-    }
-    else
-        return z;
+  float z = __ieee754_j0f(x);
+  if (_LIB_VERSION == _IEEE_ || isnanf(x))
+    return z;
+  if (fabsf(x) > (float)X_TLOSS) {
+    /* j0f(|x|>X_TLOSS) */
+    return (float)__kernel_standard(_R4, (double)x, (double)x, 134);
+  } else
+    return z;
 #endif
 }
 
@@ -54,24 +54,24 @@ float y0f(_R2 x) /* wrapper y0f */
 #endif
 {
 #ifdef _IEEE_LIBM
-    return __ieee754_y0f(x);
+  return __ieee754_y0f(x);
 #else
-    float z;
-    z = __ieee754_y0f(x);
-    if (_LIB_VERSION == _IEEE_ || isnanf(x)) return z;
-    if (x <= (float)0.0) {
-        if (x == (float)0.0) /* d= -one/(x-x); */
-            return (float)__kernel_standard(_R4, (double)x, (double)x, 108);
-        else
-            /* d = zero/(x-x); */
-            return (float)__kernel_standard(_R4, (double)x, (double)x, 109);
-    }
-    if (x > (float)X_TLOSS) {
-        /* y0(x>X_TLOSS) */
-        return (float)__kernel_standard(_R4, (double)x, (double)x, 135);
-    }
+  float z;
+  z = __ieee754_y0f(x);
+  if (_LIB_VERSION == _IEEE_ || isnanf(x))
+    return z;
+  if (x <= (float)0.0) {
+    if (x == (float)0.0) /* d= -one/(x-x); */
+      return (float)__kernel_standard(_R4, (double)x, (double)x, 108);
     else
-        return z;
+      /* d = zero/(x-x); */
+      return (float)__kernel_standard(_R4, (double)x, (double)x, 109);
+  }
+  if (x > (float)X_TLOSS) {
+    /* y0(x>X_TLOSS) */
+    return (float)__kernel_standard(_R4, (double)x, (double)x, 135);
+  } else
+    return z;
 #endif
 }
 

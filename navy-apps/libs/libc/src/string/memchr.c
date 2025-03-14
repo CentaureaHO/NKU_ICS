@@ -39,13 +39,14 @@ QUICKREF
 #include <_ansi.h>
 #include <string.h>
 
-_PTR _DEFUN(memchr, (src_void, c, length), _CONST _PTR src_void _AND int c _AND size_t length)
-{
-    _CONST unsigned char* src = (_CONST unsigned char*)src_void;
+_PTR _DEFUN(memchr, (src_void, c, length),
+            _CONST _PTR src_void _AND int c _AND size_t length) {
+  _CONST unsigned char *src = (_CONST unsigned char *)src_void;
 
-    while (length--) {
-        if (*src == c) return (char*)src;
-        src++;
-    }
-    return NULL;
+  while (length--) {
+    if (*src == c)
+      return (char *)src;
+    src++;
+  }
+  return NULL;
 }

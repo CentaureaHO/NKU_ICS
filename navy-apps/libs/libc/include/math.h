@@ -15,10 +15,9 @@ extern "C" {
 /* Define HUGE_VAL as infinity, unless HUGE_VAL is already defined
    (which might have been done by something like math-68881.h).  */
 
-union __dmath
-{
-    __uint32_t i[2];
-    double     d;
+union __dmath {
+  __uint32_t i[2];
+  double d;
 };
 
 extern const union __dmath __infinity;
@@ -35,8 +34,8 @@ extern double cos _PARAMS((double));
 extern double sin _PARAMS((double));
 extern double tan _PARAMS((double));
 extern double tanh _PARAMS((double));
-extern double frexp _PARAMS((double, int*));
-extern double modf _PARAMS((double, double*));
+extern double frexp _PARAMS((double, int *));
+extern double modf _PARAMS((double, double *));
 extern double ceil _PARAMS((double));
 extern double fabs _PARAMS((double));
 extern double floor _PARAMS((double));
@@ -89,9 +88,9 @@ extern double acosh _PARAMS((double));
 extern double atanh _PARAMS((double));
 extern double remainder _PARAMS((double, double));
 extern double gamma _PARAMS((double));
-extern double gamma_r _PARAMS((double, int*));
+extern double gamma_r _PARAMS((double, int *));
 extern double lgamma _PARAMS((double));
-extern double lgamma_r _PARAMS((double, int*));
+extern double lgamma_r _PARAMS((double, int *));
 extern double erf _PARAMS((double));
 extern double erfc _PARAMS((double));
 extern double y0 _PARAMS((double));
@@ -123,18 +122,18 @@ extern double hypot _PARAMS((double, double));
 #define _fabs_r(p, x) fabs(x)
 #define _floor_r(p, x) floor(x)
 
-extern double _acos_r _PARAMS((struct _reent*, double));
-extern double _asin_r _PARAMS((struct _reent*, double));
-extern double _atan2_r _PARAMS((struct _reent*, double, double));
-extern double _cosh_r _PARAMS((struct _reent*, double));
-extern double _sinh_r _PARAMS((struct _reent*, double));
-extern double _exp_r _PARAMS((struct _reent*, double));
-extern double _ldexp_r _PARAMS((struct _reent*, double, int));
-extern double _log_r _PARAMS((struct _reent*, double));
-extern double _log10_r _PARAMS((struct _reent*, double));
-extern double _pow_r _PARAMS((struct _reent*, double, double));
-extern double _sqrt_r _PARAMS((struct _reent*, double));
-extern double _fmod_r _PARAMS((struct _reent*, double, double));
+extern double _acos_r _PARAMS((struct _reent *, double));
+extern double _asin_r _PARAMS((struct _reent *, double));
+extern double _atan2_r _PARAMS((struct _reent *, double, double));
+extern double _cosh_r _PARAMS((struct _reent *, double));
+extern double _sinh_r _PARAMS((struct _reent *, double));
+extern double _exp_r _PARAMS((struct _reent *, double));
+extern double _ldexp_r _PARAMS((struct _reent *, double, int));
+extern double _log_r _PARAMS((struct _reent *, double));
+extern double _log10_r _PARAMS((struct _reent *, double));
+extern double _pow_r _PARAMS((struct _reent *, double, double));
+extern double _sqrt_r _PARAMS((struct _reent *, double));
+extern double _fmod_r _PARAMS((struct _reent *, double, double));
 
 #define _asinh_r(p, x) asinh(x)
 #define _cbrt_r(p, x) cbrt(x)
@@ -144,23 +143,23 @@ extern double _fmod_r _PARAMS((struct _reent*, double, double));
 #define _log1p_r(p, x) log1p(x)
 #define _expm1_r(p, x) expm1(x)
 
-extern double _acosh_r _PARAMS((struct _reent*, double));
-extern double _atanh_r _PARAMS((struct _reent*, double));
-extern double _remainder_r _PARAMS((struct _reent*, double, double));
-extern double _gamma_r _PARAMS((struct _reent*, double));
-extern double _gamma_r_r _PARAMS((struct _reent*, double, int*));
-extern double _lgamma_r _PARAMS((struct _reent*, double));
-extern double _lgamma_r_r _PARAMS((struct _reent*, double, int*));
-extern double _erf_r _PARAMS((struct _reent*, double));
-extern double _erfc_r _PARAMS((struct _reent*, double));
-extern double _y0_r _PARAMS((struct _reent*, double));
-extern double _y1_r _PARAMS((struct _reent*, double));
-extern double _yn_r _PARAMS((struct _reent*, int, double));
-extern double _j0_r _PARAMS((struct _reent*, double));
-extern double _j1_r _PARAMS((struct _reent*, double));
-extern double _jn_r _PARAMS((struct _reent*, int, double));
+extern double _acosh_r _PARAMS((struct _reent *, double));
+extern double _atanh_r _PARAMS((struct _reent *, double));
+extern double _remainder_r _PARAMS((struct _reent *, double, double));
+extern double _gamma_r _PARAMS((struct _reent *, double));
+extern double _gamma_r_r _PARAMS((struct _reent *, double, int *));
+extern double _lgamma_r _PARAMS((struct _reent *, double));
+extern double _lgamma_r_r _PARAMS((struct _reent *, double, int *));
+extern double _erf_r _PARAMS((struct _reent *, double));
+extern double _erfc_r _PARAMS((struct _reent *, double));
+extern double _y0_r _PARAMS((struct _reent *, double));
+extern double _y1_r _PARAMS((struct _reent *, double));
+extern double _yn_r _PARAMS((struct _reent *, int, double));
+extern double _j0_r _PARAMS((struct _reent *, double));
+extern double _j1_r _PARAMS((struct _reent *, double));
+extern double _jn_r _PARAMS((struct _reent *, int, double));
 #define _log2_r(p, x) (_log_r((p), (x)) / M_LOG2_E)
-extern double _hypot_r _PARAMS((struct _reent*, double, double));
+extern double _hypot_r _PARAMS((struct _reent *, double, double));
 
 /* Single precision versions of ANSI functions.  */
 
@@ -169,8 +168,8 @@ extern float cosf _PARAMS((float));
 extern float sinf _PARAMS((float));
 extern float tanf _PARAMS((float));
 extern float tanhf _PARAMS((float));
-extern float frexpf _PARAMS((float, int*));
-extern float modff _PARAMS((float, float*));
+extern float frexpf _PARAMS((float, int *));
+extern float modff _PARAMS((float, float *));
 extern float ceilf _PARAMS((float));
 extern float fabsf _PARAMS((float));
 extern float floorf _PARAMS((float));
@@ -213,9 +212,9 @@ extern float acoshf _PARAMS((float));
 extern float atanhf _PARAMS((float));
 extern float remainderf _PARAMS((float, float));
 extern float gammaf _PARAMS((float));
-extern float gammaf_r _PARAMS((float, int*));
+extern float gammaf_r _PARAMS((float, int *));
 extern float lgammaf _PARAMS((float));
-extern float lgammaf_r _PARAMS((float, int*));
+extern float lgammaf_r _PARAMS((float, int *));
 extern float erff _PARAMS((float));
 extern float erfcf _PARAMS((float));
 extern float y0f _PARAMS((float));
@@ -241,18 +240,18 @@ extern float hypotf _PARAMS((float, float));
 #define _fabsf_r(p, x) fabsf(x)
 #define _floorf_r(p, x) floorf(x)
 
-extern float _acosf_r _PARAMS((struct _reent*, float));
-extern float _asinf_r _PARAMS((struct _reent*, float));
-extern float _atan2f_r _PARAMS((struct _reent*, float, float));
-extern float _coshf_r _PARAMS((struct _reent*, float));
-extern float _sinhf_r _PARAMS((struct _reent*, float));
-extern float _expf_r _PARAMS((struct _reent*, float));
-extern float _ldexpf_r _PARAMS((struct _reent*, float, int));
-extern float _logf_r _PARAMS((struct _reent*, float));
-extern float _log10f_r _PARAMS((struct _reent*, float));
-extern float _powf_r _PARAMS((struct _reent*, float, float));
-extern float _sqrtf_r _PARAMS((struct _reent*, float));
-extern float _fmodf_r _PARAMS((struct _reent*, float, float));
+extern float _acosf_r _PARAMS((struct _reent *, float));
+extern float _asinf_r _PARAMS((struct _reent *, float));
+extern float _atan2f_r _PARAMS((struct _reent *, float, float));
+extern float _coshf_r _PARAMS((struct _reent *, float));
+extern float _sinhf_r _PARAMS((struct _reent *, float));
+extern float _expf_r _PARAMS((struct _reent *, float));
+extern float _ldexpf_r _PARAMS((struct _reent *, float, int));
+extern float _logf_r _PARAMS((struct _reent *, float));
+extern float _log10f_r _PARAMS((struct _reent *, float));
+extern float _powf_r _PARAMS((struct _reent *, float, float));
+extern float _sqrtf_r _PARAMS((struct _reent *, float));
+extern float _fmodf_r _PARAMS((struct _reent *, float, float));
 
 #define _asinhf_r(p, x) asinhf(x)
 #define _cbrtf_r(p, x) cbrtf(x)
@@ -262,23 +261,23 @@ extern float _fmodf_r _PARAMS((struct _reent*, float, float));
 #define _log1pf_r(p, x) log1pf(x)
 #define _expm1f_r(p, x) expm1f(x)
 
-extern float _acoshf_r _PARAMS((struct _reent*, float));
-extern float _atanhf_r _PARAMS((struct _reent*, float));
-extern float _remainderf_r _PARAMS((struct _reent*, float, float));
-extern float _gammaf_r _PARAMS((struct _reent*, float));
-extern float _gammaf_r_r _PARAMS((struct _reent*, float, int*));
-extern float _lgammaf_r _PARAMS((struct _reent*, float));
-extern float _lgammaf_r_r _PARAMS((struct _reent*, float, int*));
-extern float _erff_r _PARAMS((struct _reent*, float));
-extern float _erfcf_r _PARAMS((struct _reent*, float));
-extern float _y0f_r _PARAMS((struct _reent*, float));
-extern float _y1f_r _PARAMS((struct _reent*, float));
-extern float _ynf_r _PARAMS((struct _reent*, int, float));
-extern float _j0f_r _PARAMS((struct _reent*, float));
-extern float _j1f_r _PARAMS((struct _reent*, float));
-extern float _jnf_r _PARAMS((struct _reent*, int, float));
+extern float _acoshf_r _PARAMS((struct _reent *, float));
+extern float _atanhf_r _PARAMS((struct _reent *, float));
+extern float _remainderf_r _PARAMS((struct _reent *, float, float));
+extern float _gammaf_r _PARAMS((struct _reent *, float));
+extern float _gammaf_r_r _PARAMS((struct _reent *, float, int *));
+extern float _lgammaf_r _PARAMS((struct _reent *, float));
+extern float _lgammaf_r_r _PARAMS((struct _reent *, float, int *));
+extern float _erff_r _PARAMS((struct _reent *, float));
+extern float _erfcf_r _PARAMS((struct _reent *, float));
+extern float _y0f_r _PARAMS((struct _reent *, float));
+extern float _y1f_r _PARAMS((struct _reent *, float));
+extern float _ynf_r _PARAMS((struct _reent *, int, float));
+extern float _j0f_r _PARAMS((struct _reent *, float));
+extern float _j1f_r _PARAMS((struct _reent *, float));
+extern float _jnf_r _PARAMS((struct _reent *, int, float));
 #define _log2f_r(p, x) (_logf_r((p), (x)) / (float)M_LOG2_E)
-extern float _hypotf_r _PARAMS((struct _reent*, float, float));
+extern float _hypotf_r _PARAMS((struct _reent *, float, float));
 
 /* The gamma functions use a global variable, signgam.  */
 
@@ -288,14 +287,13 @@ extern float _hypotf_r _PARAMS((struct _reent*, float, float));
 
 /* The exception structure passed to the matherr routine.  */
 
-struct exception
-{
-    int    type;
-    char*  name;
-    double arg1;
-    double arg2;
-    double retval;
-    int    err;
+struct exception {
+  int type;
+  char *name;
+  double arg1;
+  double arg2;
+  double retval;
+  int err;
 };
 
 extern int matherr _PARAMS((struct exception * e));
@@ -336,12 +334,11 @@ extern int matherr _PARAMS((struct exception * e));
 
 /* Global control over fdlibm error handling.  */
 
-enum __fdlibm_version
-{
-    __fdlibm_ieee = -1,
-    __fdlibm_svid,
-    __fdlibm_xopen,
-    __fdlibm_posix
+enum __fdlibm_version {
+  __fdlibm_ieee = -1,
+  __fdlibm_svid,
+  __fdlibm_xopen,
+  __fdlibm_posix
 };
 
 #define _LIB_VERSION_TYPE enum __fdlibm_version

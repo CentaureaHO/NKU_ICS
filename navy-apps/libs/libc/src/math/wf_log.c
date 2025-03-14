@@ -33,16 +33,17 @@ float logf(_R2 x) /* wrapper logf */
 #endif
 {
 #ifdef _IEEE_LIBM
-    return __ieee754_logf(x);
+  return __ieee754_logf(x);
 #else
-    float z;
-    z = __ieee754_logf(x);
-    if (_LIB_VERSION == _IEEE_ || isnanf(x) || x > (float)0.0) return z;
-    if (x == (float)0.0) /* logf(0) */
-        return (float)__kernel_standard(_R4, (double)x, (double)x, 116);
-    else
-        /* logf(x<0) */
-        return (float)__kernel_standard(_R4, (double)x, (double)x, 117);
+  float z;
+  z = __ieee754_logf(x);
+  if (_LIB_VERSION == _IEEE_ || isnanf(x) || x > (float)0.0)
+    return z;
+  if (x == (float)0.0) /* logf(0) */
+    return (float)__kernel_standard(_R4, (double)x, (double)x, 116);
+  else
+    /* logf(x<0) */
+    return (float)__kernel_standard(_R4, (double)x, (double)x, 117);
 #endif
 }
 

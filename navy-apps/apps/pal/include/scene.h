@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-VOID PAL_ApplyWave(SDL_Surface* lpSurface);
+VOID PAL_ApplyWave(SDL_Surface *lpSurface);
 
 VOID PAL_MakeScene(VOID);
 

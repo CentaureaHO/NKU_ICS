@@ -28,9 +28,11 @@ extern "C" {
 
 WORD PAL_MagicSelectionMenuUpdate(VOID);
 
-VOID PAL_MagicSelectionMenuInit(WORD wPlayerRole, BOOL fInBattle, WORD wDefaultMagic);
+VOID PAL_MagicSelectionMenuInit(WORD wPlayerRole, BOOL fInBattle,
+                                WORD wDefaultMagic);
 
-WORD PAL_MagicSelectionMenu(WORD wPlayerRole, BOOL fInBattle, WORD wDefaultMagic);
+WORD PAL_MagicSelectionMenu(WORD wPlayerRole, BOOL fInBattle,
+                            WORD wDefaultMagic);
 
 #ifdef __cplusplus
 }

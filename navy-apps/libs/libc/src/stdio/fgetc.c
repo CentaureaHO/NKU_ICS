@@ -38,4 +38,4 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 
 #include <stdio.h>
 
-int _DEFUN(fgetc, (fp), FILE* fp) { return __sgetc(fp); }
+int _DEFUN(fgetc, (fp), FILE *fp) { return __sgetc(fp); }

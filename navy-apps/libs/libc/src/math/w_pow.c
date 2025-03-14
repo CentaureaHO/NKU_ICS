@@ -77,35 +77,39 @@ double pow(_R2 x, y) /* wrapper pow */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-    return __ieee754_pow(x, y);
+  return __ieee754_pow(x, y);
 #else
-    double z;
-    z = __ieee754_pow(x, y);
-    if (_LIB_VERSION == _IEEE_ || isnan(y)) return z;
-    if (isnan(x)) {
-        if (y == 0.0)
-            return __kernel_standard(_R4, x, y, 42); /* pow(NaN,0.0) */
-        else
-            return z;
-    }
-    if (x == 0.0) {
-        if (y == 0.0) return __kernel_standard(_R4, x, y, 20);             /* pow(0.0,0.0) */
-        if (finite(y) && y < 0.0) return __kernel_standard(_R4, x, y, 23); /* pow(0.0,negative) */
-        return z;
-    }
-    if (!finite(z)) {
-        if (finite(x) && finite(y)) {
-            if (isnan(z))
-                return __kernel_standard(_R4, x, y, 24); /* pow neg**non-int */
-            else
-                return __kernel_standard(_R4, x, y, 21); /* pow overflow */
-        }
-    }
-    if (z == 0.0 && finite(x) && finite(y)) return __kernel_standard(_R4, x, y, 22); /* pow underflow */
+  double z;
+  z = __ieee754_pow(x, y);
+  if (_LIB_VERSION == _IEEE_ || isnan(y))
     return z;
+  if (isnan(x)) {
+    if (y == 0.0)
+      return __kernel_standard(_R4, x, y, 42); /* pow(NaN,0.0) */
+    else
+      return z;
+  }
+  if (x == 0.0) {
+    if (y == 0.0)
+      return __kernel_standard(_R4, x, y, 20); /* pow(0.0,0.0) */
+    if (finite(y) && y < 0.0)
+      return __kernel_standard(_R4, x, y, 23); /* pow(0.0,negative) */
+    return z;
+  }
+  if (!finite(z)) {
+    if (finite(x) && finite(y)) {
+      if (isnan(z))
+        return __kernel_standard(_R4, x, y, 24); /* pow neg**non-int */
+      else
+        return __kernel_standard(_R4, x, y, 21); /* pow overflow */
+    }
+  }
+  if (z == 0.0 && finite(x) && finite(y))
+    return __kernel_standard(_R4, x, y, 22); /* pow underflow */
+  return z;
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
-    return (double)_powf_r(_R4, (float)x, (float)y);
+  return (double)_powf_r(_R4, (float)x, (float)y);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

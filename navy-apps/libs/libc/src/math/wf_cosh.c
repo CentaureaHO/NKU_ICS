@@ -32,17 +32,17 @@ float coshf(_R2 x) /* wrapper coshf */
 #endif
 {
 #ifdef _IEEE_LIBM
-    return __ieee754_coshf(x);
+  return __ieee754_coshf(x);
 #else
-    float z;
-    z = __ieee754_coshf(x);
-    if (_LIB_VERSION == _IEEE_ || isnanf(x)) return z;
-    if (fabsf(x) > (float)8.9415985107e+01) {
-        /* cosh overflow */
-        return (float)__kernel_standard(_R4, (double)x, (double)x, 105);
-    }
-    else
-        return z;
+  float z;
+  z = __ieee754_coshf(x);
+  if (_LIB_VERSION == _IEEE_ || isnanf(x))
+    return z;
+  if (fabsf(x) > (float)8.9415985107e+01) {
+    /* cosh overflow */
+    return (float)__kernel_standard(_R4, (double)x, (double)x, 105);
+  } else
+    return z;
 #endif
 }
 

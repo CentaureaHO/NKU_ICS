@@ -73,18 +73,19 @@ double log(_R2 x) /* wrapper log */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-    return __ieee754_log(x);
+  return __ieee754_log(x);
 #else
-    double z;
-    z = __ieee754_log(x);
-    if (_LIB_VERSION == _IEEE_ || isnan(x) || x > 0.0) return z;
-    if (x == 0.0)
-        return __kernel_standard(_R4, x, x, 16); /* log(0) */
-    else
-        return __kernel_standard(_R4, x, x, 17); /* log(x<0) */
+  double z;
+  z = __ieee754_log(x);
+  if (_LIB_VERSION == _IEEE_ || isnan(x) || x > 0.0)
+    return z;
+  if (x == 0.0)
+    return __kernel_standard(_R4, x, x, 16); /* log(0) */
+  else
+    return __kernel_standard(_R4, x, x, 17); /* log(x<0) */
 #endif
-#else  /* defined (_DOUBLE_IS_32BITS) */
-    return (double)_logf_r(_R4, (float)x);
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_logf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

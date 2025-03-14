@@ -77,12 +77,14 @@ int exp;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-    if (!finite(value) || value == 0.0) return value;
-    value                                           = scalbn(value, exp);
-    if (!finite(value) || value == 0.0) _R4->_errno = ERANGE;
+  if (!finite(value) || value == 0.0)
     return value;
+  value = scalbn(value, exp);
+  if (!finite(value) || value == 0.0)
+    _R4->_errno = ERANGE;
+  return value;
 #else  /* defined (_DOUBLE_IS_32BITS) */
-    return (double)_ldexpf_r(_R4, (float)value, exp);
+  return (double)_ldexpf_r(_R4, (float)value, exp);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

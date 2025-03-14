@@ -80,12 +80,12 @@ static double zero = 0.0; /* used as const */
 #include <assert.h>
 
 #ifdef __STDC__
-double __kernel_standard(struct _reent* p, double x, double y, int type)
+double __kernel_standard(struct _reent *p, double x, double y, int type)
 #else
-double        __kernel_standard(p, x, y, type) struct _reent* p;
-double        x, y;
-int           type;
+double __kernel_standard(p, x, y, type) struct _reent *p;
+double x, y;
+int type;
 #endif
 {
-    assert(0);
+  assert(0);
 }

@@ -74,59 +74,63 @@ QUICKREF
 #include <reent.h>
 #include <string.h>
 
-char* /* NULL if no token left */
-    _DEFUN(_strtok_r, (r, s, delim), struct _reent* r _AND char* s _AND _CONST char* delim)
-{
-    char*        scan;
-    char*        tok;
-    _CONST char* dscan;
+char * /* NULL if no token left */
+    _DEFUN(_strtok_r, (r, s, delim),
+           struct _reent *r _AND char *s _AND _CONST char *delim) {
+  char *scan;
+  char *tok;
+  _CONST char *dscan;
 
-    if (s == NULL && r->_scanpoint == NULL) {
-        return NULL;
-    }
-    if (s != NULL)
-        scan = s;
-    else
-        scan = r->_scanpoint;
+  if (s == NULL && r->_scanpoint == NULL) {
+    return NULL;
+  }
+  if (s != NULL)
+    scan = s;
+  else
+    scan = r->_scanpoint;
 
-    /*
-     * Scan leading delimiters.
-     */
+  /*
+   * Scan leading delimiters.
+   */
 
-    for (; *scan != '\0'; scan++) {
-        for (dscan = delim; *dscan != '\0'; dscan++) {
-            if (*scan == *dscan) break;
-        }
-
-        if (*dscan == '\0') break;
-    }
-    if (*scan == '\0') {
-        r->_scanpoint = NULL;
-        return NULL;
+  for (; *scan != '\0'; scan++) {
+    for (dscan = delim; *dscan != '\0'; dscan++) {
+      if (*scan == *dscan)
+        break;
     }
 
-    tok = scan;
-
-    /*
-     * Scan token.
-     */
-
-    for (; *scan != '\0'; scan++) {
-        for (dscan = delim; *dscan != '\0';) /* ++ moved down. */
-            if (*scan == *dscan++) {
-                r->_scanpoint = scan + 1;
-                *scan         = '\0';
-                return tok;
-            }
-    }
-
-    /* Reached end of string. */
+    if (*dscan == '\0')
+      break;
+  }
+  if (*scan == '\0') {
     r->_scanpoint = NULL;
-    return tok;
+    return NULL;
+  }
+
+  tok = scan;
+
+  /*
+   * Scan token.
+   */
+
+  for (; *scan != '\0'; scan++) {
+    for (dscan = delim; *dscan != '\0';) /* ++ moved down. */
+      if (*scan == *dscan++) {
+        r->_scanpoint = scan + 1;
+        *scan = '\0';
+        return tok;
+      }
+  }
+
+  /* Reached end of string. */
+  r->_scanpoint = NULL;
+  return tok;
 }
 
 #ifndef _REENT_ONLY
 
-char* _DEFUN(strtok, (s, delim), char* s _AND _CONST char* delim) { return _strtok_r(_REENT, s, delim); }
+char *_DEFUN(strtok, (s, delim), char *s _AND _CONST char *delim) {
+  return _strtok_r(_REENT, s, delim);
+}
 
 #endif

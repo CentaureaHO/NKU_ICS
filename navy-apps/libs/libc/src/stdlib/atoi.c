@@ -45,5 +45,5 @@ No supporting OS subroutines are required.
 #include <_ansi.h>
 #include <stdlib.h>
 
-int _DEFUN(atoi, (s), _CONST char* s) { return (int)strtol(s, NULL, 10); }
-long _DEFUN(atol, (s), _CONST char* s) { return strtol(s, NULL, 10); }
+int _DEFUN(atoi, (s), _CONST char *s) { return (int)strtol(s, NULL, 10); }
+long _DEFUN(atol, (s), _CONST char *s) { return strtol(s, NULL, 10); }

@@ -50,12 +50,11 @@ Supporting OS subroutines required: <<getpid>>, <<kill>>.
 #include <stdlib.h>
 
 _VOID
-_DEFUN_VOID(abort)
-{
-    while (1) {
-        raise(SIGABRT);
-        _exit(1);
-    }
+_DEFUN_VOID(abort) {
+  while (1) {
+    raise(SIGABRT);
+    _exit(1);
+  }
 }
 
 #endif

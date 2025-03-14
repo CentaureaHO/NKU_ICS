@@ -33,17 +33,17 @@ float sinhf(_R2 x) /* wrapper sinhf */
 #endif
 {
 #ifdef _IEEE_LIBM
-    return __ieee754_sinhf(x);
+  return __ieee754_sinhf(x);
 #else
-    float z;
-    z = __ieee754_sinhf(x);
-    if (_LIB_VERSION == _IEEE_) return z;
-    if (!finitef(z) && finitef(x)) {
-        /* sinhf overflow */
-        return (float)__kernel_standard(_R4, (double)x, (double)x, 125);
-    }
-    else
-        return z;
+  float z;
+  z = __ieee754_sinhf(x);
+  if (_LIB_VERSION == _IEEE_)
+    return z;
+  if (!finitef(z) && finitef(x)) {
+    /* sinhf overflow */
+    return (float)__kernel_standard(_R4, (double)x, (double)x, 125);
+  } else
+    return z;
 #endif
 }
 

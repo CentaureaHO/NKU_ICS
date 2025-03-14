@@ -35,4 +35,6 @@ QUICKREF
 
 #include <string.h>
 
-char* _DEFUN(rindex, (s, c), _CONST char* s _AND int c) { return strrchr(s, c); }
+char *_DEFUN(rindex, (s, c), _CONST char *s _AND int c) {
+  return strrchr(s, c);
+}

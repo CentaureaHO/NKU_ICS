@@ -36,10 +36,10 @@ effects vary with the locale.
 */
 
 #include <stdlib.h>
-int _DEFUN(wctomb, (s, wchar), char* s _AND wchar_t wchar)
-{
-    if (s == NULL) return 0;
+int _DEFUN(wctomb, (s, wchar), char *s _AND wchar_t wchar) {
+  if (s == NULL)
+    return 0;
 
-    *s = (char)wchar;
-    return 1;
+  *s = (char)wchar;
+  return 1;
 }

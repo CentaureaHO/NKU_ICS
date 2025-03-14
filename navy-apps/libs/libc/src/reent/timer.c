@@ -53,13 +53,13 @@ DESCRIPTION
         <<errno>>.
 */
 
-clock_t     _times_r(ptr, ptms) struct _reent* ptr;
-struct tms* ptms;
+clock_t _times_r(ptr, ptms) struct _reent *ptr;
+struct tms *ptms;
 {
-    clock_t ret;
+  clock_t ret;
 
-    ret = _times(ptms);
-    return ret;
+  ret = _times(ptms);
+  return ret;
 }
 
 /*
@@ -93,16 +93,17 @@ DESCRIPTION
         Check libc.a to see if its available on yours.
 */
 
-int              _gettimeofday_r(ptr, ptimeval, ptimezone) struct _reent* ptr;
-struct timeval*  ptimeval;
-struct timezone* ptimezone;
+int _gettimeofday_r(ptr, ptimeval, ptimezone) struct _reent *ptr;
+struct timeval *ptimeval;
+struct timezone *ptimezone;
 {
-    int ret;
+  int ret;
 
-    errno                       = 0;
-    ret                         = _gettimeofday(ptimeval, ptimezone);
-    if (errno != 0) ptr->_errno = errno;
-    return ret;
+  errno = 0;
+  ret = _gettimeofday(ptimeval, ptimezone);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

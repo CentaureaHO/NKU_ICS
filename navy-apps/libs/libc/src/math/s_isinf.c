@@ -13,13 +13,13 @@ int isinf(x) double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-    __int32_t hx, lx;
-    EXTRACT_WORDS(hx, lx, x);
-    hx &= 0x7fffffff;
-    hx |= (__uint32_t)(lx | (-lx)) >> 31;
-    hx = 0x7ff00000 - hx;
-    return 1 - (int)((__uint32_t)(hx | (-hx)) >> 31);
+  __int32_t hx, lx;
+  EXTRACT_WORDS(hx, lx, x);
+  hx &= 0x7fffffff;
+  hx |= (__uint32_t)(lx | (-lx)) >> 31;
+  hx = 0x7ff00000 - hx;
+  return 1 - (int)((__uint32_t)(hx | (-hx)) >> 31);
 #else  /* defined (_DOUBLE_IS_32BITS) */
-    return isinff((float)x);
+  return isinff((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

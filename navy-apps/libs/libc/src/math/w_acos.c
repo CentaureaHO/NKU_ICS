@@ -95,19 +95,19 @@ double acos(_R2 x) /* wrapper acos */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-    return __ieee754_acos(x);
+  return __ieee754_acos(x);
 #else
-    double z;
-    z = __ieee754_acos(x);
-    if (_LIB_VERSION == _IEEE_ || isnan(x)) return z;
-    if (fabs(x) > 1.0) {
-        return __kernel_standard(_R4, x, x, 1); /* acos(|x|>1) */
-    }
-    else
-        return z;
+  double z;
+  z = __ieee754_acos(x);
+  if (_LIB_VERSION == _IEEE_ || isnan(x))
+    return z;
+  if (fabs(x) > 1.0) {
+    return __kernel_standard(_R4, x, x, 1); /* acos(|x|>1) */
+  } else
+    return z;
 #endif
-#else  /* defined (_DOUBLE_IS_32BITS) */
-    return (double)_acosf_r(_R4, (float)x);
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_acosf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

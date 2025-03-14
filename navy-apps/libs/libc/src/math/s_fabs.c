@@ -62,11 +62,11 @@ double fabs(x) double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-    __uint32_t high;
-    GET_HIGH_WORD(high, x);
-    SET_HIGH_WORD(x, high & 0x7fffffff);
-    return x;
+  __uint32_t high;
+  GET_HIGH_WORD(high, x);
+  SET_HIGH_WORD(x, high & 0x7fffffff);
+  return x;
 #else  /* defined (_DOUBLE_IS_32BITS) */
-    return (double)fabsf((float)x);
+  return (double)fabsf((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

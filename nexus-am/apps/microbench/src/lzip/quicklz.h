@@ -4,23 +4,22 @@
 #include <am.h>
 #include <klib.h>
 
-static inline void* bench_memcpy(void* dst, const void* src, size_t n)
-{
-    assert(dst && src);
-    const char* s;
-    char*       d;
-    if (src + n > dst && src < dst) {
-        s                    = src + n;
-        d                    = dst + n;
-        while (n-- > 0) *--d = *--s;
-    }
-    else
-    {
-        s                    = src;
-        d                    = dst;
-        while (n-- > 0) *d++ = *s++;
-    }
-    return dst;
+static inline void *bench_memcpy(void *dst, const void *src, size_t n) {
+  assert(dst && src);
+  const char *s;
+  char *d;
+  if (src + n > dst && src < dst) {
+    s = src + n;
+    d = dst + n;
+    while (n-- > 0)
+      *--d = *--s;
+  } else {
+    s = src;
+    d = dst;
+    while (n-- > 0)
+      *d++ = *s++;
+  }
+  return dst;
 }
 
 // Fast data compression library
@@ -71,11 +70,12 @@ static inline void* bench_memcpy(void* dst, const void* src, size_t n)
 #define QLZ_VERSION_REVISION 0
 
 // Verify compression level
-#if QLZ_COMPRESSION_LEVEL != 1 && QLZ_COMPRESSION_LEVEL != 2 && QLZ_COMPRESSION_LEVEL != 3
+#if QLZ_COMPRESSION_LEVEL != 1 && QLZ_COMPRESSION_LEVEL != 2 &&                \
+    QLZ_COMPRESSION_LEVEL != 3
 #error QLZ_COMPRESSION_LEVEL must be 1, 2 or 3
 #endif
 
-typedef unsigned int       ui32;
+typedef unsigned int ui32;
 typedef unsigned short int ui16;
 
 // Decrease QLZ_POINTERS for level 3 to increase compression speed. Do not touch
@@ -92,61 +92,56 @@ typedef unsigned short int ui16;
 #endif
 
 // hash entry
-typedef struct
-{
+typedef struct {
 #if QLZ_COMPRESSION_LEVEL == 1
-    ui32         cache;
-#if defined      QLZ_PTR_64 && QLZ_STREAMING_BUFFER == 0
-    unsigned int offset;
+  ui32 cache;
+#if defined QLZ_PTR_64 && QLZ_STREAMING_BUFFER == 0
+  unsigned int offset;
 #else
-    const unsigned char* offset;
+  const unsigned char *offset;
 #endif
 #else
-    const unsigned char* offset[QLZ_POINTERS];
+  const unsigned char *offset[QLZ_POINTERS];
 #endif
 
 } qlz_hash_compress;
 
-typedef struct
-{
+typedef struct {
 #if QLZ_COMPRESSION_LEVEL == 1
-    const unsigned char* offset;
+  const unsigned char *offset;
 #else
-    const unsigned char* offset[QLZ_POINTERS];
+  const unsigned char *offset[QLZ_POINTERS];
 #endif
 } qlz_hash_decompress;
 
 // states
-typedef struct
-{
+typedef struct {
 #if QLZ_STREAMING_BUFFER > 0
-    unsigned char stream_buffer[QLZ_STREAMING_BUFFER];
+  unsigned char stream_buffer[QLZ_STREAMING_BUFFER];
 #endif
-    size_t            stream_counter;
-    qlz_hash_compress hash[QLZ_HASH_VALUES];
-    unsigned char     hash_counter[QLZ_HASH_VALUES];
+  size_t stream_counter;
+  qlz_hash_compress hash[QLZ_HASH_VALUES];
+  unsigned char hash_counter[QLZ_HASH_VALUES];
 } qlz_state_compress;
 
 #if QLZ_COMPRESSION_LEVEL == 1 || QLZ_COMPRESSION_LEVEL == 2
-typedef struct
-{
+typedef struct {
 #if QLZ_STREAMING_BUFFER > 0
-    unsigned char stream_buffer[QLZ_STREAMING_BUFFER];
+  unsigned char stream_buffer[QLZ_STREAMING_BUFFER];
 #endif
-    qlz_hash_decompress hash[QLZ_HASH_VALUES];
-    unsigned char       hash_counter[QLZ_HASH_VALUES];
-    size_t              stream_counter;
+  qlz_hash_decompress hash[QLZ_HASH_VALUES];
+  unsigned char hash_counter[QLZ_HASH_VALUES];
+  size_t stream_counter;
 } qlz_state_decompress;
 #elif QLZ_COMPRESSION_LEVEL == 3
-typedef struct
-{
+typedef struct {
 #if QLZ_STREAMING_BUFFER > 0
-    unsigned char       stream_buffer[QLZ_STREAMING_BUFFER];
+  unsigned char stream_buffer[QLZ_STREAMING_BUFFER];
 #endif
 #if QLZ_COMPRESSION_LEVEL <= 2
-    qlz_hash_decompress hash[QLZ_HASH_VALUES];
+  qlz_hash_decompress hash[QLZ_HASH_VALUES];
 #endif
-    size_t              stream_counter;
+  size_t stream_counter;
 } qlz_state_decompress;
 #endif
 
@@ -155,10 +150,12 @@ extern "C" {
 #endif
 
 // Public functions of QuickLZ
-size_t qlz_size_decompressed(const char* source);
-size_t qlz_size_compressed(const char* source);
-size_t qlz_compress(const void* source, char* destination, size_t size, qlz_state_compress* state);
-size_t qlz_decompress(const char* source, void* destination, qlz_state_decompress* state);
+size_t qlz_size_decompressed(const char *source);
+size_t qlz_size_compressed(const char *source);
+size_t qlz_compress(const void *source, char *destination, size_t size,
+                    qlz_state_compress *state);
+size_t qlz_decompress(const char *source, void *destination,
+                      qlz_state_decompress *state);
 int qlz_get_setting(int setting);
 
 #if defined(__cplusplus)

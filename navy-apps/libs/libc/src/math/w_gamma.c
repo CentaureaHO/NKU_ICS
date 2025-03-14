@@ -152,22 +152,22 @@ double gamma(_R2 x) _R3 double x;
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-    return __ieee754_gamma_r(x, &_R4->_signgam);
+  return __ieee754_gamma_r(x, &_R4->_signgam);
 #else
-    double y;
-    y = __ieee754_gamma_r(x, &_R4->_signgam);
-    if (_LIB_VERSION == _IEEE_) return y;
-    if (!finite(y) && finite(x)) {
-        if (floor(x) == x && x <= 0.0)
-            return __kernel_standard(_R4, x, x, 41); /* gamma pole */
-        else
-            return __kernel_standard(_R4, x, x, 40); /* gamma overflow */
-    }
+  double y;
+  y = __ieee754_gamma_r(x, &_R4->_signgam);
+  if (_LIB_VERSION == _IEEE_)
+    return y;
+  if (!finite(y) && finite(x)) {
+    if (floor(x) == x && x <= 0.0)
+      return __kernel_standard(_R4, x, x, 41); /* gamma pole */
     else
-        return y;
+      return __kernel_standard(_R4, x, x, 40); /* gamma overflow */
+  } else
+    return y;
 #endif
-#else  /* defined (_DOUBLE_IS_32BITS) */
-    return (double)_gammaf_r(_R4, (float)x);
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_gammaf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

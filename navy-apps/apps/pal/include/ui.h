@@ -37,9 +37,10 @@ extern "C" {
 #define MENUITEM_COLOR_SELECTED_FIRST 0xF9
 #define MENUITEM_COLOR_SELECTED_TOTALNUM 6
 
-#define MENUITEM_COLOR_SELECTED      \
-    (MENUITEM_COLOR_SELECTED_FIRST + \
-        SDL_GetTicks() / (600 / MENUITEM_COLOR_SELECTED_TOTALNUM) % MENUITEM_COLOR_SELECTED_TOTALNUM)
+#define MENUITEM_COLOR_SELECTED                                                \
+  (MENUITEM_COLOR_SELECTED_FIRST +                                             \
+   SDL_GetTicks() / (600 / MENUITEM_COLOR_SELECTED_TOTALNUM) %                 \
+       MENUITEM_COLOR_SELECTED_TOTALNUM)
 
 #define MENUITEM_COLOR_EQUIPPEDITEM 0xC8
 
@@ -121,52 +122,60 @@ extern "C" {
 
 #define BATTLE_LABEL_ESCAPEFAIL 31
 
-typedef struct tagBOX
-{
-    PAL_POS      pos;
-    WORD         wWidth, wHeight;
-    SDL_Surface* lpSavedArea;
+typedef struct tagBOX {
+  PAL_POS pos;
+  WORD wWidth, wHeight;
+  SDL_Surface *lpSavedArea;
 } BOX, *LPBOX;
 
-typedef struct tagMENUITEM
-{
-    WORD    wValue;
-    WORD    wNumWord;
-    BOOL    fEnabled;
-    PAL_POS pos;
+typedef struct tagMENUITEM {
+  WORD wValue;
+  WORD wNumWord;
+  BOOL fEnabled;
+  PAL_POS pos;
 } MENUITEM, *LPMENUITEM;
 
-typedef struct tagOBJECTDESC
-{
-    WORD                  wObjectID;
-    LPSTR                 lpDesc;
-    struct tagOBJECTDESC* next;
+typedef struct tagOBJECTDESC {
+  WORD wObjectID;
+  LPSTR lpDesc;
+  struct tagOBJECTDESC *next;
 } OBJECTDESC, *LPOBJECTDESC;
 
 typedef VOID (*LPITEMCHANGED_CALLBACK)(WORD);
 
 #define MENUITEM_VALUE_CANCELLED 0xFFFF
 
-typedef enum tagNUMCOLOR { kNumColorYellow, kNumColorBlue, kNumColorCyan } NUMCOLOR;
+typedef enum tagNUMCOLOR {
+  kNumColorYellow,
+  kNumColorBlue,
+  kNumColorCyan
+} NUMCOLOR;
 
-typedef enum tagNUMALIGN { kNumAlignLeft, kNumAlignMid, kNumAlignRight } NUMALIGN;
+typedef enum tagNUMALIGN {
+  kNumAlignLeft,
+  kNumAlignMid,
+  kNumAlignRight
+} NUMALIGN;
 
 INT PAL_InitUI(VOID);
 
 VOID PAL_FreeUI(VOID);
 
 LPBOX
-PAL_CreateBox(PAL_POS pos, INT nRows, INT nColumns, INT iStyle, BOOL fSaveScreen);
+PAL_CreateBox(PAL_POS pos, INT nRows, INT nColumns, INT iStyle,
+              BOOL fSaveScreen);
 
 LPBOX
 PAL_CreateSingleLineBox(PAL_POS pos, INT nLen, BOOL fSaveScreen);
 
 VOID PAL_DeleteBox(LPBOX lpBox);
 
-WORD PAL_ReadMenu(LPITEMCHANGED_CALLBACK lpfnMenuItemChanged, LPMENUITEM rgMenuItem, INT nMenuItem, WORD wDefaultItem,
-    BYTE bLabelColor);
+WORD PAL_ReadMenu(LPITEMCHANGED_CALLBACK lpfnMenuItemChanged,
+                  LPMENUITEM rgMenuItem, INT nMenuItem, WORD wDefaultItem,
+                  BYTE bLabelColor);
 
-VOID PAL_DrawNumber(UINT iNum, UINT nLength, PAL_POS pos, NUMCOLOR color, NUMALIGN align);
+VOID PAL_DrawNumber(UINT iNum, UINT nLength, PAL_POS pos, NUMCOLOR color,
+                    NUMALIGN align);
 
 LPOBJECTDESC
 PAL_LoadObjectDesc(LPCSTR lpszFileName);

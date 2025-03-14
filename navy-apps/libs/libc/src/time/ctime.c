@@ -36,4 +36,6 @@ ANSI C requires <<ctime>>.
 
 #include <time.h>
 
-char* _DEFUN(ctime, (tim_p), _CONST time_t* tim_p) { return asctime(localtime(tim_p)); }
+char *_DEFUN(ctime, (tim_p), _CONST time_t *tim_p) {
+  return asctime(localtime(tim_p));
+}

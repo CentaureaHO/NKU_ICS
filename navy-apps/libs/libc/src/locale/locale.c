@@ -89,46 +89,36 @@ No supporting OS subroutines are required.
 #include <string.h>
 
 static _CONST struct lconv lconv = {
-    ".",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    CHAR_MAX,
-    CHAR_MAX,
-    CHAR_MAX,
-    CHAR_MAX,
-    CHAR_MAX,
-    CHAR_MAX,
-    CHAR_MAX,
-    CHAR_MAX,
+    ".",      "",       "",       "",       "",       "",
+    "",       "",       "",       "",       CHAR_MAX, CHAR_MAX,
+    CHAR_MAX, CHAR_MAX, CHAR_MAX, CHAR_MAX, CHAR_MAX, CHAR_MAX,
 };
 
-char* _DEFUN(_setlocale_r, (p, category, locale), struct _reent* p _AND int category _AND _CONST char* locale)
-{
-    if (locale && strcmp(locale, "C") && strcmp(locale, "")) return 0;
+char *_DEFUN(_setlocale_r, (p, category, locale),
+             struct _reent *p _AND int category _AND _CONST char *locale) {
+  if (locale && strcmp(locale, "C") && strcmp(locale, ""))
+    return 0;
 
-    p->_current_category = category;
+  p->_current_category = category;
 
-    p->_current_locale = locale;
+  p->_current_locale = locale;
 
-    return "C";
+  return "C";
 }
 
-struct lconv* _DEFUN(_localeconv_r, (data), struct _reent* data) { return (struct lconv*)&lconv; }
+struct lconv *_DEFUN(_localeconv_r, (data), struct _reent *data) {
+  return (struct lconv *)&lconv;
+}
 
 #ifndef _REENT_ONLY
 
-char* _DEFUN(setlocale, (category, locale), int category _AND _CONST char* locale)
-{
-    return _setlocale_r(_REENT, category, locale);
+char *_DEFUN(setlocale, (category, locale),
+             int category _AND _CONST char *locale) {
+  return _setlocale_r(_REENT, category, locale);
 }
 
-struct lconv* _DEFUN_VOID(localeconv) { return _localeconv_r(_REENT); }
+struct lconv *_DEFUN_VOID(localeconv) {
+  return _localeconv_r(_REENT);
+}
 
 #endif

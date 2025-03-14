@@ -49,15 +49,16 @@ DESCRIPTION
         <<errno>>.
 */
 
-void*  _sbrk_r(ptr, incr) struct _reent* ptr;
+void *_sbrk_r(ptr, incr) struct _reent *ptr;
 size_t incr;
 {
-    char* ret;
-    void* _sbrk(size_t);
-    errno                       = 0;
-    ret                         = (char*)(_sbrk(incr));
-    if (errno != 0) ptr->_errno = errno;
-    return ret;
+  char *ret;
+  void *_sbrk(size_t);
+  errno = 0;
+  ret = (char *)(_sbrk(incr));
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

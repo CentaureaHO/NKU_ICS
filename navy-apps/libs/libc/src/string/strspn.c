@@ -35,18 +35,19 @@ QUICKREF
 
 #include <string.h>
 
-size_t _DEFUN(strspn, (s1, s2), _CONST char* s1 _AND _CONST char* s2)
-{
-    _CONST char* s = s1;
-    _CONST char* c;
+size_t _DEFUN(strspn, (s1, s2), _CONST char *s1 _AND _CONST char *s2) {
+  _CONST char *s = s1;
+  _CONST char *c;
 
-    while (*s1) {
-        for (c = s2; *c; c++) {
-            if (*s1 == *c) break;
-        }
-        if (*c == '\0') break;
-        s1++;
+  while (*s1) {
+    for (c = s2; *c; c++) {
+      if (*s1 == *c)
+        break;
     }
+    if (*c == '\0')
+      break;
+    s1++;
+  }
 
-    return s1 - s;
+  return s1 - s;
 }

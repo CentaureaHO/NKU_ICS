@@ -41,12 +41,11 @@ QUICKREF
 #include <ctype.h>
 #include <string.h>
 
-int _DEFUN(strcasecmp, (s1, s2), _CONST char* s1 _AND _CONST char* s2)
-{
-    while (*s1 != '\0' && toupper(*s1) == toupper(*s2)) {
-        s1++;
-        s2++;
-    }
+int _DEFUN(strcasecmp, (s1, s2), _CONST char *s1 _AND _CONST char *s2) {
+  while (*s1 != '\0' && toupper(*s1) == toupper(*s2)) {
+    s1++;
+    s2++;
+  }
 
-    return toupper(*(unsigned char*)s1) - toupper(*(unsigned char*)s2);
+  return toupper(*(unsigned char *)s1) - toupper(*(unsigned char *)s2);
 }

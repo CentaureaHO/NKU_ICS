@@ -74,13 +74,14 @@ on two different systems.
 #include <reent.h>
 #include <stdlib.h>
 
-int _DEFUN(_rand_r, (ptr), struct _reent* ptr)
-{
-    ptr->_next = (ptr->_next * 1103515245) + 12345;
-    return ((ptr->_next >> 16) & 0x7fff);
+int _DEFUN(_rand_r, (ptr), struct _reent *ptr) {
+  ptr->_next = (ptr->_next * 1103515245) + 12345;
+  return ((ptr->_next >> 16) & 0x7fff);
 }
 
-void _DEFUN(_srand_r, (ptr, seed), struct _reent* ptr _AND unsigned int seed) { ptr->_next = seed; }
+void _DEFUN(_srand_r, (ptr, seed), struct _reent *ptr _AND unsigned int seed) {
+  ptr->_next = seed;
+}
 
 #ifndef _REENT_ONLY
 

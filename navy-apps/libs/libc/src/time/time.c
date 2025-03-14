@@ -41,15 +41,15 @@ Supporting OS subroutine required: Some implementations require
 #include <sys/time.h>
 #include <sys/types.h>
 
-time_t _DEFUN(time, (t), time_t* t)
-{
-    struct timeval now;
+time_t _DEFUN(time, (t), time_t *t) {
+  struct timeval now;
 
-    if (_gettimeofday_r(_REENT, &now, (struct timezone*)0) >= 0) {
-        if (t) *t = now.tv_sec;
-        return now.tv_sec;
-    }
-    return -1;
+  if (_gettimeofday_r(_REENT, &now, (struct timezone *)0) >= 0) {
+    if (t)
+      *t = now.tv_sec;
+    return now.tv_sec;
+  }
+  return -1;
 }
 
 #endif

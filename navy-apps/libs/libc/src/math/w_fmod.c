@@ -79,19 +79,19 @@ double fmod(_R2 x, y) /* wrapper fmod */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-    return __ieee754_fmod(x, y);
+  return __ieee754_fmod(x, y);
 #else
-    double z;
-    z = __ieee754_fmod(x, y);
-    if (_LIB_VERSION == _IEEE_ || isnan(y) || isnan(x)) return z;
-    if (y == 0.0) {
-        return __kernel_standard(_R4, x, y, 27); /* fmod(x,0) */
-    }
-    else
-        return z;
+  double z;
+  z = __ieee754_fmod(x, y);
+  if (_LIB_VERSION == _IEEE_ || isnan(y) || isnan(x))
+    return z;
+  if (y == 0.0) {
+    return __kernel_standard(_R4, x, y, 27); /* fmod(x,0) */
+  } else
+    return z;
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
-    return (double)_fmodf_r(_R4, (float)x, (float)y);
+  return (double)_fmodf_r(_R4, (float)x, (float)y);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

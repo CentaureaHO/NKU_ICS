@@ -32,21 +32,21 @@ float atanhf(_R2 x) /* wrapper atanhf */
 #endif
 {
 #ifdef _IEEE_LIBM
-    return __ieee754_atanhf(x);
+  return __ieee754_atanhf(x);
 #else
-    float z, y;
-    z = __ieee754_atanhf(x);
-    if (_LIB_VERSION == _IEEE_ || isnanf(x)) return z;
-    y = fabsf(x);
-    if (y >= (float)1.0) {
-        if (y > (float)1.0) /* atanhf(|x|>1) */
-            return (float)__kernel_standard(_R4, (double)x, (double)x, 130);
-        else
-            /* atanhf(|x|==1) */
-            return (float)__kernel_standard(_R4, (double)x, (double)x, 131);
-    }
+  float z, y;
+  z = __ieee754_atanhf(x);
+  if (_LIB_VERSION == _IEEE_ || isnanf(x))
+    return z;
+  y = fabsf(x);
+  if (y >= (float)1.0) {
+    if (y > (float)1.0) /* atanhf(|x|>1) */
+      return (float)__kernel_standard(_R4, (double)x, (double)x, 130);
     else
-        return z;
+      /* atanhf(|x|==1) */
+      return (float)__kernel_standard(_R4, (double)x, (double)x, 131);
+  } else
+    return z;
 #endif
 }
 

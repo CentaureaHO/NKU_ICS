@@ -21,15 +21,14 @@
 
 #include "main.h"
 
-typedef struct tagRESOURCES
-{
-    BYTE bLoadFlags;
+typedef struct tagRESOURCES {
+  BYTE bLoadFlags;
 
-    LPPALMAP  lpMap;                  // current loaded map
-    LPSPRITE* lppEventObjectSprites;  // event object sprites
-    int       nEventObject;           // number of event objects
+  LPPALMAP lpMap;                  // current loaded map
+  LPSPRITE *lppEventObjectSprites; // event object sprites
+  int nEventObject;                // number of event objects
 
-    LPSPRITE rglpPlayerSprite[MAX_PLAYERS_IN_PARTY + 1];  // player sprites
+  LPSPRITE rglpPlayerSprite[MAX_PLAYERS_IN_PARTY + 1]; // player sprites
 } RESOURCES, *LPRESOURCES;
 
 static LPRESOURCES gpResources = NULL;
@@ -50,18 +49,18 @@ static VOID PAL_FreeEventObjectSprites(VOID)
 
 --*/
 {
-    int i;
+  int i;
 
-    if (gpResources->lppEventObjectSprites != NULL) {
-        for (i = 0; i < gpResources->nEventObject; i++) {
-            free(gpResources->lppEventObjectSprites[i]);
-        }
-
-        free(gpResources->lppEventObjectSprites);
-
-        gpResources->lppEventObjectSprites = NULL;
-        gpResources->nEventObject          = 0;
+  if (gpResources->lppEventObjectSprites != NULL) {
+    for (i = 0; i < gpResources->nEventObject; i++) {
+      free(gpResources->lppEventObjectSprites[i]);
     }
+
+    free(gpResources->lppEventObjectSprites);
+
+    gpResources->lppEventObjectSprites = NULL;
+    gpResources->nEventObject = 0;
+  }
 }
 
 static VOID PAL_FreePlayerSprites(VOID)
@@ -80,12 +79,12 @@ static VOID PAL_FreePlayerSprites(VOID)
 
 --*/
 {
-    int i;
+  int i;
 
-    for (i = 0; i < MAX_PLAYERS_IN_PARTY + 1; i++) {
-        free(gpResources->rglpPlayerSprite[i]);
-        gpResources->rglpPlayerSprite[i] = NULL;
-    }
+  for (i = 0; i < MAX_PLAYERS_IN_PARTY + 1; i++) {
+    free(gpResources->rglpPlayerSprite[i]);
+    gpResources->rglpPlayerSprite[i] = NULL;
+  }
 }
 
 VOID PAL_InitResources(VOID)
@@ -104,7 +103,7 @@ VOID PAL_InitResources(VOID)
 
 --*/
 {
-    gpResources = (LPRESOURCES)UTIL_calloc(1, sizeof(RESOURCES));
+  gpResources = (LPRESOURCES)UTIL_calloc(1, sizeof(RESOURCES));
 }
 
 VOID PAL_FreeResources(VOID)
@@ -123,25 +122,25 @@ VOID PAL_FreeResources(VOID)
 
 --*/
 {
-    if (gpResources != NULL) {
-        //
-        // Free all loaded sprites
-        //
-        PAL_FreePlayerSprites();
-        PAL_FreeEventObjectSprites();
+  if (gpResources != NULL) {
+    //
+    // Free all loaded sprites
+    //
+    PAL_FreePlayerSprites();
+    PAL_FreeEventObjectSprites();
 
-        //
-        // Free map
-        //
-        PAL_FreeMap(gpResources->lpMap);
+    //
+    // Free map
+    //
+    PAL_FreeMap(gpResources->lpMap);
 
-        //
-        // Delete the instance
-        //
-        free(gpResources);
-    }
+    //
+    // Delete the instance
+    //
+    free(gpResources);
+  }
 
-    gpResources = NULL;
+  gpResources = NULL;
 }
 
 VOID PAL_SetLoadFlags(BYTE bFlags)
@@ -160,11 +159,11 @@ VOID PAL_SetLoadFlags(BYTE bFlags)
 
 --*/
 {
-    if (gpResources == NULL) {
-        return;
-    }
+  if (gpResources == NULL) {
+    return;
+  }
 
-    gpResources->bLoadFlags |= bFlags;
+  gpResources->bLoadFlags |= bFlags;
 }
 
 VOID PAL_LoadResources(VOID)
@@ -183,128 +182,133 @@ VOID PAL_LoadResources(VOID)
 
 --*/
 {
-    int  i, index, l, n;
-    WORD wPlayerID, wSpriteNum;
+  int i, index, l, n;
+  WORD wPlayerID, wSpriteNum;
 
-    if (gpResources == NULL || gpResources->bLoadFlags == 0) {
-        return;
+  if (gpResources == NULL || gpResources->bLoadFlags == 0) {
+    return;
+  }
+
+  //
+  // Load scene
+  //
+  if (gpResources->bLoadFlags & kLoadScene) {
+    FILE *fpMAP, *fpGOP;
+
+    fpMAP = UTIL_OpenRequiredFile("map.mkf");
+    fpGOP = UTIL_OpenRequiredFile("gop.mkf");
+
+    if (gpGlobals->fEnteringScene) {
+      gpGlobals->wScreenWave = 0;
+      gpGlobals->sWaveProgression = 0;
     }
 
     //
-    // Load scene
+    // Free previous loaded scene (sprites and map)
     //
-    if (gpResources->bLoadFlags & kLoadScene) {
-        FILE *fpMAP, *fpGOP;
+    PAL_FreeEventObjectSprites();
+    PAL_FreeMap(gpResources->lpMap);
 
-        fpMAP = UTIL_OpenRequiredFile("map.mkf");
-        fpGOP = UTIL_OpenRequiredFile("gop.mkf");
+    //
+    // Load map
+    //
+    i = gpGlobals->wNumScene - 1;
+    gpResources->lpMap =
+        PAL_LoadMap(gpGlobals->g.rgScene[i].wMapNum, fpMAP, fpGOP);
 
-        if (gpGlobals->fEnteringScene) {
-            gpGlobals->wScreenWave      = 0;
-            gpGlobals->sWaveProgression = 0;
-        }
+    if (gpResources->lpMap == NULL) {
+      fclose(fpMAP);
+      fclose(fpGOP);
 
-        //
-        // Free previous loaded scene (sprites and map)
-        //
-        PAL_FreeEventObjectSprites();
-        PAL_FreeMap(gpResources->lpMap);
-
-        //
-        // Load map
-        //
-        i                  = gpGlobals->wNumScene - 1;
-        gpResources->lpMap = PAL_LoadMap(gpGlobals->g.rgScene[i].wMapNum, fpMAP, fpGOP);
-
-        if (gpResources->lpMap == NULL) {
-            fclose(fpMAP);
-            fclose(fpGOP);
-
-            TerminateOnError("PAL_LoadResources(): Fail to load map #%d (scene #%d) !",
-                gpGlobals->g.rgScene[i].wMapNum,
-                gpGlobals->wNumScene);
-        }
-
-        //
-        // Load sprites
-        //
-        index                     = gpGlobals->g.rgScene[i].wEventObjectIndex;
-        gpResources->nEventObject = gpGlobals->g.rgScene[i + 1].wEventObjectIndex;
-        gpResources->nEventObject -= index;
-
-        if (gpResources->nEventObject > 0) {
-            gpResources->lppEventObjectSprites = (LPSPRITE*)UTIL_calloc(gpResources->nEventObject, sizeof(LPSPRITE));
-        }
-
-        for (i = 0; i < gpResources->nEventObject; i++, index++) {
-            n = gpGlobals->g.lprgEventObject[index].wSpriteNum;
-            if (n == 0) {
-                //
-                // this event object has no sprite
-                //
-                gpResources->lppEventObjectSprites[i] = NULL;
-                continue;
-            }
-
-            l = PAL_MKFGetDecompressedSize(n, gpGlobals->f.fpMGO);
-
-            gpResources->lppEventObjectSprites[i] = (LPSPRITE)UTIL_malloc(l);
-
-            if (PAL_MKFDecompressChunk(gpResources->lppEventObjectSprites[i], l, n, gpGlobals->f.fpMGO) > 0) {
-                gpGlobals->g.lprgEventObject[index].nSpriteFramesAuto =
-                    PAL_SpriteGetNumFrames(gpResources->lppEventObjectSprites[i]);
-            }
-        }
-
-        gpGlobals->partyoffset = PAL_XY(160, 112);
-
-        fclose(fpGOP);
-        fclose(fpMAP);
+      TerminateOnError(
+          "PAL_LoadResources(): Fail to load map #%d (scene #%d) !",
+          gpGlobals->g.rgScene[i].wMapNum, gpGlobals->wNumScene);
     }
 
     //
-    // Load player sprites
+    // Load sprites
     //
-    if (gpResources->bLoadFlags & kLoadPlayerSprite) {
-        //
-        // Free previous loaded player sprites
-        //
-        PAL_FreePlayerSprites();
+    index = gpGlobals->g.rgScene[i].wEventObjectIndex;
+    gpResources->nEventObject = gpGlobals->g.rgScene[i + 1].wEventObjectIndex;
+    gpResources->nEventObject -= index;
 
-        for (i = 0; i <= (short)gpGlobals->wMaxPartyMemberIndex; i++) {
-            wPlayerID = gpGlobals->rgParty[i].wPlayerRole;
-            assert(wPlayerID < MAX_PLAYER_ROLES);
-
-            //
-            // Load player sprite
-            //
-            wSpriteNum = gpGlobals->g.PlayerRoles.rgwSpriteNum[wPlayerID];
-
-            l = PAL_MKFGetDecompressedSize(wSpriteNum, gpGlobals->f.fpMGO);
-
-            gpResources->rglpPlayerSprite[i] = (LPSPRITE)UTIL_malloc(l);
-
-            PAL_MKFDecompressChunk(gpResources->rglpPlayerSprite[i], l, wSpriteNum, gpGlobals->f.fpMGO);
-        }
-
-        if (gpGlobals->nFollower > 0) {
-            //
-            // Load the follower sprite
-            //
-            wSpriteNum = gpGlobals->rgParty[i].wPlayerRole;
-
-            l = PAL_MKFGetDecompressedSize(wSpriteNum, gpGlobals->f.fpMGO);
-
-            gpResources->rglpPlayerSprite[i] = (LPSPRITE)UTIL_malloc(l);
-
-            PAL_MKFDecompressChunk(gpResources->rglpPlayerSprite[i], l, wSpriteNum, gpGlobals->f.fpMGO);
-        }
+    if (gpResources->nEventObject > 0) {
+      gpResources->lppEventObjectSprites =
+          (LPSPRITE *)UTIL_calloc(gpResources->nEventObject, sizeof(LPSPRITE));
     }
 
+    for (i = 0; i < gpResources->nEventObject; i++, index++) {
+      n = gpGlobals->g.lprgEventObject[index].wSpriteNum;
+      if (n == 0) {
+        //
+        // this event object has no sprite
+        //
+        gpResources->lppEventObjectSprites[i] = NULL;
+        continue;
+      }
+
+      l = PAL_MKFGetDecompressedSize(n, gpGlobals->f.fpMGO);
+
+      gpResources->lppEventObjectSprites[i] = (LPSPRITE)UTIL_malloc(l);
+
+      if (PAL_MKFDecompressChunk(gpResources->lppEventObjectSprites[i], l, n,
+                                 gpGlobals->f.fpMGO) > 0) {
+        gpGlobals->g.lprgEventObject[index].nSpriteFramesAuto =
+            PAL_SpriteGetNumFrames(gpResources->lppEventObjectSprites[i]);
+      }
+    }
+
+    gpGlobals->partyoffset = PAL_XY(160, 112);
+
+    fclose(fpGOP);
+    fclose(fpMAP);
+  }
+
+  //
+  // Load player sprites
+  //
+  if (gpResources->bLoadFlags & kLoadPlayerSprite) {
     //
-    // Clear all of the load flags
+    // Free previous loaded player sprites
     //
-    gpResources->bLoadFlags = 0;
+    PAL_FreePlayerSprites();
+
+    for (i = 0; i <= (short)gpGlobals->wMaxPartyMemberIndex; i++) {
+      wPlayerID = gpGlobals->rgParty[i].wPlayerRole;
+      assert(wPlayerID < MAX_PLAYER_ROLES);
+
+      //
+      // Load player sprite
+      //
+      wSpriteNum = gpGlobals->g.PlayerRoles.rgwSpriteNum[wPlayerID];
+
+      l = PAL_MKFGetDecompressedSize(wSpriteNum, gpGlobals->f.fpMGO);
+
+      gpResources->rglpPlayerSprite[i] = (LPSPRITE)UTIL_malloc(l);
+
+      PAL_MKFDecompressChunk(gpResources->rglpPlayerSprite[i], l, wSpriteNum,
+                             gpGlobals->f.fpMGO);
+    }
+
+    if (gpGlobals->nFollower > 0) {
+      //
+      // Load the follower sprite
+      //
+      wSpriteNum = gpGlobals->rgParty[i].wPlayerRole;
+
+      l = PAL_MKFGetDecompressedSize(wSpriteNum, gpGlobals->f.fpMGO);
+
+      gpResources->rglpPlayerSprite[i] = (LPSPRITE)UTIL_malloc(l);
+
+      PAL_MKFDecompressChunk(gpResources->rglpPlayerSprite[i], l, wSpriteNum,
+                             gpGlobals->f.fpMGO);
+    }
+  }
+
+  //
+  // Clear all of the load flags
+  //
+  gpResources->bLoadFlags = 0;
 }
 
 LPPALMAP
@@ -324,11 +328,11 @@ PAL_GetCurrentMap(VOID)
 
 --*/
 {
-    if (gpResources == NULL) {
-        return NULL;
-    }
+  if (gpResources == NULL) {
+    return NULL;
+  }
 
-    return gpResources->lpMap;
+  return gpResources->lpMap;
 }
 
 LPSPRITE
@@ -348,11 +352,11 @@ PAL_GetPlayerSprite(BYTE bPlayerIndex)
 
 --*/
 {
-    if (gpResources == NULL || bPlayerIndex > MAX_PLAYERS_IN_PARTY) {
-        return NULL;
-    }
+  if (gpResources == NULL || bPlayerIndex > MAX_PLAYERS_IN_PARTY) {
+    return NULL;
+  }
 
-    return gpResources->rglpPlayerSprite[bPlayerIndex];
+  return gpResources->rglpPlayerSprite[bPlayerIndex];
 }
 
 LPSPRITE
@@ -372,12 +376,13 @@ PAL_GetEventObjectSprite(WORD wEventObjectID)
 
 --*/
 {
-    wEventObjectID -= gpGlobals->g.rgScene[gpGlobals->wNumScene - 1].wEventObjectIndex;
-    wEventObjectID--;
+  wEventObjectID -=
+      gpGlobals->g.rgScene[gpGlobals->wNumScene - 1].wEventObjectIndex;
+  wEventObjectID--;
 
-    if (gpResources == NULL || wEventObjectID >= gpResources->nEventObject) {
-        return NULL;
-    }
+  if (gpResources == NULL || wEventObjectID >= gpResources->nEventObject) {
+    return NULL;
+  }
 
-    return gpResources->lppEventObjectSprites[wEventObjectID];
+  return gpResources->lppEventObjectSprites[wEventObjectID];
 }

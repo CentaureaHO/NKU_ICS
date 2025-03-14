@@ -48,14 +48,15 @@ DESCRIPTION
         <<errno>>.
 */
 
-int _fork_r(ptr) struct _reent* ptr;
+int _fork_r(ptr) struct _reent *ptr;
 {
-    int ret;
+  int ret;
 
-    errno                       = 0;
-    ret                         = _fork();
-    if (errno != 0) ptr->_errno = errno;
-    return ret;
+  errno = 0;
+  ret = _fork();
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
 }
 
 /*
@@ -81,15 +82,16 @@ DESCRIPTION
         <<errno>>.
 */
 
-int  _wait_r(ptr, status) struct _reent* ptr;
-int* status;
+int _wait_r(ptr, status) struct _reent *ptr;
+int *status;
 {
-    int ret;
+  int ret;
 
-    errno                       = 0;
-    ret                         = _wait(status);
-    if (errno != 0) ptr->_errno = errno;
-    return ret;
+  errno = 0;
+  ret = _wait(status);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

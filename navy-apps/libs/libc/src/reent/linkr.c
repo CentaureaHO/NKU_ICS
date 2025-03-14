@@ -49,16 +49,17 @@ DESCRIPTION
         <<errno>>.
 */
 
-int          _link_r(ptr, old, new) struct _reent* ptr;
-_CONST char* old;
-_CONST char* new;
+int _link_r(ptr, old, new) struct _reent *ptr;
+_CONST char *old;
+_CONST char *new;
 {
-    int ret;
+  int ret;
 
-    errno                       = 0;
-    ret                         = _link(old, new);
-    if (errno != 0) ptr->_errno = errno;
-    return ret;
+  errno = 0;
+  ret = _link(old, new);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
 }
 
 /*
@@ -84,15 +85,16 @@ DESCRIPTION
         <<errno>>.
 */
 
-int          _unlink_r(ptr, file) struct _reent* ptr;
-_CONST char* file;
+int _unlink_r(ptr, file) struct _reent *ptr;
+_CONST char *file;
 {
-    int ret;
+  int ret;
 
-    errno                       = 0;
-    ret                         = _unlink(file);
-    if (errno != 0) ptr->_errno = errno;
-    return ret;
+  errno = 0;
+  ret = _unlink(file);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

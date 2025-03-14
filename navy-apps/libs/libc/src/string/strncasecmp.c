@@ -44,15 +44,17 @@ QUICKREF
 #include <ctype.h>
 #include <string.h>
 
-int _DEFUN(strncasecmp, (s1, s2, n), _CONST char* s1 _AND _CONST char* s2 _AND size_t n)
-{
-    if (n == 0) return 0;
+int _DEFUN(strncasecmp, (s1, s2, n),
+           _CONST char *s1 _AND _CONST char *s2 _AND size_t n) {
+  if (n == 0)
+    return 0;
 
-    while (n-- != 0 && toupper(*s1) == toupper(*s2)) {
-        if (n == 0 || *s1 == '\0' || *s2 == '\0') break;
-        s1++;
-        s2++;
-    }
+  while (n-- != 0 && toupper(*s1) == toupper(*s2)) {
+    if (n == 0 || *s1 == '\0' || *s2 == '\0')
+      break;
+    s1++;
+    s2++;
+  }
 
-    return toupper(*(unsigned char*)s1) - toupper(*(unsigned char*)s2);
+  return toupper(*(unsigned char *)s1) - toupper(*(unsigned char *)s2);
 }
