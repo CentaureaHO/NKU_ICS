@@ -92,7 +92,7 @@ make_EHelper(sar)
     rtl_get_CF(r3);
     rtl_or(r3, r3, r2);
     */
-    rtl_set_CF(r3);
+    rtl_set_CF(r2);
 
     rtl_sar(r0, r0, r1);
 
