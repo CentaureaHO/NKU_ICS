@@ -187,7 +187,7 @@ void init_qemu_reg()
 #define TEST_FLAG_REGS \
     T(CF, 0)           \
     T(PF, 2)           \
-    /*T(AF, 4)*/           \
+    /*T(AF, 4)*/       \
     T(ZF, 6)           \
     T(SF, 7)           \
     T(OF, 11)
