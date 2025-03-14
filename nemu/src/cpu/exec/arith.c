@@ -274,14 +274,26 @@ make_EHelper(sbb)
 
     // update OF: overflow only happens when minuend and subtrahend have different sign,
     //                                  while res has different sign with minuend
-    rtl_li(r0, id_dest->val);
-    rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
     rtl_xor(r2, r0, r2);  // sign_bit(r2) = 1 if minuend has different sign with res else 0
     rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
     rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
-    rtl_msb(r0, r1, id_dest->width);
-    rtl_set_OF(r0);
+    rtl_msb(r1, r1, id_dest->width);
+    // rtl_set_OF(r0);
+    // Additional: minuend = 0x0, subtrahend = 0x7fffffff, CF = 0x1
+    //             then shall be fixed to OF = 0x0
+    // OF = r1 && !(minuend == 0x0 && subtrahend == 0x7fffffff && CF == 0x1)
+    /* current: r0: minuend, r1: original OF */
+    rtl_li(r2, id_src->val);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r2, r2, id_src->width);
+    rtl_get_CF(r3);
+    rtl_eq0(r0, r0);
+    rtl_eqi(r2, r2, 0x7fffffff);
+    rtl_eqi(r3, r3, 0x1);
+    rtl_and(r0, r0, r2);
+    rtl_and(r0, r0, r3);
+    rtl_not(r0);
+    rtl_and(r1, r1, r0);
+    rtl_set_OF(r1);
 
     print_asm_template2(sbb);
 }
