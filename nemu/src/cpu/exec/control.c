@@ -3,7 +3,7 @@
 make_EHelper(jmp)
 {
     // Flags Affected: All if a task switch takes place; none if no task switch occurs
-    
+
     decoding.is_jmp = 1;
 
     print_asm("jmp %x", decoding.jmp_eip);

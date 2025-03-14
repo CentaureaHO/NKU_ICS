@@ -61,14 +61,13 @@ make_EHelper(cltd)
 {
     // Flags Affected: None
 
-    if (decoding.is_operand_size_16) 
-    {
+    if (decoding.is_operand_size_16) {
         rtl_lr(r0, R_AX, 2);
         rtl_msb(r0, r0, 2);
 
-        rtl_not(r0);                // t0: 0x00000000 -> 0xffffffff | 0x00000001 -> 0xfffffffe
-        rtl_addi(r0, r0, 0x1);      // t0: 0xffffffff -> 0x00000000 | 0xfffffffe -> 0xffffffff
-        rtl_andi(r0, r0, 0xffff);   // t0: 0x00000000 | 0x0000ffff
+        rtl_not(r0);               // t0: 0x00000000 -> 0xffffffff | 0x00000001 -> 0xfffffffe
+        rtl_addi(r0, r0, 0x1);     // t0: 0xffffffff -> 0x00000000 | 0xfffffffe -> 0xffffffff
+        rtl_andi(r0, r0, 0xffff);  // t0: 0x00000000 | 0x0000ffff
         rtl_sr(R_DX, 2, r0);
     }
     else
