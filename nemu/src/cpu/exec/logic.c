@@ -118,6 +118,8 @@ make_EHelper(shr)
 
 make_EHelper(setcc)
 {
+    // Flags Affected: None
+
     uint8_t subcode = decoding.opcode & 0xf;
     rtl_setcc(&t2, subcode);
     operand_write(id_dest, &t2);
@@ -127,6 +129,8 @@ make_EHelper(setcc)
 
 make_EHelper(not)
 {
+    // Flags Affected: None
+
     rtl_mv(&t0, &id_dest->val);
     rtl_not(&t0);
     operand_write(id_dest, &t0);
