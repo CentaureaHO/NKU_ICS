@@ -361,15 +361,38 @@ make_EHelper(imul1)
 
     switch (id_dest->width)
     {
-        case 1: rtl_sr_w(R_AX, r0); break;
+        case 1:
+            rtl_sr_w(R_AX, r0);
+            rtl_sext(r2, r0, 1);
+            // rtl_eq(r3, r0, r2);
+            rtl_sub(r3, r0, r2);
+            rtl_eq0(r3, r3);
+            rtl_not(r3);
+            rtl_set_CF(r3);
+            rtl_set_OF(r3);
+            break;
         case 2:
             rtl_sr_w(R_AX, r0);
-            rtl_shri(r0, r0, 16);
-            rtl_sr_w(R_DX, r0);
+            rtl_shri(r2, r0, 16);
+            rtl_sr_w(R_DX, r2);
+            rtl_sari(r3, r0, 15);
+            // rtl_eq(r3, r2, r3);
+            rtl_sub(r3, r2, r3);
+            rtl_eq0(r3, r3);
+            rtl_not(r3);
+            rtl_set_CF(r3);
+            rtl_set_OF(r3);
             break;
         case 4:
             rtl_sr_l(R_EDX, r1);
             rtl_sr_l(R_EAX, r0);
+            rtl_sari(r3, r0, 31);
+            // rtl_eq(r3, r1, r3);
+            rtl_sub(r3, r1, r3);
+            rtl_eq0(r3, r3);
+            rtl_not(r3);
+            rtl_set_CF(r3);
+            rtl_set_OF(r3);
             break;
         default: assert(0);
     }
