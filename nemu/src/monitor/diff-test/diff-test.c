@@ -185,11 +185,11 @@ void init_qemu_reg()
 }
 
 #define TEST_FLAG_REGS \
-    T(CF, 0)          \
-    T(PF, 2)          \
-    T(AF, 4)          \
-    T(ZF, 6)          \
-    T(SF, 7)          \
+    T(CF, 0)           \
+    T(PF, 2)           \
+    T(AF, 4)           \
+    T(ZF, 6)           \
+    T(SF, 7)           \
     T(OF, 11)
 
 void difftest_step(uint32_t eip)
@@ -233,7 +233,8 @@ void difftest_step(uint32_t eip)
 // TODO: Check the registers state with QEMU.
 // Set `diff` as `true` if they are not the same.
 
-#define T(name, shift) Log("\tQEMU: %s = %d, NEMU: %s = %d", #name, (r.eflags >> shift) & 0x1, #name, (cpu.eflags >> shift) & 0x1);
+#define T(name, shift) \
+    Log("\tQEMU: %s = %d, NEMU: %s = %d", #name, (r.eflags >> shift) & 0x1, #name, (cpu.eflags >> shift) & 0x1);
 #define CHECK_REG_1(name)
 #define CHECK_REG_2(name)
 #define CHECK_REG_8(name)
@@ -242,7 +243,7 @@ void difftest_step(uint32_t eip)
     if (strcmp(#name, "eflags") == 0) {                                                  \
         if ((r.eflags & eflags_mask) != (cpu.eflags & eflags_mask)) {                    \
             Log("QEMU: %s = 0x%x, NEMU: %s = 0x%x", #name, r.eflags, #name, cpu.eflags); \
-            TEST_FLAG_REGS                                                              \
+            TEST_FLAG_REGS                                                               \
             diff = true;                                                                 \
         }                                                                                \
     }                                                                                    \
