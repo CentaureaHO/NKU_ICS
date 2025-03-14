@@ -289,12 +289,14 @@ make_EHelper(sbb)
     // rtl_set_OF(r0);
     // Additional: minuend = 0x0, subtrahend = 0x7fffffff, CF = 0x1
     //             then shall be fixed to OF = 0x0
-    // OF = r1 && !(minuend == 0x0 && subtrahend == 0x7fffffff && CF == 0x1)
+    // OF = r1 && !((minuend == 0x0 || minuend == 0x80000000) && subtrahend == 0x7fffffff && CF == 0x1)
     /* current: r0: minuend, r1: original OF */
+    rtl_eq0(r2, r0);
+    rtl_eqi(r0, r0, 0x80000000);
+    rtl_or(r0, r0, r2);
     rtl_li(r2, id_src->val);
     if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r2, r2, id_src->width);
     rtl_get_CF(r3);
-    rtl_eq0(r0, r0);
     rtl_eqi(r2, r2, 0x7fffffff);
     rtl_eqi(r3, r3, 0x1);
     rtl_and(r0, r0, r2);
