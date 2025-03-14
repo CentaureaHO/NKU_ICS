@@ -274,6 +274,9 @@ make_EHelper(sbb)
 
     // update OF: overflow only happens when minuend and subtrahend have different sign,
     //                                  while res has different sign with minuend
+    rtl_li(r0, id_dest->val);
+    rtl_li(r1, id_src->val);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
     rtl_xor(r2, r0, r2);  // sign_bit(r2) = 1 if minuend has different sign with res else 0
     rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
     rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
