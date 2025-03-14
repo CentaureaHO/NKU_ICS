@@ -3,7 +3,43 @@
 make_EHelper(add)
 {
     // OF, SF, ZF, AF, CF, and PF as described in Appendix C
-    TODO();
+
+    rtl_li(r0, id_dest->val);
+    rtl_li(r1, id_src->val);
+    if (id_src->width == 1 && id_dest->width > 1)
+        rtl_sext(r1, r1, id_src->width);
+
+    /* r0: add src0, r1: add src1 */
+
+    // update AF:
+    rtl_andi(r2, r0, 0xf);  // low 4 bits of src0 -> r2
+    rtl_andi(r3, r1, 0xf);  // low 4 bits of src1 -> r3
+    rtl_add(r2, r2, r3);    // add res of low 4 bits -> r2
+    rtl_andi(r2, r2, 0x10); // check if carry of low 4 bits -> r2
+    rtl_set_AF(r2);
+
+    rtl_add(r2, r0, r1);    // add src0 and src1 -> r2
+
+    /* r0: add src0, r1: add src1, r2: add res */
+
+    // write back 
+    operand_write(id_dest, r2);
+
+    // update PF, ZF, SF:
+    rtl_update_PFZFSF(r2, id_dest->width);
+
+    // update CF: carry means res < src0 && res < src1
+    rtl_sltu(r3, r2, r0);
+    rtl_set_CF(r3);
+
+    // update OF: overflow only happens when src0 and src1 have the same sign, 
+    //                                  while res has different sign
+    rtl_xor(r2, r0, r2);    // sign_bit(r2) = 0 if src0 has the same sign with res else 1
+    rtl_xor(r3, r0, r1);    // sign_bit(r3) = 0 if src0 has the same sign with src1 else 1
+    rtl_not(r3);            // sign_bit(r3) = 1 if src0 has the same sign with src1 else 0
+    rtl_and(r1, r2, r3);    // if sign_bit(r1) -> overflow
+    rtl_msb(r0, r1, id_dest->width);
+    rtl_set_OF(r0);
 
     print_asm_template2(add);
 }
@@ -78,7 +114,7 @@ make_EHelper(mul)
         EAX * r/m32 → EDX:EAX:
             EDX != 0 → OF = 1, CF = 1
             EDX == 0 → OF = 0, CF = 0
-    */
+     */
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
     TODO();
 
@@ -93,7 +129,7 @@ make_EHelper(imul1)
             AL * r/m8 → AX: AL  ==  sext(AL, 2)
             AX * r/m16 → DX:AX: AX  ==  sext(AX, 4)
             EAX * r/m32 → EDX:EAX: EAX ==  sext(EAX, 4)
-    */
+     */
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
     TODO();
 
@@ -107,7 +143,7 @@ make_EHelper(imul2)
         clear OF and CF while:
             r16 * r/m16 → r16:  exactly fits within r16
             r32 * r/m32 → r32:  exactly fits within r32
-    */
+     */
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
     TODO();
 
@@ -121,7 +157,7 @@ make_EHelper(imul3)
         clear OF and CF while:
             r/m16 * imm16 → r16:    exactly fits within r16
             r/m32 * imm32 → r32:    exactly fits within r32
-    */
+     */
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
     TODO();
 
@@ -131,7 +167,34 @@ make_EHelper(imul3)
 make_EHelper(div)
 {
     // OF, SF, ZF, AR(AF), PF, CF are undefined.
-    TODO();
+
+    rtl_li(r0, id_dest->val);
+
+    switch (id_dest->width)
+    {
+        case 1:
+            rtl_mv(r2, rzero);
+            rtl_lr_w(r1, R_AX);
+            break;
+        case 2:
+            rtl_lr_w(r1, R_AX);
+            rtl_lr_w(r2, R_DX);
+            rtl_shli(r2, r2, 16);
+            rtl_or(r1, r1, r2);
+            rtl_mv(r2, rzero);
+            break;
+        case 4:
+            rtl_lr_l(r1, R_EAX);
+            rtl_lr_l(r2, R_EDX);
+            break;
+        default: assert(0);
+    }
+
+    rtl_div(r1, r0, r2, r1, r0);
+
+    rtl_sr(R_EAX, id_dest->width, r1);
+    if (id_dest->width == 1) rtl_sr_b(R_AH, r0);
+    else rtl_sr(R_EDX, id_dest->width, r0);
 
     print_asm_template1(div);
 }

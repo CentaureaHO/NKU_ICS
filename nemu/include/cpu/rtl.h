@@ -227,4 +227,10 @@ static inline void rtl_update_PF(const rtlreg_t* result)
         rtl_set_PF(disable);
 }
 
+static inline void rtl_update_PFZFSF(const rtlreg_t* result, int width)
+{
+    rtl_update_PF(result);
+    rtl_update_ZFSF(result, width);
+}
+
 #endif
