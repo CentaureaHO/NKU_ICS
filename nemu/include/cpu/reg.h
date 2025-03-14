@@ -177,6 +177,8 @@ typedef struct
         };
     };
 
+    uint32_t exec_cnt;
+
 } CPU_state;
 
 extern CPU_state cpu;
