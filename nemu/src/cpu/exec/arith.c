@@ -96,15 +96,15 @@ make_EHelper(inc)
 {
     // OF, SF, ZF, AF, and PF as described in Appendix C
     t0 = id_dest->val + 1;
-    
-    rtl_li(&t2, 1);
 
     rtl_update_ZFSF(&t0, id_dest->width);
     rtl_update_PF(&t0);
-    
-    rtl_update_OF(&t0, &id_dest->val, &t2, id_dest->width);
 
-    rtl_update_AF(&t0, &id_dest->val, &t2);
+    rtl_xor(&t1, &t0, &id_dest->val);
+    rtl_msb(&t1, &t1, id_dest->width);
+    rtl_set_OF(&t1);
+
+    rtl_update_AF(&t0, &id_dest->val, enable);
 
     operand_write(id_dest, &t0);
 
