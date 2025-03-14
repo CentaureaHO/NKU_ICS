@@ -304,6 +304,7 @@ make_EHelper(sbb)
     rtl_li(r0, id_dest->val);
     rtl_eqi(r0, r0, 0x80000000);
     rtl_and(r0, r0, r2);
+    Log("t0 = %d, t1 = %d, t2 = %d, t3 = %d", t0, t1, t2, t3);
     rtl_or(r1, r1, r0);
     rtl_set_OF(r1);
 
