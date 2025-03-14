@@ -185,6 +185,12 @@ static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width)
     *dest = (*src1 & SIGNED_BIT_MASK(width)) ? 1 : 0;
 }
 
+static inline void rtl_mtb(rtlreg_t* dest, const rtlreg_t* src1, int tar)
+{
+    // dest <- src1[tar]
+    *dest = (*src1 >> tar) & 1;
+}
+
 static inline void rtl_update_ZF(const rtlreg_t* result, int width)
 {
     // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])

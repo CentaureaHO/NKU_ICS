@@ -70,6 +70,28 @@ make_EHelper(sar)
     // why?
     // OF for single shifts; OF is undefined for multiple shifts; CF, ZF, PF, and SF as described in Appendix C
 
+    rtl_li(r0, id_dest->val);
+    rtl_li(r1, id_src->val);
+
+    rtl_get_OF(r2);         // CF = old_CF || ((src != 0) && ((dest >> src) & 0x1))
+                            // OF = old_OF && (src != 1)
+    rtl_subi(r3, r1, 1);
+    rtl_neq0(r3, r3);
+    rtl_and(r2, r2, r3);
+    rtl_set_OF(r2);
+
+    rtl_mtb(r2, r0, t1);    // r2 = ((dest >> src) & 0x1)
+    rtl_neq0(r3, r1);
+    rtl_and(r2, r2, r3);
+    rtl_get_CF(r3);
+    rtl_or(r3, r3, r2);
+    rtl_set_CF(r3);
+
+    rtl_sar(r0, r0, r1);
+
+    rtl_update_PFZFSF(r0, id_dest->width);
+
+    /*
     rtl_li(&t2, id_dest->val);
     rtl_sar(&t0, &t2, &id_src->val);
 
@@ -77,6 +99,7 @@ make_EHelper(sar)
     rtl_update_ZFSF(&t0, id_dest->width);
 
     operand_write(id_dest, &t0);
+    */
 
     print_asm_template2(sar);
 }
