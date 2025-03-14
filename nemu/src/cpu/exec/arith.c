@@ -139,45 +139,38 @@ make_EHelper(div)
 make_EHelper(idiv)
 {
     // OF, SF, ZF, AR(AF), PF, CF are undefined.
-    TODO();
 
-    /*
-    rtl_sext(&id_dest->val, &id_dest->val, id_dest->width);
-
+    rtl_sext(r0, &id_dest->val, id_dest->width);
     switch (id_dest->width)
     {
         case 1:
-            rtl_lr_w(&t0, R_AX);
-            rtl_sext(&t0, &t0, 2);
-            rtl_msb(&t1, &t0, 4);
-            rtl_sub(&t1, &tzero, &t1);
+            rtl_lr_w(r1, R_AX);
+            rtl_sext(r1, r1, 2);
+            rtl_msb(r2, r1, 4);
+            rtl_sub(r2, rzero, r2);
             break;
         case 2:
-            rtl_lr_w(&t0, R_AX);
-            rtl_lr_w(&t1, R_DX);
-            rtl_shli(&t1, &t1, 16);
-            rtl_or(&t0, &t0, &t1);
-            rtl_msb(&t1, &t0, 4);
-            rtl_sub(&t1, &tzero, &t1);
+            rtl_lr_w(r1, R_AX);
+            rtl_lr_w(r2, R_DX);
+            rtl_shli(r2, r2, 16);
+            rtl_or(r1, r1, r2);
+            rtl_msb(r2, r1, 4);
+            rtl_sub(r2, rzero, r2);
             break;
         case 4:
-            rtl_lr_l(&t0, R_EAX);
-            rtl_lr_l(&t1, R_EDX);
+            rtl_lr_l(r1, R_EAX);
+            rtl_lr_l(r2, R_EDX);
             break;
         default: assert(0);
     }
 
-    rtl_idiv(&t2, &t3, &t1, &t0, &id_dest->val);
+    rtl_idiv(r1, r0, r2, r1, r0);
 
-    rtl_sr(R_EAX, id_dest->width, &t2);
-    if (id_dest->width == 1) {
-        rtl_sr_b(R_AH, &t3);
-    }
+    rtl_sr(R_EAX, id_dest->width, r1);
+    if (id_dest->width == 1)
+        rtl_sr_b(R_AH, r0);
     else
-    {
-        rtl_sr(R_EDX, id_dest->width, &t3);
-    }
-    */
+        rtl_sr(R_EDX, id_dest->width, r0);
 
     print_asm_template1(idiv);
 }

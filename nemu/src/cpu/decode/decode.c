@@ -2,13 +2,14 @@
 #include "cpu/rtl.h"
 
 /* shared by all helper functions */
-DecodeInfo     decoding;
-rtlreg_t       t0, t1, t2, t3;
-rtlreg_t*      r0    = &t0;
-rtlreg_t*      r1    = &t1;
-rtlreg_t*      r2    = &t2;
-rtlreg_t*      r3    = &t3;
-const rtlreg_t tzero = 0;
+DecodeInfo      decoding;
+rtlreg_t        t0, t1, t2, t3;
+rtlreg_t*       r0    = &t0;
+rtlreg_t*       r1    = &t1;
+rtlreg_t*       r2    = &t2;
+rtlreg_t*       r3    = &t3;
+const rtlreg_t  tzero = 0;
+const rtlreg_t* rzero = &tzero;
 
 const rtlreg_t  ENABLE = 1, DISABLE = 0;
 const rtlreg_t* enable  = &ENABLE;

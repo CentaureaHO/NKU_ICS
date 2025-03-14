@@ -6,12 +6,13 @@
 #define TRUNCATE_MASK(width) (~0u >> ((4 - width) << 3))
 #define SIGNED_BIT_MASK(width) (1u << ((width << 3) - 1))
 
-extern rtlreg_t       t0, t1, t2, t3;
-extern rtlreg_t*      r0;
-extern rtlreg_t*      r1;
-extern rtlreg_t*      r2;
-extern rtlreg_t*      r3;
-extern const rtlreg_t tzero;
+extern rtlreg_t        t0, t1, t2, t3;
+extern rtlreg_t*       r0;
+extern rtlreg_t*       r1;
+extern rtlreg_t*       r2;
+extern rtlreg_t*       r3;
+extern const rtlreg_t  tzero;
+extern const rtlreg_t* rzero;
 
 extern const rtlreg_t  ENABLE, DISABLE;
 extern const rtlreg_t* enable;
