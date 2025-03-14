@@ -3,91 +3,23 @@
 make_EHelper(add)
 {
     // OF, SF, ZF, AF, CF, and PF as described in Appendix C
-
-    if (id_src->width == 1 && id_dest->width > 1) {
-        // Log("Src is byte, dest is word or dword. Sign extend src to dest width %d", id_dest->width);
-        rtl_sext(&t0, &id_src->val, id_src->width);
-    }
-    else
-        rtl_mv(&t0, &id_src->val);
-
-    // Log("id_dest->val = 0x%x, id_src->val = 0x%x", id_dest->val, id_src->val);
-
-    rtl_add(&t1, &id_dest->val, &t0);
-
-    // Log("Add result: 0x%x", t1);
-
-    operand_write(id_dest, &t1);
-
-    rtl_update_ZFSF(&t1, id_dest->width);
-
-    rtl_sltu(&t2, &t1, &id_dest->val);
-    rtl_set_CF(&t2);
-
-    rtl_update_PF(&t1);
-
-    rtl_xor(&t0, &t1, &id_dest->val);           // t0 = result ^ dest
-    rtl_xor(&t2, &id_dest->val, &id_src->val);  // t2 = dest ^ src
-    rtl_not(&t2);                               // t2 = ~(dest ^ src)
-    rtl_and(&t0, &t0, &t2);                     // t0 = (result ^ dest) & ~(dest ^ src)
-    rtl_msb(&t0, &t0, id_dest->width);
-    rtl_set_OF(&t0);
+    TODO();
 
     print_asm_template2(add);
 }
 
 make_EHelper(sub)
 {
-    if (id_src->width == 1 && id_dest->width > 1)
-        rtl_sext(&t1, &id_src->val, id_src->width);
-    else
-        rtl_mv(&t1, &id_src->val);
-
-    rtl_sub(&t2, &id_dest->val, &t1);
-    rtl_update_PF(&t2);
-
-    operand_write(id_dest, &t2);
-
-    rtl_update_ZFSF(&t2, id_dest->width);
-
-    rtl_sltu(&t0, &id_dest->val, &t1);
-    rtl_set_CF(&t0);
-
-    rtl_xor(&t0, &id_dest->val, &t1);
-    rtl_xor(&t1, &id_dest->val, &t2);
-    rtl_and(&t0, &t0, &t1);
-    rtl_msb(&t0, &t0, id_dest->width);
-    rtl_set_OF(&t0);
-
-    rtl_andi(&t0, &id_dest->val, 0xF);
-    rtl_andi(&t1, &t1, 0xF);
-    rtl_sltu(&t0, &t0, &t1);
-    rtl_set_AF(&t0);
+    // OF, SF, ZF, AF, PF, and CF as described in Appendix C
+    TODO();
 
     print_asm_template2(sub);
 }
 
 make_EHelper(cmp)
 {
-    if (id_src->width == 1 && id_dest->width > 1)
-        rtl_sext(&t0, &id_src->val, id_src->width);
-    else
-        rtl_mv(&t0, &id_src->val);
-
-    rtl_sub(&t1, &id_dest->val, &t0);
-
-    rtl_update_ZFSF(&t1, id_dest->width);
-
-    rtl_sltu(&t0, &id_dest->val, &t0);
-    rtl_set_CF(&t0);
-
-    rtl_update_PF(&t1);
-
-    rtl_xor(&t2, &id_dest->val, &id_src->val);  // t2 = dest ^ src
-    rtl_xor(&t3, &id_dest->val, &t1);           // t3 = dest ^ result
-    rtl_and(&t2, &t2, &t3);                     // t2 = (dest^src) & (dest^result)
-    rtl_msb(&t2, &t2, id_dest->width);
-    rtl_set_OF(&t2);
+    // OF, SF, ZF, AF, PF, and CF as described in Appendix C
+    TODO();
 
     print_asm_template2(cmp);
 }
@@ -95,43 +27,24 @@ make_EHelper(cmp)
 make_EHelper(inc)
 {
     // OF, SF, ZF, AF, and PF as described in Appendix C
-    t0 = id_dest->val + 1;
-
-    rtl_update_ZFSF(&t0, id_dest->width);
-    rtl_update_PF(&t0);
-
-    rtl_xor(&t1, &t0, &id_dest->val);
-    rtl_msb(&t1, &t1, id_dest->width);
-    rtl_set_OF(&t1);
-
-    // rtl_update_AF(&t0, &id_dest->val, enable);
-
-    operand_write(id_dest, &t0);
+    TODO();
 
     print_asm_template1(inc);
 }
 
 make_EHelper(dec)
 {
-    // OF, SF, ZF, AF, and PF as described in Appendix C
-    t0 = id_dest->val - 1;
-
-    operand_write(id_dest, &t0);
-
-    rtl_update_ZFSF(&t0, id_dest->width);
-    rtl_update_PF(&t0);
-
-    rtl_xor(&t1, &t0, &id_dest->val);
-    rtl_msb(&t1, &t1, id_dest->width);
-    rtl_set_OF(&t1);
-
-    operand_write(id_dest, &t0);
+    // OF, SF, ZF, AF, and PF as described in Appendix C.
+    TODO();
 
     print_asm_template1(dec);
 }
 
 make_EHelper(neg)
 {
+    // The carry flag is set to 1, unless the operand is zero, in which case the
+    // carry flag is cleared to 0.
+    // CF as described above; OF, SF, ZF, and PF as described in Appendix C
     TODO();
 
     print_asm_template1(neg);
@@ -139,80 +52,35 @@ make_EHelper(neg)
 
 make_EHelper(adc)
 {
-    rtl_add(&t2, &id_dest->val, &id_src->val);
-    rtl_sltu(&t3, &t2, &id_dest->val);
-    rtl_get_CF(&t1);
-    rtl_add(&t2, &t2, &t1);
-    operand_write(id_dest, &t2);
-
-    rtl_update_ZFSF(&t2, id_dest->width);
-
-    rtl_sltu(&t0, &t2, &id_dest->val);
-    rtl_or(&t0, &t3, &t0);
-    rtl_set_CF(&t0);
-
-    rtl_xor(&t0, &id_dest->val, &id_src->val);
-    rtl_not(&t0);
-    rtl_xor(&t1, &id_dest->val, &t2);
-    rtl_and(&t0, &t0, &t1);
-    rtl_msb(&t0, &t0, id_dest->width);
-    rtl_set_OF(&t0);
+    // OF, SF, ZF, AF, CF, and PF as described in Appendix C
+    TODO();
 
     print_asm_template2(adc);
 }
 
 make_EHelper(sbb)
 {
-    if (id_src->width == 1 && id_dest->width > 1)
-        rtl_sext(&t1, &id_src->val, id_src->width);
-    else
-        rtl_mv(&t1, &id_src->val);
-
-    rtl_sub(&t2, &id_dest->val, &t1);
-    rtl_get_CF(&t0);
-    rtl_sub(&t2, &t2, &t0);
-    rtl_update_PF(&t2);
-
-    operand_write(id_dest, &t2);
-
-    rtl_update_ZFSF(&t2, id_dest->width);
-
-    rtl_sltu(&t0, &id_dest->val, &t1);
-    rtl_set_CF(&t0);
-
-    rtl_xor(&t0, &id_dest->val, &t1);
-    rtl_xor(&t1, &id_dest->val, &t2);
-    rtl_and(&t0, &t0, &t1);
-    rtl_msb(&t0, &t0, id_dest->width);
-    rtl_set_OF(&t0);
-
-    rtl_andi(&t0, &id_dest->val, 0xF);
-    rtl_andi(&t1, &t1, 0xF);
-    rtl_sltu(&t0, &t0, &t1);
-    rtl_set_AF(&t0);
+    // OF, SF, ZF, AF, PF, and CF as described in Appendix C
+    TODO();
 
     print_asm_template2(sbb);
 }
 
 make_EHelper(mul)
 {
-    rtl_lr(&t0, R_EAX, id_dest->width);
-    rtl_mul(&t0, &t1, &id_dest->val, &t0);
-
-    switch (id_dest->width)
-    {
-        case 1: rtl_sr_w(R_AX, &t1); break;
-        case 2:
-            rtl_sr_w(R_AX, &t1);
-            rtl_shri(&t1, &t1, 16);
-            rtl_sr_w(R_DX, &t1);
-            break;
-        case 4:
-            rtl_sr_l(R_EDX, &t0);
-            rtl_sr_l(R_EAX, &t1);
-            break;
-        default: assert(0);
-    }
+    /*
+        AL * r/m8 → AX:
+            AH != 0 → OF = 1, CF = 1
+            AH == 0 → OF = 0, CF = 0
+        AX * r/m16 → DX:AX:
+            DX != 0 → OF = 1, CF = 1
+            DX == 0 → OF = 0, CF = 0
+        EAX * r/m32 → EDX:EAX:
+            EDX != 0 → OF = 1, CF = 1
+            EDX == 0 → OF = 0, CF = 0
+    */
+    // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
+    TODO();
 
     print_asm_template1(mul);
 }
@@ -220,23 +88,14 @@ make_EHelper(mul)
 // imul with one operand
 make_EHelper(imul1)
 {
-    rtl_lr(&t0, R_EAX, id_dest->width);
-    rtl_imul(&t0, &t1, &id_dest->val, &t0);
-
-    switch (id_dest->width)
-    {
-        case 1: rtl_sr_w(R_AX, &t1); break;
-        case 2:
-            rtl_sr_w(R_AX, &t1);
-            rtl_shri(&t1, &t1, 16);
-            rtl_sr_w(R_DX, &t1);
-            break;
-        case 4:
-            rtl_sr_l(R_EDX, &t0);
-            rtl_sr_l(R_EAX, &t1);
-            break;
-        default: assert(0);
-    }
+    /*
+        clear OF and CF while:
+            AL * r/m8 → AX: AL  ==  sext(AL, 2)
+            AX * r/m16 → DX:AX: AX  ==  sext(AX, 4)
+            EAX * r/m32 → EDX:EAX: EAX ==  sext(EAX, 4)
+    */
+    // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
+    TODO();
 
     print_asm_template1(imul);
 }
@@ -244,11 +103,13 @@ make_EHelper(imul1)
 // imul with two operands
 make_EHelper(imul2)
 {
-    rtl_sext(&id_src->val, &id_src->val, id_src->width);
-    rtl_sext(&id_dest->val, &id_dest->val, id_dest->width);
-
-    rtl_imul(&t0, &t1, &id_dest->val, &id_src->val);
-    operand_write(id_dest, &t1);
+    /*
+        clear OF and CF while:
+            r16 * r/m16 → r16:  exactly fits within r16
+            r32 * r/m32 → r32:  exactly fits within r32
+    */
+    // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
+    TODO();
 
     print_asm_template2(imul);
 }
@@ -256,54 +117,31 @@ make_EHelper(imul2)
 // imul with three operands
 make_EHelper(imul3)
 {
-    rtl_sext(&id_src->val, &id_src->val, id_src->width);
-    rtl_sext(&id_src2->val, &id_src2->val, id_src->width);
-    rtl_sext(&id_dest->val, &id_dest->val, id_dest->width);
-
-    rtl_imul(&t0, &t1, &id_src2->val, &id_src->val);
-    operand_write(id_dest, &t1);
+    /*
+        clear OF and CF while:
+            r/m16 * imm16 → r16:    exactly fits within r16
+            r/m32 * imm32 → r32:    exactly fits within r32
+    */
+    // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
+    TODO();
 
     print_asm_template3(imul);
 }
 
 make_EHelper(div)
 {
-    switch (id_dest->width)
-    {
-        case 1:
-            rtl_li(&t1, 0);
-            rtl_lr_w(&t0, R_AX);
-            break;
-        case 2:
-            rtl_lr_w(&t0, R_AX);
-            rtl_lr_w(&t1, R_DX);
-            rtl_shli(&t1, &t1, 16);
-            rtl_or(&t0, &t0, &t1);
-            rtl_li(&t1, 0);
-            break;
-        case 4:
-            rtl_lr_l(&t0, R_EAX);
-            rtl_lr_l(&t1, R_EDX);
-            break;
-        default: assert(0);
-    }
-
-    rtl_div(&t2, &t3, &t1, &t0, &id_dest->val);
-
-    rtl_sr(R_EAX, id_dest->width, &t2);
-    if (id_dest->width == 1) {
-        rtl_sr_b(R_AH, &t3);
-    }
-    else
-    {
-        rtl_sr(R_EDX, id_dest->width, &t3);
-    }
+    // OF, SF, ZF, AR(AF), PF, CF are undefined.
+    TODO();
 
     print_asm_template1(div);
 }
 
 make_EHelper(idiv)
 {
+    // OF, SF, ZF, AR(AF), PF, CF are undefined.
+    TODO();
+
+    /*
     rtl_sext(&id_dest->val, &id_dest->val, id_dest->width);
 
     switch (id_dest->width)
@@ -339,6 +177,7 @@ make_EHelper(idiv)
     {
         rtl_sr(R_EDX, id_dest->width, &t3);
     }
+    */
 
     print_asm_template1(idiv);
 }

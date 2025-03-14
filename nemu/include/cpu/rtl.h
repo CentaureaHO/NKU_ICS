@@ -7,11 +7,15 @@
 #define SIGNED_BIT_MASK(width) (1u << ((width << 3) - 1))
 
 extern rtlreg_t       t0, t1, t2, t3;
+extern rtlreg_t*      r0;
+extern rtlreg_t*      r1;
+extern rtlreg_t*      r2;
+extern rtlreg_t*      r3;
 extern const rtlreg_t tzero;
 
-static const rtlreg_t  ENABLE = 1, DISABLE = 0;
-static const rtlreg_t* enable  = &ENABLE;
-static const rtlreg_t* disable = &DISABLE;
+extern const rtlreg_t  ENABLE, DISABLE;
+extern const rtlreg_t* enable;
+extern const rtlreg_t* disable;
 
 /* RTL basic instructions */
 
@@ -209,16 +213,12 @@ static inline void rtl_update_ZFSF(const rtlreg_t* result, int width)
 
 static inline void rtl_update_PF(const rtlreg_t* result)
 {
-    // Log("rtl_update_PF method has not been tested");
-
     uint8_t src = *result & TRUNCATE_MASK(1);
     int     cnt = 0;
     while (src) {
         src &= src - 1;
         ++cnt;
     }
-
-    // Log("cnt = %d", cnt);
 
     if (cnt % 2 == 0)
         rtl_set_PF(enable);

@@ -4,7 +4,15 @@
 /* shared by all helper functions */
 DecodeInfo     decoding;
 rtlreg_t       t0, t1, t2, t3;
+rtlreg_t*      r0    = &t0;
+rtlreg_t*      r1    = &t1;
+rtlreg_t*      r2    = &t2;
+rtlreg_t*      r3    = &t3;
 const rtlreg_t tzero = 0;
+
+const rtlreg_t  ENABLE = 1, DISABLE = 0;
+const rtlreg_t* enable  = &ENABLE;
+const rtlreg_t* disable = &DISABLE;
 
 #define make_DopHelper(name) void concat(decode_op_, name)(vaddr_t * eip, Operand * op, bool load_val)
 
