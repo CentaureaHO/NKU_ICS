@@ -247,67 +247,30 @@ make_EHelper(sbb)
     rtl_li(r1, id_src->val);
     if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
 
+    uint32_t _dest = t0, _src = t1;
+    uint32_t* dest = &_dest;
+    uint32_t* src  = &_src;
+
+    rtl_sub(r0, dest, src);     // r0 = dest - src
+    rtl_sltu(r1, dest, r0);     // r1 = dest < (dest - src)
+
     rtl_get_CF(r2);
-    rtl_add(r1, r1, r2);
+    rtl_sub(r3, r0, r2);        // r3 = dest - src - CF
+    rtl_sltu(r2, r0, r3);       // r2 = (dest - src) < (dest - src - CF)
+    
+    /* r0: dest - src, r1: dest < (dest - src), 
+       r2: (dest - src) < (dest - src - CF), r3: dest - src - CF */
 
-    /* r0: minuend, r1: subtrahend */
+    rtl_or(r1, r1, r2);         // r1 = r1 || r2
+    rtl_set_CF(r1);             // CF = r1
 
-    // update AF: AF = (low4(minuend) < low4(subtrahend)) ? 1 : 0
-    rtl_andi(r2, r0, 0xf);  // low 4 bits of minuend -> r2
-    rtl_andi(r3, r1, 0xf);  // low 4 bits of subtrahend -> r3
-    rtl_sltu(r2, r2, r3);   // low 4 bits of minuend < low 4 bits of subtrahend -> r2
-    rtl_set_AF(r2);
+    rtl_update_PFZFSF(r0, id_dest->width);
 
-    // update CF: carry means minuend < subtrahend
-    // rtl_sltu(r3, r0, r1);
-    // rtl_set_CF(r3);
-    // Additional: minuend = 0x0, subtrahend = 0xffffffff, CF = 0x1
-    //             then shall be fixed to CF = 0x1
-    rtl_get_CF(r2);
-    rtl_sub(r3, r1, r2);
-    rtl_sltu(r2, r0, r3);
-    rtl_sltu(r3, r0, r1);
-    rtl_or(r2, r2, r3);
-    rtl_set_CF(r2);
-
-    rtl_sub(r2, r0, r1);  // minuend - subtrahend -> r2
-
-    /* r0: minuend, r1: subtrahend, r2: sub res */
-
-    // write back
-    operand_write(id_dest, r2);
-
-    // update PF, ZF, SF:
-    rtl_update_PFZFSF(r2, id_dest->width);
-
-    // update OF: overflow only happens when minuend and subtrahend have different sign,
-    //                                  while res has different sign with minuend
-    rtl_xor(r2, r0, r2);  // sign_bit(r2) = 1 if minuend has different sign with res else 0
-    rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
-    rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
-    rtl_msb(r1, r1, id_dest->width);
-    // rtl_set_OF(r0);
-    // Additional: minuend = 0x0, subtrahend = 0x7fffffff, CF = 0x1
-    //             then shall be fixed to OF = 0x0
-    // OF = (r1 && !(minuend == 0x0 && subtrahend == 0x7fffffff && CF == 0x1)) || (minuend == 0x80000000 && subtrahend
-    // == 0x7fffffff && CF == 0x1)
-    /* current: r0: minuend, r1: original OF */
-    rtl_li(r2, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r2, r2, id_src->width);
-    rtl_get_CF(r3);
-    rtl_eq0(r0, r0);
-    rtl_eqi(r2, r2, 0x7fffffff);
-    rtl_eqi(r3, r3, 0x1);
-    rtl_and(r2, r2, r3);
-    rtl_and(r0, r0, r2);
-    rtl_not(r0);
-    rtl_and(r1, r1, r0);
-    rtl_li(r0, id_dest->val);
-    rtl_eqi(r0, r0, 0x80000000);
-    rtl_and(r0, r0, r2);
-    Log("t0 = %d, t1 = %d, t2 = %d, t3 = %d", t0, t1, t2, t3);
-    rtl_or(r1, r1, r0);
-    rtl_set_OF(r1);
+    rtl_xor(r0, dest, src);     // r0 = dest ^ src
+    rtl_xor(r1, dest, r3);      // r1 = dest ^ (dest - src - CF)
+    rtl_and(r0, r0, r1);        // r0 = (dest ^ src) & (dest ^ (dest - src - CF))
+    rtl_msb(r0, r0, id_dest->width);
+    rtl_set_OF(r0);             // OF = msb((dest ^ src) & (dest ^ (dest - src - CF)))
 
     print_asm_template2(sbb);
 }
