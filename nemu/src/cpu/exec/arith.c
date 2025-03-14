@@ -411,6 +411,10 @@ make_EHelper(imul2)
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
 
     Log("imul2 is not implemented for setting eflags");
+    rtl_set_SF(disable);
+    rtl_set_ZF(disable);
+    rtl_set_AF(disable);
+    rtl_set_PF(disable);
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
