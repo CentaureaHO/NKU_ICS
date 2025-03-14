@@ -264,7 +264,7 @@ make_EHelper(sbb)
     rtl_or(r1, r1, r2);         // r1 = r1 || r2
     rtl_set_CF(r1);             // CF = r1
 
-    rtl_update_PFZFSF(r0, id_dest->width);
+    rtl_update_PFZFSF(r3, id_dest->width);
 
     rtl_xor(r0, dest, src);     // r0 = dest ^ src
     rtl_xor(r1, dest, r3);      // r1 = dest ^ (dest - src - CF)
