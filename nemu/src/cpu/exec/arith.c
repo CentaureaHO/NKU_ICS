@@ -104,7 +104,7 @@ make_EHelper(inc)
     rtl_msb(&t1, &t1, id_dest->width);
     rtl_set_OF(&t1);
 
-    rtl_update_AF(&t0, &id_dest->val, enable);
+    // rtl_update_AF(&t0, &id_dest->val, enable);
 
     operand_write(id_dest, &t0);
 
