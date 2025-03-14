@@ -243,6 +243,7 @@ make_EHelper(adc)
 make_EHelper(sbb)
 {
     // OF, SF, ZF, AF, PF, and CF as described in Appendix C
+    
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
     if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
@@ -260,6 +261,16 @@ make_EHelper(sbb)
     
     /* r0: dest - src, r1: dest < (dest - src), 
        r2: (dest - src) < (dest - src - CF), r3: dest - src - CF */
+
+    uint32_t tmp0 = 0, tmp1 = 0;
+    uint32_t* p0 = &tmp0;
+    uint32_t* p1 = &tmp1;
+    rtl_andi(r0, dest, 0xf);
+    rtl_andi(p0, src, 0xf);
+    rtl_get_CF(p1);
+    rtl_add(p0, p0, p1);
+    rtl_sltu(p1, r0, p0);
+    rtl_set_AF(p1);
 
     rtl_or(r1, r1, r2);         // r1 = r1 || r2
     rtl_set_CF(r1);             // CF = r1
