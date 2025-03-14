@@ -344,7 +344,29 @@ make_EHelper(imul1)
             EAX * r/m32 → EDX:EAX: EAX ==  sext(EAX, 4)
      */
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
-    TODO();
+
+    Log("imul1 is not implemented for setting eflags");
+
+    rtl_lr(r0, R_EAX, id_dest->width);
+    rtl_li(r1, id_dest->val);
+    rtl_imul(r1, r0, r1, r0);
+
+    switch (id_dest->width)
+    {
+        case 1: 
+            rtl_sr_w(R_AX, r0);
+            break;
+        case 2:
+            rtl_sr_w(R_AX, r0);
+            rtl_shri(r0, r0, 16);
+            rtl_sr_w(R_DX, r0);
+            break;
+        case 4:
+            rtl_sr_l(R_EDX, r1);
+            rtl_sr_l(R_EAX, r0);
+            break;
+        default: assert(0);
+    }
 
     print_asm_template1(imul);
 }
@@ -358,7 +380,17 @@ make_EHelper(imul2)
             r32 * r/m32 → r32:  exactly fits within r32
      */
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
-    TODO();
+
+    Log("imul2 is not implemented for setting eflags");
+
+    rtl_li(r0, id_dest->val);
+    rtl_li(r1, id_src->val);
+    rtl_sext(r2, r0, id_dest->width);
+    rtl_sext(r3, r1, id_src->width);
+
+    rtl_imul(r1, r0, r2, r3);
+
+    operand_write(id_dest, r0);
 
     print_asm_template2(imul);
 }
@@ -372,7 +404,19 @@ make_EHelper(imul3)
             r/m32 * imm32 → r32:    exactly fits within r32
      */
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
-    TODO();
+
+    Log("imul3 is not implemented for setting eflags");
+
+    rtl_li(r0, id_dest->val);
+    rtl_li(r1, id_src->val);
+    rtl_li(r2, id_src2->val);
+    rtl_sext(r0, r0, id_dest->width);
+    rtl_sext(r1, r1, id_src->width);
+    rtl_sext(r2, r2, id_src->width);
+
+    rtl_imul(r1, r0, r1, r2);
+
+    operand_write(id_dest, r0);
 
     print_asm_template3(imul);
 }
