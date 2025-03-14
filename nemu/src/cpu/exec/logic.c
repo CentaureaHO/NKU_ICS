@@ -98,6 +98,8 @@ make_EHelper(sar)
 
     rtl_update_PFZFSF(r0, id_dest->width);
 
+    operand_write(id_dest, r0);
+
     /*
     rtl_li(&t2, id_dest->val);
     rtl_sar(&t0, &t2, &id_src->val);
