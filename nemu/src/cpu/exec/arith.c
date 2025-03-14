@@ -6,23 +6,22 @@ make_EHelper(add)
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1)
-        rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
 
     /* r0: add src0, r1: add src1 */
 
     // update AF:
-    rtl_andi(r2, r0, 0xf);  // low 4 bits of src0 -> r2
-    rtl_andi(r3, r1, 0xf);  // low 4 bits of src1 -> r3
-    rtl_add(r2, r2, r3);    // add res of low 4 bits -> r2
-    rtl_andi(r2, r2, 0x10); // check if carry of low 4 bits -> r2
+    rtl_andi(r2, r0, 0xf);   // low 4 bits of src0 -> r2
+    rtl_andi(r3, r1, 0xf);   // low 4 bits of src1 -> r3
+    rtl_add(r2, r2, r3);     // add res of low 4 bits -> r2
+    rtl_andi(r2, r2, 0x10);  // check if carry of low 4 bits -> r2
     rtl_set_AF(r2);
 
-    rtl_add(r2, r0, r1);    // add src0 and src1 -> r2
+    rtl_add(r2, r0, r1);  // add src0 and src1 -> r2
 
     /* r0: add src0, r1: add src1, r2: add res */
 
-    // write back 
+    // write back
     operand_write(id_dest, r2);
 
     // update PF, ZF, SF:
@@ -32,12 +31,12 @@ make_EHelper(add)
     rtl_sltu(r3, r2, r0);
     rtl_set_CF(r3);
 
-    // update OF: overflow only happens when src0 and src1 have the same sign, 
+    // update OF: overflow only happens when src0 and src1 have the same sign,
     //                                  while res has different sign
-    rtl_xor(r2, r0, r2);    // sign_bit(r2) = 1 if src0 has different sign with res else 0
-    rtl_xor(r3, r0, r1);    // sign_bit(r3) = 0 if src0 has the same sign with src1 else 1
-    rtl_not(r3);            // sign_bit(r3) = 1 if src0 has the same sign with src1 else 0
-    rtl_and(r1, r2, r3);    // if sign_bit(r1) -> overflow
+    rtl_xor(r2, r0, r2);  // sign_bit(r2) = 1 if src0 has different sign with res else 0
+    rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if src0 has the same sign with src1 else 1
+    rtl_not(r3);          // sign_bit(r3) = 1 if src0 has the same sign with src1 else 0
+    rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
     rtl_msb(r0, r1, id_dest->width);
     rtl_set_OF(r0);
 
@@ -47,21 +46,20 @@ make_EHelper(add)
 make_EHelper(sub)
 {
     // OF, SF, ZF, AF, PF, and CF as described in Appendix C
-    
+
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1)
-        rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
 
     /* r0: minuend, r1: subtrahend */
 
     // update AF: AF = (low4(minuend) < low4(subtrahend)) ? 1 : 0
     rtl_andi(r2, r0, 0xf);  // low 4 bits of minuend -> r2
     rtl_andi(r3, r1, 0xf);  // low 4 bits of subtrahend -> r3
-    rtl_sltu(r2, r2, r3);    // low 4 bits of minuend < low 4 bits of subtrahend -> r2
+    rtl_sltu(r2, r2, r3);   // low 4 bits of minuend < low 4 bits of subtrahend -> r2
     rtl_set_AF(r2);
 
-    rtl_sub(r2, r0, r1);    // minuend - subtrahend -> r2
+    rtl_sub(r2, r0, r1);  // minuend - subtrahend -> r2
 
     /* r0: minuend, r1: subtrahend, r2: sub res */
 
@@ -77,9 +75,9 @@ make_EHelper(sub)
 
     // update OF: overflow only happens when minuend and subtrahend have different sign,
     //                                  while res has different sign with minuend
-    rtl_xor(r2, r0, r2);    // sign_bit(r2) = 1 if minuend has different sign with res else 0
-    rtl_xor(r3, r0, r1);    // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
-    rtl_and(r1, r2, r3);    // if sign_bit(r1) -> overflow
+    rtl_xor(r2, r0, r2);  // sign_bit(r2) = 1 if minuend has different sign with res else 0
+    rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
+    rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
     rtl_msb(r0, r1, id_dest->width);
     rtl_set_OF(r0);
 
@@ -89,21 +87,20 @@ make_EHelper(sub)
 make_EHelper(cmp)
 {
     // OF, SF, ZF, AF, PF, and CF as described in Appendix C
-    
+
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1)
-        rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
 
     /* r0: minuend, r1: subtrahend */
 
     // update AF: AF = (low4(minuend) < low4(subtrahend)) ? 1 : 0
     rtl_andi(r2, r0, 0xf);  // low 4 bits of minuend -> r2
     rtl_andi(r3, r1, 0xf);  // low 4 bits of subtrahend -> r3
-    rtl_sltu(r2, r2, r3);    // low 4 bits of minuend < low 4 bits of subtrahend -> r2
+    rtl_sltu(r2, r2, r3);   // low 4 bits of minuend < low 4 bits of subtrahend -> r2
     rtl_set_AF(r2);
 
-    rtl_sub(r2, r0, r1);    // minuend - subtrahend -> r2
+    rtl_sub(r2, r0, r1);  // minuend - subtrahend -> r2
 
     /* r0: minuend, r1: subtrahend, r2: sub res */
 
@@ -116,9 +113,9 @@ make_EHelper(cmp)
 
     // update OF: overflow only happens when minuend and subtrahend have different sign,
     //                                  while res has different sign with minuend
-    rtl_xor(r2, r0, r2);    // sign_bit(r2) = 1 if minuend has different sign with res else 0
-    rtl_xor(r3, r0, r1);    // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
-    rtl_and(r1, r2, r3);    // if sign_bit(r1) -> overflow
+    rtl_xor(r2, r0, r2);  // sign_bit(r2) = 1 if minuend has different sign with res else 0
+    rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
+    rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
     rtl_msb(r0, r1, id_dest->width);
     rtl_set_OF(r0);
 
@@ -128,7 +125,7 @@ make_EHelper(cmp)
 make_EHelper(inc)
 {
     // OF, SF, ZF, AF, and PF as described in Appendix C
-    
+
     rtl_li(r0, id_dest->val);
     rtl_addi(r1, r0, 0x1);
 
@@ -148,8 +145,8 @@ make_EHelper(inc)
     // update OF: overflow only happens when sign_bit(src) == 0 && sign_bit(res) == 1
     rtl_msb(r2, r0, id_dest->width);
     rtl_msb(r3, r1, id_dest->width);
-    rtl_eq0(r2, r2);        // sign_bit(src) == 0 -> r2
-    rtl_eqi(r3, r3, 0x1);   // sign_bit(res) == 1 -> r3
+    rtl_eq0(r2, r2);       // sign_bit(src) == 0 -> r2
+    rtl_eqi(r3, r3, 0x1);  // sign_bit(res) == 1 -> r3
     rtl_and(r1, r2, r3);
     rtl_set_OF(r1);
 
@@ -159,7 +156,7 @@ make_EHelper(inc)
 make_EHelper(dec)
 {
     // OF, SF, ZF, AF, and PF as described in Appendix C.
-    
+
     rtl_li(r0, id_dest->val);
     rtl_subi(r1, r0, 0x1);
 
@@ -179,8 +176,8 @@ make_EHelper(dec)
     // update OF: overflow only happens when sign_bit(src) == 1 && sign_bit(res) == 0
     rtl_msb(r2, r0, id_dest->width);
     rtl_msb(r3, r1, id_dest->width);
-    rtl_eqi(r2, r2, 0x1);   // sign_bit(src) == 1 -> r2
-    rtl_eq0(r3, r3);        // sign_bit(res) == 0 -> r3
+    rtl_eqi(r2, r2, 0x1);  // sign_bit(src) == 1 -> r2
+    rtl_eq0(r3, r3);       // sign_bit(res) == 0 -> r3
     rtl_and(r1, r2, r3);
     rtl_set_OF(r1);
 
@@ -203,8 +200,7 @@ make_EHelper(adc)
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1)
-        rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
 
     rtl_get_CF(r2);
     rtl_add(r1, r1, r2);
@@ -212,17 +208,17 @@ make_EHelper(adc)
     /* r0: add src0, r1: add src1 */
 
     // update AF:
-    rtl_andi(r2, r0, 0xf);  // low 4 bits of src0 -> r2
-    rtl_andi(r3, r1, 0xf);  // low 4 bits of src1 -> r3
-    rtl_add(r2, r2, r3);    // add res of low 4 bits -> r2
-    rtl_andi(r2, r2, 0x10); // check if carry of low 4 bits -> r2
+    rtl_andi(r2, r0, 0xf);   // low 4 bits of src0 -> r2
+    rtl_andi(r3, r1, 0xf);   // low 4 bits of src1 -> r3
+    rtl_add(r2, r2, r3);     // add res of low 4 bits -> r2
+    rtl_andi(r2, r2, 0x10);  // check if carry of low 4 bits -> r2
     rtl_set_AF(r2);
 
-    rtl_add(r2, r0, r1);    // add src0 and src1 -> r2
+    rtl_add(r2, r0, r1);  // add src0 and src1 -> r2
 
     /* r0: add src0, r1: add src1, r2: add res */
 
-    // write back 
+    // write back
     operand_write(id_dest, r2);
 
     // update PF, ZF, SF:
@@ -232,12 +228,12 @@ make_EHelper(adc)
     rtl_sltu(r3, r2, r0);
     rtl_set_CF(r3);
 
-    // update OF: overflow only happens when src0 and src1 have the same sign, 
+    // update OF: overflow only happens when src0 and src1 have the same sign,
     //                                  while res has different sign
-    rtl_xor(r2, r0, r2);    // sign_bit(r2) = 1 if src0 has different sign with res else 0
-    rtl_xor(r3, r0, r1);    // sign_bit(r3) = 0 if src0 has the same sign with src1 else 1
-    rtl_not(r3);            // sign_bit(r3) = 1 if src0 has the same sign with src1 else 0
-    rtl_and(r1, r2, r3);    // if sign_bit(r1) -> overflow
+    rtl_xor(r2, r0, r2);  // sign_bit(r2) = 1 if src0 has different sign with res else 0
+    rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if src0 has the same sign with src1 else 1
+    rtl_not(r3);          // sign_bit(r3) = 1 if src0 has the same sign with src1 else 0
+    rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
     rtl_msb(r0, r1, id_dest->width);
     rtl_set_OF(r0);
 
@@ -249,8 +245,7 @@ make_EHelper(sbb)
     // OF, SF, ZF, AF, PF, and CF as described in Appendix C
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1)
-        rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
 
     rtl_get_CF(r2);
     rtl_add(r1, r1, r2);
@@ -260,10 +255,10 @@ make_EHelper(sbb)
     // update AF: AF = (low4(minuend) < low4(subtrahend)) ? 1 : 0
     rtl_andi(r2, r0, 0xf);  // low 4 bits of minuend -> r2
     rtl_andi(r3, r1, 0xf);  // low 4 bits of subtrahend -> r3
-    rtl_sltu(r2, r2, r3);    // low 4 bits of minuend < low 4 bits of subtrahend -> r2
+    rtl_sltu(r2, r2, r3);   // low 4 bits of minuend < low 4 bits of subtrahend -> r2
     rtl_set_AF(r2);
 
-    rtl_sub(r2, r0, r1);    // minuend - subtrahend -> r2
+    rtl_sub(r2, r0, r1);  // minuend - subtrahend -> r2
 
     /* r0: minuend, r1: subtrahend, r2: sub res */
 
@@ -279,9 +274,9 @@ make_EHelper(sbb)
 
     // update OF: overflow only happens when minuend and subtrahend have different sign,
     //                                  while res has different sign with minuend
-    rtl_xor(r2, r0, r2);    // sign_bit(r2) = 1 if minuend has different sign with res else 0
-    rtl_xor(r3, r0, r1);    // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
-    rtl_and(r1, r2, r3);    // if sign_bit(r1) -> overflow
+    rtl_xor(r2, r0, r2);  // sign_bit(r2) = 1 if minuend has different sign with res else 0
+    rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
+    rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
     rtl_msb(r0, r1, id_dest->width);
     rtl_set_OF(r0);
 
@@ -302,14 +297,14 @@ make_EHelper(mul)
             EDX == 0 → OF = 0, CF = 0
      */
     // OF and CF as described above; SF, ZF, AF, PF, and CF are undefined
-    
+
     rtl_lr(r0, R_EAX, id_dest->width);
     rtl_li(r1, id_dest->val);
     rtl_mul(r1, r0, r1, r0);
 
     switch (id_dest->width)
     {
-        case 1: 
+        case 1:
             rtl_sr_w(R_AX, r0);
             rtl_lr_b(r0, R_AH);
             break;
@@ -353,9 +348,7 @@ make_EHelper(imul1)
 
     switch (id_dest->width)
     {
-        case 1: 
-            rtl_sr_w(R_AX, r0);
-            break;
+        case 1: rtl_sr_w(R_AX, r0); break;
         case 2:
             rtl_sr_w(R_AX, r0);
             rtl_shri(r0, r0, 16);
@@ -450,8 +443,10 @@ make_EHelper(div)
     rtl_div(r1, r0, r2, r1, r0);
 
     rtl_sr(R_EAX, id_dest->width, r1);
-    if (id_dest->width == 1) rtl_sr_b(R_AH, r0);
-    else rtl_sr(R_EDX, id_dest->width, r0);
+    if (id_dest->width == 1)
+        rtl_sr_b(R_AH, r0);
+    else
+        rtl_sr(R_EDX, id_dest->width, r0);
 
     print_asm_template1(div);
 }
