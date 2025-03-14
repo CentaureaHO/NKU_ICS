@@ -258,6 +258,18 @@ make_EHelper(sbb)
     rtl_sltu(r2, r2, r3);   // low 4 bits of minuend < low 4 bits of subtrahend -> r2
     rtl_set_AF(r2);
 
+    // update CF: carry means minuend < subtrahend
+    // rtl_sltu(r3, r0, r1);
+    // rtl_set_CF(r3);
+    // Additional: minuend = 0x0, subtrahend = 0xffffffff, CF = 0x1
+    //             then shall be fixed to CF = 0x1
+    rtl_get_CF(r2);
+    rtl_sub(r3, r1, r2);
+    rtl_sltu(r2, r0, r3);
+    rtl_sltu(r3, r0, r1);
+    rtl_or(r2, r2, r3);
+    rtl_set_CF(r2);
+
     rtl_sub(r2, r0, r1);  // minuend - subtrahend -> r2
 
     /* r0: minuend, r1: subtrahend, r2: sub res */
@@ -267,10 +279,6 @@ make_EHelper(sbb)
 
     // update PF, ZF, SF:
     rtl_update_PFZFSF(r2, id_dest->width);
-
-    // update CF: carry means minuend < subtrahend
-    rtl_sltu(r3, r0, r1);
-    rtl_set_CF(r3);
 
     // update OF: overflow only happens when minuend and subtrahend have different sign,
     //                                  while res has different sign with minuend
