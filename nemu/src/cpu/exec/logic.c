@@ -75,12 +75,14 @@ make_EHelper(sar)
 
     rtl_get_OF(r2);         // CF = old_CF || ((src != 0) && ((dest >> src) & 0x1))
                             // OF = old_OF && (src != 1)
-    rtl_subi(r3, r1, 1);
+    rtl_subi(r3, r1, 0x1);
+    Log("Got t3 = 0x%x in rtl_subi", t3);
     rtl_neq0(r3, r3);
     rtl_and(r2, r2, r3);
     rtl_set_OF(r2);
 
     rtl_mtb(r2, r0, t1);    // r2 = ((dest >> src) & 0x1)
+    Log("Got t2 = 0x%x in rtl_mtb", t2);
     rtl_neq0(r3, r1);
     rtl_and(r2, r2, r3);
     rtl_get_CF(r3);
