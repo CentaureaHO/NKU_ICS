@@ -13,9 +13,12 @@ typedef struct watchpoint
     uint32_t prev_val;
     char*    expr_str;
     ASTNode* ast;
+
+    bool is_bp;
 } WP;
 
 WP* create_wp(char* es);
+WP* create_bp(uint32_t addr);
 void destroy_wp(int n);
 void print_wp();
 bool check_wp();

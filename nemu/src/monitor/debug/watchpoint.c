@@ -16,6 +16,7 @@ void init_wp_pool()
         wp_pool[i].next     = &wp_pool[i + 1];
         wp_pool[i].expr_str = NULL;
         wp_pool[i].ast      = NULL;
+        wp_pool[i].is_bp    = false;
     }
     wp_pool[NR_WP - 1].next = NULL;
 
@@ -98,6 +99,45 @@ WP* create_wp(char* es)
     wp->expr_str = strdup(es);
     wp->ast      = ast;
     wp->prev_val = val;
+    wp->is_bp    = false;
+
+    return wp;
+}
+
+WP* create_bp(uint32_t addr)
+{
+    static char es[32] = "$eip == ";
+    static bool init = false;
+    static int len = 0;
+    if (!init) {
+        len = strlen(es);
+        init = true;
+    }
+
+    snprintf(es + len, sizeof(es) - len, "0x%x", addr);
+    
+    printf("es: %s\n", es);
+
+    bool     success = true;
+    ASTNode* ast     = build_ast(es, &success);
+    if (!success || ast == NULL) {
+        Log("Failed to build AST for expression");
+        return NULL;
+    }
+
+    uint32_t val = eval_ast(ast);
+
+    WP* wp = new_wp();
+    if (wp == NULL) {
+        Log("Failed to create watchpoint");
+        free_ast(ast);
+        return NULL;
+    }
+
+    wp->expr_str = strdup(es);
+    wp->ast      = ast;
+    wp->prev_val = val;
+    wp->is_bp    = true;
 
     return wp;
 }

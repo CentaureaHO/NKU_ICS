@@ -129,6 +129,20 @@ static int cmd_w(char* args)
     return 0;
 }
 
+static int cmd_b(char* args)
+{
+    uint32_t addr = strtol(args, NULL, 0);
+    WP* wp = create_bp(addr);
+
+    if (wp == NULL) {
+        Log("Failed to create breakpoint for address 0x%08x", addr);
+        return 0;
+    }
+
+    printf("Breakpoint %d: %s 0x%08x\n", wp->NO, wp->expr_str, wp->prev_val);
+    return 0;
+}
+
 static int cmd_d(char* args)
 {
     int n = atoi(args);
@@ -265,6 +279,7 @@ static struct
     {"d", "Delete watchpoint: d [N]", cmd_d},
     {"wr", "Write target register with expression: wr $REG, EXPR", cmd_wr},
     {"wm", "Write memory at address: wm ADDR_EXPR, VALUE_EXPR", cmd_wm},
+    {"b", "Set breakpoint at address: b [EXPR]", cmd_b},
 
     /* TODO: Add more commands */
 
