@@ -116,7 +116,7 @@ WP* create_bp(uint32_t addr)
 
     snprintf(es + len, sizeof(es) - len, "0x%x", addr);
 
-    printf("es: %s\n", es);
+    // printf("es: %s\n", es);
 
     bool     success = true;
     ASTNode* ast     = build_ast(es, &success);
