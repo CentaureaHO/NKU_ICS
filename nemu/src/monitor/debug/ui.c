@@ -132,13 +132,13 @@ static int cmd_w(char* args)
 static int cmd_b(char* args)
 {
     bool     success = false;
-    uint32_t addr = expr(args, &success);
+    uint32_t addr    = expr(args, &success);
     if (!success) {
         printf("Failed to evaluate expression \"%s\"\n", args);
         return 0;
     }
 
-    WP*      wp   = create_bp(addr);
+    WP* wp = create_bp(addr);
 
     if (wp == NULL) {
         Log("Failed to create breakpoint for address 0x%08x", addr);
