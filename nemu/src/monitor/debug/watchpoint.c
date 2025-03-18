@@ -185,17 +185,18 @@ bool check_wp()
     bool changed = false;
 
     while (p != NULL) {
-        if (p->is_bp && p->prev_val == 0x1) {
-            p = p->next;
-            continue;
-        }
-
         uint32_t val = eval_ast(p->ast);
 
         if (val != p->prev_val) {
+            if (p->is_bp && p->prev_val == 0x1) {
+                p->prev_val = val;
+                p = p->next;
+                continue;
+            }
+
+            p->prev_val = val;
             changed = true;
             printf("Watchpoint %d: %s: 0x%08x -> 0x%08x\n", p->NO, p->expr_str, p->prev_val, val);
-            p->prev_val = val;
         }
 
         p = p->next;
