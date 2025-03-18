@@ -132,7 +132,7 @@ static int cmd_w(char* args)
 static int cmd_b(char* args)
 {
     uint32_t addr = strtol(args, NULL, 0);
-    WP* wp = create_bp(addr);
+    WP*      wp   = create_bp(addr);
 
     if (wp == NULL) {
         Log("Failed to create breakpoint for address 0x%08x", addr);

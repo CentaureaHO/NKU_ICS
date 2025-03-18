@@ -107,15 +107,15 @@ WP* create_wp(char* es)
 WP* create_bp(uint32_t addr)
 {
     static char es[32] = "$eip == ";
-    static bool init = false;
-    static int len = 0;
+    static bool init   = false;
+    static int  len    = 0;
     if (!init) {
-        len = strlen(es);
+        len  = strlen(es);
         init = true;
     }
 
     snprintf(es + len, sizeof(es) - len, "0x%x", addr);
-    
+
     printf("es: %s\n", es);
 
     bool     success = true;
@@ -185,8 +185,7 @@ bool check_wp()
     bool changed = false;
 
     while (p != NULL) {
-        if (p->is_bp && p->prev_val == 0x1)
-        {
+        if (p->is_bp && p->prev_val == 0x1) {
             p = p->next;
             continue;
         }
