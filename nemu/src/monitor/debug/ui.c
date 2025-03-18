@@ -131,7 +131,13 @@ static int cmd_w(char* args)
 
 static int cmd_b(char* args)
 {
-    uint32_t addr = strtol(args, NULL, 0);
+    bool     success = false;
+    uint32_t addr = expr(args, &success);
+    if (!success) {
+        printf("Failed to evaluate expression \"%s\"\n", args);
+        return 0;
+    }
+
     WP*      wp   = create_bp(addr);
 
     if (wp == NULL) {
