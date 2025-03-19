@@ -50,33 +50,29 @@ WP* new_wp()
 
 void free_wp(WP* wp)
 {
-    Log("Free watchpoint %d", wp->NO);
-
     if (wp == NULL) {
         Log("Invalid watchpoint");
         return;
     }
 
-    Log("Free watchpoint %d", wp->NO);
-
     WP* p = head;
     if (p == wp) {
-        head = head->next;
+        head     = head->next;
         wp->next = free_;
-        free_ = wp;
+        free_    = wp;
         return;
     }
 
-    Log("Target watchpoint not head");
-
-    while (p->next != NULL) {
-        if (p->next == wp) {
-            p->next = wp->next;
-            wp->next = free_;
-            free_ = wp;
-            return;
+    while (p != NULL) {
+        if (p->next != wp) {
+            p = p->next;
+            continue;
         }
-        p = p->next;
+
+        p->next  = wp->next;
+        wp->next = free_;
+        free_    = wp;
+        return;
     }
 
     Log("Target watchpoint not found");
