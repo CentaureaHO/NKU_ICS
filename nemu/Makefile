@@ -53,6 +53,9 @@ gdb: $(BINARY)
 clean: 
 	rm -rf $(BUILD_DIR)
 
-.PHONY: format
+.PHONY: format count
 format:
 	@find . -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.hh" \) -exec clang-format -i {} +
+
+count:
+	@find . -name "*.c" -o -name "*.h" | xargs grep -v '^[[:space:]]*$$' | wc -l
