@@ -10,7 +10,7 @@
 
 // #define REPLACE_REG_TO_PTR
 // #define EXPRDBG_LOG_ENABLE
-// #define PRINT_AST
+#define PRINT_AST
 
 #define MAX_TOKEN_LEN 32
 
