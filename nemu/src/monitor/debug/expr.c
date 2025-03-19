@@ -268,7 +268,7 @@ void print_ast(ASTNode* node, int depth)
             print_ast(node->data.left, depth + 1);
             print_ast(node->data.right, depth + 1);
             break;
-        case AST_NUMBER: printf("NUMBER: %u\n", node->data.val); break;
+        case AST_NUMBER: printf("NUMBER: 0x%08x\n", node->data.val); break;
         case AST_POINTER: printf("POINTER: %p\n", node->data.ptr); break;
         case AST_REGISTER: printf("REGISTER: %s\n", node->data.reg_name); break;
         case AST_VARIABLE: printf("VARIABLE: %s\n", node->data.var_name); break;
