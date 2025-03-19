@@ -194,9 +194,9 @@ bool check_wp()
                 continue;
             }
 
+            printf("Watchpoint %d: %s: 0x%08x -> 0x%08x\n", p->NO, p->expr_str, p->prev_val, val);
             p->prev_val = val;
             changed     = true;
-            printf("Watchpoint %d: %s: 0x%08x -> 0x%08x\n", p->NO, p->expr_str, p->prev_val, val);
         }
 
         p = p->next;
