@@ -1,5 +1,6 @@
 // Author:  Douglas Wilhelm Harder
 // Copyright (c) 2009 by Douglas Wilhelm Harder.  All rights reserved.
+#include <klib.h>
 
 template <typename T> T max(T a, T b) { return a > b ? a : b; }
 
