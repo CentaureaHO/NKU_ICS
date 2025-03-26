@@ -85,7 +85,7 @@ make_EHelper(sar)
 
     rtl_subi(r2, r1, 0x1);
     rtl_mtb(r2, r0, t2);  // r2 = ((dest >> (src - 1)) & 0x1)
-    Log("Got t2 = 0x%x in rtl_mtb", t2);
+    // Log("Got t2 = 0x%x in rtl_mtb", t2);
     /*
     rtl_neq0(r3, r1);
     rtl_and(r2, r2, r3);
