@@ -189,7 +189,24 @@ make_EHelper(neg)
     // The carry flag is set to 1, unless the operand is zero, in which case the
     // carry flag is cleared to 0.
     // CF as described above; OF, SF, ZF, and PF as described in Appendix C
-    TODO();
+    rtl_li(r0, id_dest->val);
+    rtl_eq0(r1, r0);
+    rtl_set_CF(r1);
+    rtl_not(r1);
+    rtl_set_CF(r1);
+    
+    rtl_sub(r1, rzero, r0);
+    
+    operand_write(id_dest, r1);
+    
+    rtl_update_PFZFSF(r1, id_dest->width);
+    
+    rtl_msb(r0, r0, id_dest->width);
+    rtl_eqi(r0, r0, 0x1);
+    rtl_msb(r2, r1, id_dest->width);
+    rtl_eqi(r2, r2, 0x1);
+    rtl_and(r0, r0, r2);
+    rtl_set_OF(r0);
 
     print_asm_template1(neg);
 }
