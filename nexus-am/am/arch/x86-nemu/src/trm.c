@@ -4,7 +4,7 @@
 // Define this macro after serial has been implemented
 // #define HAS_SERIAL
 
-#define SERIAL_PORT 0x3f8
+// #define SERIAL_PORT 0x3f8
 
 extern char _heap_start;
 extern char _heap_end;
