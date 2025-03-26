@@ -190,9 +190,7 @@ make_EHelper(neg)
     // carry flag is cleared to 0.
     // CF as described above; OF, SF, ZF, and PF as described in Appendix C
     rtl_li(r0, id_dest->val);
-    rtl_eq0(r1, r0);
-    rtl_set_CF(r1);
-    rtl_not(r1);
+    rtl_neq0(r1, r0);
     rtl_set_CF(r1);
     
     rtl_sub(r1, rzero, r0);
