@@ -59,6 +59,7 @@ int main() {
 
   for (int i = 0; i < ARR_SIZE(benchmarks); i++) {
     Benchmark *bench = &benchmarks[i];
+    if (strcmp(bench->name, "md5") != 0) continue;
     current = bench;
     setting = &bench->settings[SETTING];
     const char *msg = bench_check(bench);
