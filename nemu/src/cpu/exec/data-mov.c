@@ -5,6 +5,7 @@ make_EHelper(mov)
     // Flags Affected: None
 
     rtl_li(r0, id_src->val);
+    rtl_sext(r0, r0, id_src->width);
 
     operand_write(id_dest, r0);
     print_asm_template2(mov);
