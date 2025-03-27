@@ -39,6 +39,7 @@ El Dorado Hills, CA, 95762
         Returns:
         NULL.
 */
+/*
 static ee_u16 list_known_crc[] = {(ee_u16)0xd4b0, (ee_u16)0x3340,
                                   (ee_u16)0x6a79, (ee_u16)0xe714,
                                   (ee_u16)0xe3c1};
@@ -48,6 +49,13 @@ static ee_u16 matrix_known_crc[] = {(ee_u16)0xbe52, (ee_u16)0x1199,
 static ee_u16 state_known_crc[] = {(ee_u16)0x5e47, (ee_u16)0x39bf,
                                    (ee_u16)0xe5a4, (ee_u16)0x8e3a,
                                    (ee_u16)0x8d84};
+                                   */
+static ee_u16 list_known_crc[] = {(ee_u16)0xe714,
+                                    (ee_u16)0xe3c1};
+static ee_u16 matrix_known_crc[] = {(ee_u16)0x1fd7,
+                                      (ee_u16)0x0747};
+static ee_u16 state_known_crc[] = {(ee_u16)0x8e3a,
+                                     (ee_u16)0x8d84};
 void *iterate(void *pres) {
   ee_u32 i;
   ee_u16 crc;
