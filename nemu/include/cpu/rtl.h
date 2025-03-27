@@ -123,8 +123,7 @@ make_rtl_setget_eflags(CF) make_rtl_setget_eflags(OF) make_rtl_setget_eflags(ZF)
     // TODO();
     *dest = *src1;
 }
-
-inline void rtl_not(rtlreg_t* dest)
+void rtl_not(rtlreg_t* dest)
 {
     // dest <- ~dest
     // TODO();
