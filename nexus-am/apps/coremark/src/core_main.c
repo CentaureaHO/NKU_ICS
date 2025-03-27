@@ -150,8 +150,7 @@ MAIN_RETURN_TYPE main(int argc, char *argv[]) {
 #endif
   results[0].execs = get_seed_32(5);
   if (results[0].execs == 0) { /* if not supplied, execute all algorithms */
-    // results[0].execs = ALL_ALGORITHMS_MASK;
-    results[0].execs = ID_LIST;
+    results[0].execs = ALL_ALGORITHMS_MASK;
   }
   /* put in some default values based on one seed only for easy testing */
   if ((results[0].seed1 == 0) && (results[0].seed2 == 0) &&
