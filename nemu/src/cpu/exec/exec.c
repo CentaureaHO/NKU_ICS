@@ -219,7 +219,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         EMPTY,
         EMPTY,
         EMPTY,
-        /* 0x98 */ EMPTY,
+        /* 0x98 */ EX(cwtl),
         EX(cltd),
         EMPTY,
         EMPTY,
