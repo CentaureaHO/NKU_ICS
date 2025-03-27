@@ -166,7 +166,7 @@ static inline void rtl_rol(rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t*
 {
     // dest <- { src1[width * 8 - 1 - src2: 0], src1[width * 8 - 1: src2] }
     // CF <- dest[0]
-    Assert(*src2 < width << 3, "Invalid src2 = %d for width = %d", *src2, width);
+    // Assert(*src2 < width << 3, "Invalid src2 = %d for width = %d", *src2, width);
     
     int total_bits = width << 3;
     int shift = *src2 % total_bits;
@@ -183,7 +183,7 @@ static inline void rtl_ror(rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t*
 {
     // dest <- { src1[src2 - 1: 0], src1[width * 8 - 1: src2] }
     // CF <- dest[width * 8 - 1]
-    Assert(*src2 < width << 3, "Invalid src2 = %d for width = %d", *src2, width);
+    // Assert(*src2 < width << 3, "Invalid src2 = %d for width = %d", *src2, width);
     
     int total_bits = width << 3;
     int shift = *src2 % total_bits;
