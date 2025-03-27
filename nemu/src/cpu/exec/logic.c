@@ -192,8 +192,6 @@ make_EHelper(rol)
 
     rtl_set_OF(r3);
 
-    Assert(false, "Not implemented yet");
-
     print_asm_template2(rol);
 }
 
@@ -217,8 +215,6 @@ make_EHelper(ror)
     rtl_and(r3, r3, r2);
 
     rtl_set_OF(r3);
-
-    Assert(false, "Not implemented yet");
 
     print_asm_template2(ror);
 }
