@@ -1,34 +1,30 @@
 #include "trap.h"
 
-int main() 
-{
-  int result;
-  
-  unsigned char test_data = 0xff;
-  int dummy1 = 0;
-  int dummy2 = 0;
-  
-  asm volatile(
-    "push %%ebp\n\t"
-    "movl %%esp, %%ebp\n\t"
-    
-    "leal %1, %%eax\n\t"
-    "movl %%eax, 0xc(%%ebp)\n\t"
-    
-    "movl 0xc(%%ebp), %%eax\n\t"
-    "movl (%%eax), %%eax\n\t"
-
-    "movl %%eax, %0\n\t"
-    "pop %%ebp\n\t"
-    
-    : "=r" (result)
-    : "m" (test_data),
-      "m" (dummy1),
-      "m" (dummy2)
-    : "eax", "memory"
-  );
-  
-  nemu_assert(result == 0xff);
-  
-  return 0;
+int max(int x, int y) {
+  int z;
+  if (x > y) {
+    z = x;
+  } else {
+    z = y;
+  }
+  return z;
 }
+
+int test_data[] = {0,          1,          2,          0x7fffffff,
+                   0x80000000, 0x80000001, 0xfffffffe, 0xffffffff};
+int ans[] = {
+    0,          0x1,        0x2,        0x7fffffff, 0,          0,
+    0,          0,          0x1,        0x1,        0x2,        0x7fffffff,
+    0x1,        0x1,        0x1,        0x1,        0x2,        0x2,
+    0x2,        0x7fffffff, 0x2,        0x2,        0x2,        0x2,
+    0x7fffffff, 0x7fffffff, 0x7fffffff, 0x7fffffff, 0x7fffffff, 0x7fffffff,
+    0x7fffffff, 0x7fffffff, 0,          0x1,        0x2,        0x7fffffff,
+    0x80000000, 0x80000001, 0xfffffffe, 0xffffffff, 0,          0x1,
+    0x2,        0x7fffffff, 0x80000001, 0x80000001, 0xfffffffe, 0xffffffff,
+    0,          0x1,        0x2,        0x7fffffff, 0xfffffffe, 0xfffffffe,
+    0xfffffffe, 0xffffffff, 0,          0x1,        0x2,        0x7fffffff,
+    0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff};
+
+#define NR_DATA (sizeof(test_data) / sizeof(test_data[0]))
+
+int main() { nemu_assert(max(test_data[4], test_data[0]) == 0); }
