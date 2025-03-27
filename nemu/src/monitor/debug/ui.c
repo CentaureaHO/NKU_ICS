@@ -303,7 +303,7 @@ static int cmd_rx(char* args)
             printf("Failed to read memory from qemu\n");
             return 0;
         }
-        printf("0x%08x: 0x%02x%02x%02x%02x\n", addr, qemu_mem[0], qemu_mem[1], qemu_mem[2], qemu_mem[3]);
+        printf("0x%08x: 0x%02x%02x%02x%02x\n", addr, qemu_mem[3], qemu_mem[2], qemu_mem[1], qemu_mem[0]);
         addr += 4;
     }
 
