@@ -15,7 +15,9 @@ make_EHelper(push)
     // Flags Affected: None
 
     rtl_li(r0, id_dest->val);
-    rtl_push(r0);
+    // rtl_push(r0);
+    rtl_sext(&t0, r0, id_dest->width);
+    rtl_push(&t0);
 
     print_asm_template1(push);
 }
