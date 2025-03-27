@@ -177,7 +177,9 @@ make_EHelper(rol)
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
 
+    Log("Before rol: r0 = 0x%x, r1 = 0x%x", t0, t1);
     rtl_rol(r0, r0, r1, id_dest->width);
+    Log("After rol: r0 = 0x%x", t0);
     operand_write(id_dest, r0);
     rtl_li(r2, 0x1);
     rtl_and(r2, r0, r2);
