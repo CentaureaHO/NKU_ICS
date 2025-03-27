@@ -266,6 +266,52 @@ static int cmd_wm(char* args)
     return 0;
 }
 
+#ifdef DIFF_TEST
+
+bool gdb_memcpy_from_qemu(uint32_t src, void* dest, int len);
+
+static int cmd_ri(char* args)
+{
+    // show register from gdb
+    // args: none
+
+    return 0;
+}
+
+static int cmd_rx(char* args)
+{
+    // show memory from gdb
+    // args: num of memory, expr of start address
+
+    char* expr_ptr = NULL;
+    int   n        = strtol(args, &expr_ptr, 0);
+
+    Assert(n > 0, "Got argument \"%s\" for x, but it should be a positive integer", args);
+    Assert(*expr_ptr == ' ', "Got argument \"%s\" for x, but it should be followed by a space", args);
+
+    bool     success = false;
+    uint32_t addr    = expr(expr_ptr + 1, &success);
+    Assert(success, "Failed to evaluate expression \"%s\"", expr_ptr + 1);
+
+    uint8_t qemu_mem[4];
+    bool ok = false;
+
+    for (int i = 0; i < n; i++) {
+        // printf("0x%08x: 0x%08x\n", addr, vaddr_read(addr, 4));
+        ok = gdb_memcpy_from_qemu(addr, qemu_mem, 4);
+        if (!ok) {
+            printf("Failed to read memory from qemu\n");
+            return 0;
+        }
+        printf("0x%08x: 0x%02x%02x%02x%02x\n", addr, qemu_mem[0], qemu_mem[1], qemu_mem[2], qemu_mem[3]);
+        addr += 4;
+    }
+
+    return 0;
+}
+
+#endif
+
 static int cmd_help(char* args);
 
 static struct
@@ -286,6 +332,10 @@ static struct
     {"wr", "Write target register with expression: wr $REG, EXPR", cmd_wr},
     {"wm", "Write memory at address: wm ADDR_EXPR, VALUE_EXPR", cmd_wm},
     {"b", "Set breakpoint at address: b [EXPR]", cmd_b},
+    #ifdef DIFF_TEST
+    {"ri", "Show register from gdb", cmd_ri},
+    {"rx", "Show memory from gdb", cmd_rx},
+    #endif
 
     /* TODO: Add more commands */
 
