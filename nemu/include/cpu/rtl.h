@@ -124,7 +124,7 @@ make_rtl_setget_eflags(CF) make_rtl_setget_eflags(OF) make_rtl_setget_eflags(ZF)
     *dest = *src1;
 }
 
-static inline void rtl_not(rtlreg_t* dest)
+ inline void rtl_not(rtlreg_t* dest)
 {
     // dest <- ~dest
     // TODO();
@@ -162,7 +162,7 @@ static inline void rtl_pop(rtlreg_t* dest)
     cpu.esp += 4;
 }
 
-void rtl_rol(rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t* src2, int width)
+static inline void rtl_rol(rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t* src2, int width)
 {
     // dest <- { src1[width * 8 - 1 - src2: 0], src1[width * 8 - 1: src2] }
     // CF <- dest[0]
