@@ -178,6 +178,7 @@ make_EHelper(rol)
     rtl_li(r1, id_src->val);
 
     rtl_rol(r0, r0, r1, id_dest->width);
+    operand_write(id_dest, r0);
     rtl_li(r2, 0x1);
     rtl_and(r2, r0, r2);
     rtl_set_CF(r2);
@@ -203,6 +204,7 @@ make_EHelper(ror)
     rtl_li(r1, id_src->val);
 
     rtl_ror(r0, r0, r1, id_dest->width);
+    operand_write(id_dest, r0);
     rtl_msb(r2, r0, id_dest->width);
     rtl_set_CF(r2);
 
