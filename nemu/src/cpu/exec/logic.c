@@ -169,3 +169,52 @@ make_EHelper(not)
 
     print_asm_template1(not);
 }
+
+make_EHelper(rol)
+{
+    // Flags Affected: OF only for single rotates; OF is undefined for multi-bit rotates; CF as described above
+
+    rtl_li(r0, id_dest->val);
+    rtl_li(r1, id_src->val);
+
+    rtl_rol(r0, r0, r1, id_dest->width);
+    rtl_li(r2, 0x1);
+    rtl_and(r2, r0, r2);
+    rtl_set_CF(r2);
+
+    // OF = r1 == 1 && (r2 != sign(r0));
+    rtl_eqi(r3, r1, 0x1);
+    rtl_msb(r0, r0, id_dest->width);
+    // rtl_neq(r0, r0, r2);
+    rtl_sub(r0, r0, r2);
+    rtl_neq0(r0, r0);
+    rtl_and(r3, r3, r0);
+
+    rtl_set_OF(r3);
+
+    print_asm_template2(rol);
+}
+
+make_EHelper(ror)
+{
+    // Flags Affected: OF only for single rotates; OF is undefined for multi-bit rotates; CF as described above
+    
+    rtl_li(r0, id_dest->val);
+    rtl_li(r1, id_src->val);
+
+    rtl_ror(r0, r0, r1, id_dest->width);
+    rtl_msb(r2, r0, id_dest->width);
+    rtl_set_CF(r2);
+
+    // OF = r1 == 1 && (r2 != sign_next(r0));
+    rtl_mtb(r3, r3, (id_dest->width << 3) - 1);
+    // rtl_neq(r2, r2, r3);
+    rtl_sub(r2, r2, r3);
+    rtl_neq0(r2, r2);
+    rtl_eqi(r3, r1, 0x1);
+    rtl_and(r3, r3, r2);
+
+    rtl_set_OF(r3);
+
+    print_asm_template2(ror);
+}

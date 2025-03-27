@@ -5,6 +5,7 @@
 
 #define TRUNCATE_MASK(width) (~0u >> ((4 - width) << 3))
 #define SIGNED_BIT_MASK(width) (1u << ((width << 3) - 1))
+#define RANGE_MASK(high, low) ((~0u >> (31 - (high))) & (~0u << (low)))
 
 extern rtlreg_t        t0, t1, t2, t3;
 extern rtlreg_t*       r0;
@@ -159,6 +160,26 @@ static inline void rtl_pop(rtlreg_t* dest)
     // esp <- esp + 4
     *dest = vaddr_read(cpu.esp, 4);
     cpu.esp += 4;
+}
+
+static inline void rtl_rol(rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t* src2, int width)
+{
+    // dest <- { src1[width * 8 - 1 - src2: 0], src1[width * 8 - 1: src2] }
+    // CF <- dest[0]
+    Assert(*src2 < width << 3, "Invalid src2 = %d for width = %d", *src2, width);
+    
+    *dest = (*src1 & RANGE_MASK((width << 3) - 1, *src2)) | (*src1 & RANGE_MASK(*src2 - 1, 0));
+    // rtl_set_CF(*dest & 0x1);
+}
+
+static inline void rtl_ror(rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t* src2, int width)
+{
+    // dest <- { src1[src2 - 1: 0], src1[width * 8 - 1: src2] }
+    // CF <- dest[width * 8 - 1]
+    Assert(*src2 < width << 3, "Invalid src2 = %d for width = %d", *src2, width);
+
+    *dest = (*src1 & RANGE_MASK(*src2 - 1, 0)) | (*src1 & RANGE_MASK((width << 3) - 1, *src2));
+    // rtl_set_CF(*dest & SIGNED_BIT_MASK(width));
 }
 
 static inline void rtl_eq0(rtlreg_t* dest, const rtlreg_t* src1)
