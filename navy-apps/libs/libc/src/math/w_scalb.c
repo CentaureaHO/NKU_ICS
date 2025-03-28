@@ -63,7 +63,7 @@ int fn;
 #endif
   return z;
 #endif
-#else  /* defined (_DOUBLE_IS_32BITS) */
+#else /* defined (_DOUBLE_IS_32BITS) */
   return (double)_scalbf_r(_R4, (float)x, fn);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

@@ -105,7 +105,7 @@ int n;
   k += 54;                             /* subnormal result */
   SET_HIGH_WORD(x, (hx & 0x800fffff) | (k << 20));
   return x * twom54;
-#else /* defined (_DOUBLE_IS_32BITS) */
+#else  /* defined (_DOUBLE_IS_32BITS) */
   return (double)scalbnf((float)x, n);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

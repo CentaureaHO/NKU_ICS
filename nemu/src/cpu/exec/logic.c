@@ -201,7 +201,7 @@ make_EHelper(rol)
 make_EHelper(ror)
 {
     // Flags Affected: OF only for single rotates; OF is undefined for multi-bit rotates; CF as described above
-    
+
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
 

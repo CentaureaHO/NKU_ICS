@@ -1,6 +1,6 @@
-#include <benchmark.h>
 #include "heap.h"
 #include "puzzle.h"
+#include <benchmark.h>
 
 const int N = 4;
 const int MAXN = 65536;

@@ -294,7 +294,7 @@ static int cmd_rx(char* args)
     Assert(success, "Failed to evaluate expression \"%s\"", expr_ptr + 1);
 
     uint8_t qemu_mem[4];
-    bool ok = false;
+    bool    ok = false;
 
     for (int i = 0; i < n; i++) {
         // printf("0x%08x: 0x%08x\n", addr, vaddr_read(addr, 4));
@@ -332,10 +332,10 @@ static struct
     {"wr", "Write target register with expression: wr $REG, EXPR", cmd_wr},
     {"wm", "Write memory at address: wm ADDR_EXPR, VALUE_EXPR", cmd_wm},
     {"b", "Set breakpoint at address: b [EXPR]", cmd_b},
-    #ifdef DIFF_TEST
+#ifdef DIFF_TEST
     {"ri", "Show register from gdb", cmd_ri},
     {"rx", "Show memory from gdb", cmd_rx},
-    #endif
+#endif
 
     /* TODO: Add more commands */
 

@@ -109,34 +109,31 @@ bool gdb_si(void)
 
 void gdb_exit(void) { gdb_end(conn); }
 
-#include <ctype.h> 
+#include <ctype.h>
 
-static uint8_t hex_nibble(uint8_t hex)
-{
-    return isdigit(hex) ? hex - '0' : tolower(hex) - 'a' + 10;
-}
+static uint8_t hex_nibble(uint8_t hex) { return isdigit(hex) ? hex - '0' : tolower(hex) - 'a' + 10; }
 
 static bool gdb_memcpy_from_qemu_small(uint32_t src, void* dest, int len)
 {
     char buf[128];
     sprintf(buf, "m0x%x,%x", src, len);
-    
+
     gdb_send(conn, (const uint8_t*)buf, strlen(buf));
-    
-    size_t size;
+
+    size_t   size;
     uint8_t* reply = gdb_recv(conn, &size);
-    
+
     if (size > 0 && reply[0] == 'E') {
         free(reply);
         return false;
     }
-    
+
     for (int i = 0; i < len && i * 2 + 1 < size; i++) {
-        uint8_t high = reply[i * 2];
-        uint8_t low = reply[i * 2 + 1];
+        uint8_t high        = reply[i * 2];
+        uint8_t low         = reply[i * 2 + 1];
         ((uint8_t*)dest)[i] = (hex_nibble(high) << 4) | hex_nibble(low);
     }
-    
+
     free(reply);
     return true;
 }
@@ -144,7 +141,7 @@ static bool gdb_memcpy_from_qemu_small(uint32_t src, void* dest, int len)
 bool gdb_memcpy_from_qemu(uint32_t src, void* dest, int len)
 {
     const int mtu = 1500;
-    bool ok = true;
+    bool      ok  = true;
     while (len > mtu) {
         ok &= gdb_memcpy_from_qemu_small(src, dest, mtu);
         src += mtu;

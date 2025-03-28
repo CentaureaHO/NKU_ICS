@@ -44,7 +44,7 @@ double j1(_R2 x) /* wrapper j1 */
   } else
     return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
+#else  /* defined (_DOUBLE_IS_32BITS) */
   return (double)_j1f_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
@@ -76,7 +76,7 @@ double y1(_R2 x) /* wrapper y1 */
   } else
     return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
+#else  /* defined (_DOUBLE_IS_32BITS) */
   return (double)_y1f_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

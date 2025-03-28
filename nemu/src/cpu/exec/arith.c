@@ -192,13 +192,13 @@ make_EHelper(neg)
     rtl_li(r0, id_dest->val);
     rtl_neq0(r1, r0);
     rtl_set_CF(r1);
-    
+
     rtl_sub(r1, rzero, r0);
-    
+
     operand_write(id_dest, r1);
-    
+
     rtl_update_PFZFSF(r1, id_dest->width);
-    
+
     rtl_msb(r0, r0, id_dest->width);
     rtl_eqi(r0, r0, 0x1);
     rtl_msb(r2, r1, id_dest->width);

@@ -49,7 +49,7 @@ static ee_u16 matrix_known_crc[] = {(ee_u16)0xbe52, (ee_u16)0x1199,
 static ee_u16 state_known_crc[] = {(ee_u16)0x5e47, (ee_u16)0x39bf,
                                    (ee_u16)0xe5a4, (ee_u16)0x8e3a,
                                    (ee_u16)0x8d84};
-                                   
+
 /*
 static ee_u16 list_known_crc[] = {(ee_u16)0xe714,
                                     (ee_u16)0xe3c1};

@@ -38,8 +38,8 @@ float tanf(x) float x;
   /* argument reduction needed */
   else {
     n = __ieee754_rem_pio2f(x, y);
-    return __kernel_tanf(y[0], y[1],
-                         1 - ((n & 1) << 1)); /*   1 -- n even
-                                                                  -1 -- n odd */
+    return __kernel_tanf(
+        y[0], y[1], 1 - ((n & 1) << 1)); /*   1 -- n even
+                                                              -1 -- n odd */
   }
 }
