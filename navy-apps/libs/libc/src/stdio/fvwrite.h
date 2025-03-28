@@ -17,6 +17,7 @@
 
 /* %W% (Berkeley) %G% */
 #include <_ansi.h>
+#include <stdio.h>
 
 /*
  * I/O descriptors for __sfvwrite().
