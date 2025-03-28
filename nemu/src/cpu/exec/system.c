@@ -39,6 +39,17 @@ make_EHelper(int)
 #endif
 }
 
+make_EHelper(into)
+{
+    TODO();
+
+    print_asm("into %s", id_dest->str);
+
+#ifdef DIFF_TEST
+    diff_test_skip_nemu();
+#endif
+}
+
 make_EHelper(iret)
 {
     TODO();

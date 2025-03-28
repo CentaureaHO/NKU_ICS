@@ -55,3 +55,6 @@ make_EHelper(ror);
 // system
 make_EHelper(in);
 make_EHelper(out);
+make_EHelper(int);
+make_EHelper(into);
+make_EHelper(iret);

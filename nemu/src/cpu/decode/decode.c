@@ -198,6 +198,17 @@ make_DHelper(mov_I2r)
 /* used by unary operations */
 make_DHelper(I) { decode_op_I(eip, id_dest, true); }
 
+make_DHelper(int3) 
+{
+    id_dest->type = OP_TYPE_IMM;
+    id_dest->imm = 3;
+    rtl_li(&id_dest->val, id_dest->imm);
+
+#ifdef DEBUG
+    snprintf(op->str, OP_STR_SIZE, "$0x%x", op->imm);
+#endif
+}
+
 make_DHelper(r) { decode_op_r(eip, id_dest, true); }
 
 make_DHelper(E) { decode_op_rm(eip, id_dest, true, NULL, false); }
