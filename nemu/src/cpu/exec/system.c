@@ -7,18 +7,17 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr);
 make_EHelper(lidt)
 {
     rtl_lm(r0, &id_dest->addr, 2);
-    rtl_sr_idtr_b(r0);
+    rtl_sr_idtr_w(r0);
 
     rtl_li(r0, id_dest->addr);
     rtl_addi(r0, r0, 2);
     rtl_lm(r0, r0, 4);
     if (decoding.is_operand_size_16)
     {
-        
         rtl_li(r1, 0x00ffffff);
         rtl_and(r0, r0, r1);
     }
-    rtl_sr_idtr_w(r0);
+    rtl_sr_idtr_b(r0);
 
     print_asm_template1(lidt);
 }
