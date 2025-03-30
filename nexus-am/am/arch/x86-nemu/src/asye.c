@@ -30,6 +30,14 @@ _RegSet *irq_handle(_RegSet *tf) {
 
 static GateDesc idt[NR_IRQ];
 
+#include <am.h>
+
+void print(const char *s) {
+  for (; *s; s++) {
+    _putc(*s);
+  }
+}
+
 void _asye_init(_RegSet *(*h)(_Event, _RegSet *)) {
   // initialize IDT
   for (unsigned int i = 0; i < NR_IRQ; i++) {
@@ -38,6 +46,7 @@ void _asye_init(_RegSet *(*h)(_Event, _RegSet *)) {
 
   // -------------------- system call --------------------------
   idt[0x80] = GATE(STS_TG32, KSEL(SEG_KCODE), vecsys, DPL_USER);
+  print("Setting IDT: idt");
 
   set_idt(idt, sizeof(idt));
 
