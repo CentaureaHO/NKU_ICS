@@ -9,6 +9,7 @@ make_EHelper(lidt)
     rtl_lm(r0, &id_dest->addr, 2);
     Log("lidt: %x", t0);
     rtl_sr_idtr_b(r0);
+    Log("CPU.idtr.base: %x", cpu.idtr.base);
 
     Log("lidt: %x", id_dest->addr + 2);
     rtl_lm(r0, &id_dest->addr + 2, 4);
@@ -20,6 +21,7 @@ make_EHelper(lidt)
         rtl_and(r0, r0, r1);
     }
     rtl_sr_idtr_w(r0);
+    Log("CPU.idtr.limit: %x", cpu.idtr.limit);
 
     print_asm_template1(lidt);
 }
