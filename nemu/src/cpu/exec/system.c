@@ -18,7 +18,7 @@ make_EHelper(lidt)
         rtl_and(r0, r0, r1);
     }
     Log("r0 = 0x%x", t0);
-    rtl_sr_idtr_b(r0);
+    cpu.idtr.base = t0;
 
     print_asm_template1(lidt);
 }
