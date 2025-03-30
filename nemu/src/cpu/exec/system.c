@@ -43,6 +43,7 @@ make_EHelper(mov_cr2r)
 
 make_EHelper(int)
 {
+    print_asm("int %s", id_dest->str);
     Log("id_dest->val = %d", id_dest->val);
     Log("id_dest->imm = %d", id_dest->imm);
     raise_intr(id_dest->val, decoding.seq_eip);

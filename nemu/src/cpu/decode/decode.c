@@ -196,9 +196,7 @@ make_DHelper(mov_I2r)
 }
 
 /* used by unary operations */
-make_DHelper(I) { 
-    Log("Here is the function decode_op_I");
-    decode_op_I(eip, id_dest, true); }
+make_DHelper(I) { decode_op_I(eip, id_dest, true); }
 
 make_DHelper(int3) 
 {
