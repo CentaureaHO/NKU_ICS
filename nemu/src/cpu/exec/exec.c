@@ -62,7 +62,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         EX(push), EMPTY)
 
     /* 0x0f 0x01*/
-    make_group(gp7, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY)
+    make_group(gp7, EMPTY, EMPTY, EMPTY, EX(lidt), EMPTY, EMPTY, EMPTY, EMPTY)
 
     /* TODO: Add more instructions!!! */
 

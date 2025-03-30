@@ -86,6 +86,10 @@ static inline void rtl_sr_w(int r, const rtlreg_t* src1) { reg_w(r) = *src1; }
 
 static inline void rtl_sr_l(int r, const rtlreg_t* src1) { reg_l(r) = *src1; }
 
+static inline void rtl_sr_idtr_b(const rtlreg_t* src1) { cpu.idtr.base = *src1; }
+
+static inline void rtl_sr_idtr_w(const rtlreg_t* src1) { cpu.idtr.limit = *src1; }
+
 /* RTL psuedo instructions */
 
 static inline void rtl_lr(rtlreg_t* dest, int r, int width)

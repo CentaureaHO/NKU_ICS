@@ -5,7 +5,17 @@ void diff_test_skip_nemu();
 
 make_EHelper(lidt)
 {
-    TODO();
+    rtl_lm(r0, &id_dest->addr, 2);
+    rtl_sr_idtr_b(r0);
+
+    rtl_lm(r0, &id_dest->addr + 2, 4);
+    if (decoding.is_operand_size_16)
+    {
+        
+        rtl_li(r1, 0x00ffffff);
+        rtl_and(r0, r0, r1);
+    }
+    rtl_sr_idtr_w(r0);
 
     print_asm_template1(lidt);
 }

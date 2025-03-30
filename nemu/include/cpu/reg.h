@@ -177,6 +177,14 @@ typedef struct
         };
     };
 
+    struct
+    {
+        uint32_t base;
+        uint32_t limit;
+    } idtr;
+
+    uint16_t cs;
+
     uint32_t exec_cnt;
 
 } CPU_state;

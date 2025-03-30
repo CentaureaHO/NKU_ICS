@@ -11,6 +11,6 @@ static _RegSet *do_event(_Event e, _RegSet *r) {
 
 void init_irq(void) 
 { 
-  Log("Initializing interrupt/exception handler...");
+    Log("Initializing interrupt/exception handler...");
     _asye_init(do_event); 
 }
