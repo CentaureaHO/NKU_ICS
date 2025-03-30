@@ -19,6 +19,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr)
 
     cpu.cs = tar_cs;
     cpu.eip = tar_offset_low | tar_offset_high;
+    Log("NO = %d, cs = %x, eip = %x", NO, cpu.cs, cpu.eip);
 
     print_asm("intr %#x", NO);
 }
