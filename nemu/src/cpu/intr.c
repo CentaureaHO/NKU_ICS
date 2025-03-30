@@ -17,6 +17,8 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr)
     uint32_t tar_offset_low = vaddr_read(gate_addr, 2);
     uint32_t tar_offset_high = vaddr_read(gate_addr + 6, 2) << 16;
 
+    Log("NO = %d, gate_addr = %x, tar_cs = %x, tar_offset_low = %x, tar_offset_high = %x", NO, gate_addr, tar_cs, tar_offset_low, tar_offset_high);
+
     cpu.cs = tar_cs;
     cpu.eip = tar_offset_low | tar_offset_high;
     Log("NO = %d, cs = %x, eip = %x", NO, cpu.cs, cpu.eip);
