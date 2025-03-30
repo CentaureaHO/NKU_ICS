@@ -16,8 +16,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr)
     uint32_t tar_eip_low = vaddr_read(gate_addr, 4) & 0xffff;
     uint32_t tar_eip_high = vaddr_read(gate_addr + 4, 4) & 0xffff0000;
 
-    decoding.is_jmp = 0x1;
-    decoding.jmp_eip = tar_eip_low | tar_eip_high;
+    cpu.eip = tar_eip_low | tar_eip_high;
 
     print_asm("intr %#x", NO);
 }
