@@ -12,7 +12,6 @@ make_EHelper(lidt)
     Log("CPU.idtr.base: %x", cpu.idtr.base);
 
     Log("lidt: %x", id_dest->addr + 2);
-    // rtl_lm(r0, &id_dest->addr + 2, 4);
     rtl_li(r0, id_dest->addr);
     rtl_addi(r0, r0, 2);
     rtl_lm(r0, r0, 4);
