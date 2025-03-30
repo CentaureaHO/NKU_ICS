@@ -5,10 +5,14 @@ void diff_test_skip_nemu();
 
 make_EHelper(lidt)
 {
+    Log("lidt");
     rtl_lm(r0, &id_dest->addr, 2);
+    Log("lidt: %x", t0);
     rtl_sr_idtr_b(r0);
 
+    Log("lidt: %x", id_dest->addr + 2);
     rtl_lm(r0, &id_dest->addr + 2, 4);
+    Log("lidt: %x", t0);
     if (decoding.is_operand_size_16)
     {
         
