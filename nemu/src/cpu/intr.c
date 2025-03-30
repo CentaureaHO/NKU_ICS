@@ -17,6 +17,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr)
     uint32_t tar_eip_high = vaddr_read(gate_addr + 4, 4) & 0xffff0000;
 
     cpu.eip = tar_eip_low | tar_eip_high;
+    Log("NO: %d, eip: 0x%x", NO, cpu.eip);
 
     print_asm("intr %#x", NO);
 }
