@@ -5,17 +5,12 @@ void diff_test_skip_nemu();
 
 make_EHelper(lidt)
 {
-    Log("lidt");
     rtl_lm(r0, &id_dest->addr, 2);
-    Log("lidt: %x", t0);
     rtl_sr_idtr_b(r0);
-    Log("CPU.idtr.base: %x", cpu.idtr.base);
 
-    Log("lidt: %x", id_dest->addr + 2);
     rtl_li(r0, id_dest->addr);
     rtl_addi(r0, r0, 2);
     rtl_lm(r0, r0, 4);
-    Log("lidt: %x", t0);
     if (decoding.is_operand_size_16)
     {
         
@@ -23,7 +18,6 @@ make_EHelper(lidt)
         rtl_and(r0, r0, r1);
     }
     rtl_sr_idtr_w(r0);
-    Log("CPU.idtr.limit: %x", cpu.idtr.limit);
 
     print_asm_template1(lidt);
 }
