@@ -13,15 +13,11 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr)
     rtl_push(r0);
 
     uint32_t gate_addr = cpu.idtr.base + NO * 8;
-    uint16_t tar_cs = vaddr_read(gate_addr + 2, 2);
-    uint32_t tar_offset_low = vaddr_read(gate_addr, 2);
-    uint32_t tar_offset_high = vaddr_read(gate_addr + 6, 2) << 16;
+    uint32_t tar_eip_low = vaddr_read(gate_addr, 4) & 0xffff;
+    uint32_t tar_eip_high = vaddr_read(gate_addr + 4, 4) & 0xffff0000;
 
-    Log("NO = %d, gate_addr = %x, tar_cs = %x, tar_offset_low = %x, tar_offset_high = %x", NO, gate_addr, tar_cs, tar_offset_low, tar_offset_high);
-
-    cpu.cs = tar_cs;
-    cpu.eip = tar_offset_low | tar_offset_high;
-    Log("NO = %d, cs = %x, eip = %x", NO, cpu.cs, cpu.eip);
+    decoding.is_jmp = 0x1;
+    decoding.jmp_eip = tar_eip_low | tar_eip_high;
 
     print_asm("intr %#x", NO);
 }
