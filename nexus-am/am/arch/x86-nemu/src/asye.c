@@ -34,8 +34,6 @@ _RegSet *irq_handle(_RegSet *tf) {
   _RegSet *next = tf;
   if (H) {
     _Event ev;
-    print("irq_handle: ");
-    print_hex(tf->irq);
     switch (tf->irq) {
     case 0x80:
       ev.event = _EVENT_SYSCALL;
