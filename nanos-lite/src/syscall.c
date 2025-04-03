@@ -11,13 +11,11 @@ _RegSet *do_syscall(_RegSet *r) {
         SYSCALL_ARG1(r) = 1; 
         break;
       case SYS_exit:
-        // _halt(SYSCALL_ARG1(r));
-        Log("Arg 1: %d", SYSCALL_ARG1(r));
-        Log("Arg 2: %d", SYSCALL_ARG2(r));
-        Log("Arg 3: %d", SYSCALL_ARG3(r));
-        Log("Arg 4: %d", SYSCALL_ARG4(r));
-        _halt(SYSCALL_ARG1(r));
+      {
+        int ret = SYSCALL_ARG2(r);
+        _halt(ret);
         break;
+      }
       default:
         panic("Unhandled syscall ID = %d", a[0]);
     }
