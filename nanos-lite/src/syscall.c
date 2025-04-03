@@ -20,7 +20,8 @@ _RegSet *do_syscall(_RegSet *r) {
 #define HANDLER_N(name) TODO()
 #define X(name, idx, done) \
   case SYS_##name:         \
-    HANDLER_##done(name)
+    HANDLER_##done(name)  \
+    break;
   default:
     panic("Unhandled syscall ID = %d", SYSCALL_ARG1(r));
   }
