@@ -7,13 +7,15 @@ _RegSet *do_syscall(_RegSet *r) {
 
     switch (a[0]) 
     {
-      case SYS_none:
+      case SYS_none:  // 0
         SYSCALL_ARG1(r) = 1; 
         break;
-      case SYS_exit:
+      case SYS_write: // 3
+
+      case SYS_exit:  // 4
       {
-        int ret = SYSCALL_ARG2(r);
-        _halt(ret);
+        a[1] = SYSCALL_ARG2(r);
+        _halt(a[1]);
         break;
       }
       default:
