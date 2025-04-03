@@ -15,6 +15,7 @@ static inline _RegSet* sys_exit(_RegSet* r)   // 4
 }
 
 _RegSet *do_syscall(_RegSet *r) {
+  Log("syscall: %d", SYSCALL_ARG1(r));
   switch (SYSCALL_ARG1(r)) {
 #define HANDLER_Y(name) return sys_##name(r);
 #define HANDLER_N(name) panic("Unhandled syscall ID = %d", SYSCALL_ARG1(r));
