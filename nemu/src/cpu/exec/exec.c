@@ -163,7 +163,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         IDEX(r, pop),
         IDEX(r, pop),
         IDEX(r, pop),
-        /* 0x60 */ EX(pusha),
+        /* 0x60 */ EMPTY,
         EMPTY,
         EMPTY,
         EMPTY,
