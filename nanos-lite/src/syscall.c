@@ -17,11 +17,11 @@ static inline _RegSet* sys_exit(_RegSet* r)
 _RegSet *do_syscall(_RegSet *r) {
   switch (SYSCALL_ARG1(r)) {
 #define HANDLER_Y(name) return sys_##name(r);
-#define HANDLER_N(name) TODO()
+#define HANDLER_N(name) TODO();
 #define X(name, idx, done) \
   case SYS_##name:         \
-    HANDLER_##done(name)  \
-    break;
+    HANDLER_##done(name)
+    SYSCALLS
   default:
     panic("Unhandled syscall ID = %d", SYSCALL_ARG1(r));
   }
