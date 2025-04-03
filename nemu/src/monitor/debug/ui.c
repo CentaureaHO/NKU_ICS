@@ -76,6 +76,9 @@ static int cmd_info(char* args)
             cpu.IF,
             cpu.DF,
             cpu.OF);
+#ifdef DEBUG
+        printf("EXEC CNT: %d\n", cpu.exec_cnt);
+#endif
     }
     else if (strcmp(args, "w") == 0)
         print_wp();
