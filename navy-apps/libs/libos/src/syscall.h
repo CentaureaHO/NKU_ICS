@@ -1,27 +1,32 @@
 #ifndef __SYSCALL_H__
 #define __SYSCALL_H__
 
+#define SYSCALLS                                                               \
+  X(none, 0, Y)                                                                \
+  X(open, 1, N)                                                                \
+  X(read, 2, N)                                                                \
+  X(write, 3, N)                                                               \
+  X(exit, 4, Y)                                                                \
+  X(kill, 5, N)                                                                \
+  X(getpid, 6, N)                                                              \
+  X(close, 7, N)                                                               \
+  X(lseek, 8, N)                                                               \
+  X(brk, 9, N)                                                                 \
+  X(fstat, 10, N)                                                              \
+  X(time, 11, N)                                                               \
+  X(signal, 12, N)                                                             \
+  X(execve, 13, N)                                                             \
+  X(fork, 14, N)                                                               \
+  X(link, 15, N)                                                               \
+  X(unlink, 16, N)                                                             \
+  X(wait, 17, N)                                                               \
+  X(times, 18, N)                                                              \
+  X(gettimeofday, 19, N)
+
 enum {
-  SYS_none         = 0,
-  SYS_open         = 1,
-  SYS_read         = 2,
-  SYS_write        = 3,
-  SYS_exit         = 4,
-  SYS_kill         = 5,
-  SYS_getpid       = 6,
-  SYS_close        = 7,
-  SYS_lseek        = 8,
-  SYS_brk          = 9,
-  SYS_fstat        = 10,
-  SYS_time         = 11,
-  SYS_signal       = 12,
-  SYS_execve       = 13,
-  SYS_fork         = 14,
-  SYS_link         = 15,
-  SYS_unlink       = 16,
-  SYS_wait         = 17,
-  SYS_times        = 18,
-  SYS_gettimeofday = 19
+#define X(name, idx, done) SYS_##name = idx,
+  SYSCALLS
+#undef X
 };
 
 #endif
