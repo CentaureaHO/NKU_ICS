@@ -8,9 +8,9 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr)
      */
 
     rtl_push(&cpu.eflags);
-    rtl_push(&ret_addr);
     rtl_li(r0, cpu.cs);
     rtl_push(r0);
+    rtl_push(&ret_addr);
 
     uint32_t gate_addr = cpu.idtr.base + NO * 8;
     uint32_t tar_eip_low = vaddr_read(gate_addr, 4) & 0xffff;
