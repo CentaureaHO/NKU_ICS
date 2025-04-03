@@ -2,6 +2,7 @@
 // Copyright (c) 2009 by Douglas Wilhelm Harder.  All rights reserved.
 // Url: https://ece.uwaterloo.ca/~dwharder/aads/Algorithms/N_puzzles/
 #include <klib.h>
+#include <benchmark.h>
 
 template <int N> class N_puzzle {
 private:
