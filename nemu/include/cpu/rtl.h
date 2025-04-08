@@ -21,7 +21,7 @@ extern const rtlreg_t* disable;
 
 /* RTL basic instructions */
 
-static inline void rtl_li(rtlreg_t* dest, uint32_t imm) { *dest = imm; }
+inline void rtl_li(rtlreg_t* dest, uint32_t imm) { *dest = imm; }
 
 #define c_add(a, b) ((a) + (b))
 #define c_sub(a, b) ((a) - (b))
