@@ -208,7 +208,7 @@ static inline void rtl_eq0(rtlreg_t* dest, const rtlreg_t* src1)
     *dest = (*src1 == 0) ? 1 : 0;
 }
 
-static inline void rtl_eqi(rtlreg_t* dest, const rtlreg_t* src1, int imm)
+inline void rtl_eqi(rtlreg_t* dest, const rtlreg_t* src1, int imm)
 {
     // dest <- (src1 == imm ? 1 : 0)
     *dest = (*src1 == imm) ? 1 : 0;
@@ -252,7 +252,7 @@ static inline void rtl_update_SF(const rtlreg_t* result, int width)
         rtl_set_SF(disable);
 }
 
-void rtl_update_ZFSF(const rtlreg_t* result, int width)
+static inline void rtl_update_ZFSF(const rtlreg_t* result, int width)
 {
     rtl_update_ZF(result, width);
     rtl_update_SF(result, width);
