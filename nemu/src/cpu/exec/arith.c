@@ -296,7 +296,7 @@ make_EHelper(sbb)
 
     rtl_update_PFZFSF(r3, id_dest->width);
 
-    // operand_write(id_dest, r3);
+    operand_write(id_dest, r3);
 
     rtl_xor(r0, dest, src);  // r0 = dest ^ src
     rtl_xor(r1, dest, r3);   // r1 = dest ^ (dest - src - CF)
