@@ -57,7 +57,7 @@ make_EHelper(sub)
     rtl_andi(r2, r0, 0xf);  // low 4 bits of minuend -> r2
     rtl_andi(r3, r1, 0xf);  // low 4 bits of subtrahend -> r3
     rtl_sltu(r2, r2, r3);   // low 4 bits of minuend < low 4 bits of subtrahend -> r2
-    rtl_set_AF(r2);
+    // rtl_set_AF(r2);
 
     rtl_sub(r2, r0, r1);  // minuend - subtrahend -> r2
 
@@ -67,7 +67,7 @@ make_EHelper(sub)
     operand_write(id_dest, r2);
 
     // update PF, ZF, SF:
-    rtl_update_PFZFSF(r2, id_dest->width);
+    // rtl_update_PFZFSF(r2, id_dest->width);
 
     // update CF: carry means minuend < subtrahend
     rtl_sltu(r3, r0, r1);
@@ -79,7 +79,7 @@ make_EHelper(sub)
     rtl_xor(r3, r0, r1);  // sign_bit(r3) = 0 if minuend has the same sign with subtrahend else 1
     rtl_and(r1, r2, r3);  // if sign_bit(r1) -> overflow
     rtl_msb(r0, r1, id_dest->width);
-    rtl_set_OF(r0);
+    // rtl_set_OF(r0);
 
     print_asm_template2(sub);
 }
