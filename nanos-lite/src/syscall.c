@@ -9,7 +9,10 @@ static inline _RegSet* sys_none(_RegSet* r)   // 0
 
 static inline _RegSet* sys_write(_RegSet* r)   // 3
 {
-  panic("sys_write: %d", SYSCALL_ARG1(r));
+  char* buf = (char*)SYSCALL_ARG2(r);
+  size_t len = SYSCALL_ARG3(r);
+  while (len--) _putc(*buf++);
+
   return NULL;
 }
 
