@@ -21,16 +21,20 @@ static inline _RegSet* sys_exit(_RegSet* r)   // 4
 }
 
 _RegSet *do_syscall(_RegSet *r) {
-  Log("syscall: %d", SYSCALL_ARG1(r));
-  switch (SYSCALL_ARG1(r)) {
+
+  int call_num = SYSCALL_ARG2(r);   // ? why
+                                    // I find that the sys call num is put in ebx
+
+  Log("syscall: %d", call_num);
+  switch (call_num) {
 #define HANDLER_Y(name) return sys_##name(r);
-#define HANDLER_N(name) panic("Unhandled syscall ID = %d", SYSCALL_ARG1(r));
+#define HANDLER_N(name) panic("Unhandled syscall ID = %d", call_num);
 #define X(name, idx, done) \
   case SYS_##name:         \
     HANDLER_##done(name)
     SYSCALLS
   default:
-    panic("Unhandled syscall ID = %d", SYSCALL_ARG1(r));
+    panic("Unhandled syscall ID = %d", call_num);
   }
 
   return NULL;
