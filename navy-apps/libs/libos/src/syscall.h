@@ -6,7 +6,7 @@
   X(open, 1, N)                                                                \
   X(read, 2, N)                                                                \
   X(write, 3, N)                                                               \
-  X(exit, 4, Y)                                                                \
+  X(exit, 4, N)                                                                \
   X(kill, 5, N)                                                                \
   X(getpid, 6, N)                                                              \
   X(close, 7, N)                                                               \
