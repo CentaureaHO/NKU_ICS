@@ -22,8 +22,7 @@ static inline _RegSet* sys_exit(_RegSet* r)   // 4
 
 _RegSet *do_syscall(_RegSet *r) {
 
-  int call_num = SYSCALL_ARG1(r);   // ? why
-                                    // I find that the sys call num is put in ebx
+  int call_num = SYSCALL_ARG1(r);
 
   Log("syscall: %d", call_num);
   switch (call_num) {

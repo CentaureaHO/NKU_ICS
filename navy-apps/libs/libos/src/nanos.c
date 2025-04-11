@@ -21,7 +21,11 @@ void _exit(int status) { _syscall_(SYS_exit, status, 0, 0); }
 
 int _open(const char *path, int flags, mode_t mode) { _exit(SYS_open); }
 
-int _write(int fd, void *buf, size_t count) { _exit(SYS_write); }
+int _write(int fd, void *buf, size_t count) 
+{ 
+  _syscall_(SYS_write, fd, (uintptr_t)buf, count);
+  return 0;
+}
 
 void *_sbrk(intptr_t increment) { return (void *)-1; }
 
