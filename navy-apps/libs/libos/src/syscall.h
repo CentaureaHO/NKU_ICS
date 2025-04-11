@@ -21,7 +21,8 @@
   X(unlink, 16, N)                                                             \
   X(wait, 17, N)                                                               \
   X(times, 18, N)                                                              \
-  X(gettimeofday, 19, N)
+  X(gettimeofday, 19, N)                                                       \
+  X(undone, 999, Y)
 
 enum {
 #define X(name, idx, done) SYS_##name = idx,

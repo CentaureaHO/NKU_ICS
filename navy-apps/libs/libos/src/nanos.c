@@ -19,25 +19,41 @@ int _syscall_(int type, uintptr_t a0, uintptr_t a1, uintptr_t a2) {
 
 void _exit(int status) { _syscall_(SYS_exit, status, 0, 0); }
 
-int _open(const char *path, int flags, mode_t mode) { _exit(SYS_open); }
+int _open(const char *path, int flags, mode_t mode) 
+{ 
+  _syscall_(SYS_undone, SYS_open, 0, 0);
+  return -1;
+}
 
 int _write(int fd, void *buf, size_t count) 
 { 
   // 不是哥们，指导书就一句话
   // 扫一眼就过去了
   // 牛魔的我找了半天
-  // 就不能直接panic？
+  // 就不能直接换个专门提示未实现的调用？
   _syscall_(SYS_write, fd, (uintptr_t)buf, count);
   return 0;
 }
 
 void *_sbrk(intptr_t increment) { return (void *)-1; }
 
-int _read(int fd, void *buf, size_t count) { _exit(SYS_read); }
+int _read(int fd, void *buf, size_t count) 
+{ 
+  _syscall_(SYS_undone, SYS_read, 0, 0);
+  return -1;
+}
 
-int _close(int fd) { _exit(SYS_close); }
+int _close(int fd) 
+{ 
+  _syscall_(SYS_undone, SYS_close, 0, 0);
+  return -1;
+}
 
-off_t _lseek(int fd, off_t offset, int whence) { _exit(SYS_lseek); }
+off_t _lseek(int fd, off_t offset, int whence) 
+{ 
+  _syscall_(SYS_undone, SYS_lseek, 0, 0);
+  return -1;
+}
 
 // The code below is not used by Nanos-lite.
 // But to pass linking, they are defined as dummy functions
@@ -55,11 +71,13 @@ int _execve(const char *fname, char *const argv[], char *const envp[]) {
 }
 
 int _kill(int pid, int sig) {
+  _syscall_(SYS_undone, SYS_kill, 0, 0);
   _exit(-SYS_kill);
   return -1;
 }
 
 pid_t _getpid() {
+  _syscall_(SYS_undone, SYS_getpid, 0, 0);
   _exit(-SYS_getpid);
   return 1;
 }

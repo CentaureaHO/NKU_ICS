@@ -16,7 +16,25 @@ static inline _RegSet* sys_write(_RegSet* r)   // 3
 static inline _RegSet* sys_exit(_RegSet* r)   // 4
 {
   uintptr_t ret = SYSCALL_ARG2(r);
+  Log("Program exit with code %d", ret);
   _halt(ret);
+  return NULL;
+}
+
+static inline _RegSet* sys_undone(_RegSet* r)   // 999
+{
+  uintptr_t target = SYSCALL_ARG2(r);
+
+  switch (target) {
+    #define X(name, idx, done) \
+      case SYS_##name: \
+      panic("Not implemented function for %s in navy-apps/libs/libos/src/nanos.c", #name);
+    SYSCALLS
+    #undef X
+    default:
+      panic("Unhandled syscall ID = %d", target);
+  }
+
   return NULL;
 }
 
