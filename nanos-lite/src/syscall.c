@@ -7,6 +7,12 @@ static inline _RegSet* sys_none(_RegSet* r)   // 0
   return NULL;
 }
 
+static inline _RegSet* sys_write(_RegSet* r)   // 3
+{
+  panic("sys_write: %d", SYSCALL_ARG1(r));
+  return NULL;
+}
+
 static inline _RegSet* sys_exit(_RegSet* r)   // 4
 {
   uintptr_t ret = SYSCALL_ARG2(r);

@@ -5,7 +5,7 @@
   X(none, 0, Y)                                                                \
   X(open, 1, N)                                                                \
   X(read, 2, N)                                                                \
-  X(write, 3, N)                                                               \
+  X(write, 3, Y)                                                               \
   X(exit, 4, Y)                                                                \
   X(kill, 5, N)                                                                \
   X(getpid, 6, N)                                                              \
