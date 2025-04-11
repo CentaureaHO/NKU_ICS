@@ -27,6 +27,7 @@ int _write(int fd, void *buf, size_t count)
   // 扫一眼就过去了
   // 牛魔的我找了半天
   // 就不能直接panic？
+  Log("fd: %d, buf: %p, count: %d", fd, buf, count);
   _syscall_(SYS_write, fd, (uintptr_t)buf, count);
   return 0;
 }
