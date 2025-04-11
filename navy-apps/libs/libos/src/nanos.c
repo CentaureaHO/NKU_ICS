@@ -23,7 +23,11 @@ int _open(const char *path, int flags, mode_t mode) { _exit(SYS_open); }
 
 int _write(int fd, void *buf, size_t count) 
 { 
-  _syscall_(SYS_write, fd, (uintptr_t)buf, count);
+  // 不是哥们，指导书就一句话
+  // 扫一眼就过去了
+  // 牛魔的我找了半天
+  // 就不能直接panic？
+  panic("syscall write");
   return 0;
 }
 
