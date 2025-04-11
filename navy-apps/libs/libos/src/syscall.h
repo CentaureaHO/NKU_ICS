@@ -11,7 +11,7 @@
   X(getpid, 6, N)                                                              \
   X(close, 7, N)                                                               \
   X(lseek, 8, N)                                                               \
-  X(brk, 9, N)                                                                 \
+  X(brk, 9, Y)                                                                 \
   X(fstat, 10, N)                                                              \
   X(time, 11, N)                                                               \
   X(signal, 12, N)                                                             \
