@@ -9,8 +9,8 @@ static inline _RegSet* sys_none(_RegSet* r)   // 0
 
 static inline _RegSet* sys_write(_RegSet* r)   // 3
 {
-  char* buf = (char*)SYSCALL_ARG2(r);
-  size_t len = SYSCALL_ARG3(r);
+  char* buf = (char*)SYSCALL_ARG3(r);
+  size_t len = SYSCALL_ARG4(r);
   Log("sys_write: %s", buf);
   Log("Write len: %d", len);
   while (len--) _putc(*buf++);
