@@ -17,12 +17,17 @@ int _syscall_(int type, uintptr_t a0, uintptr_t a1, uintptr_t a2) {
   return ret;
 }
 
+static int _unimplemented(int syscall_type)
+{
+  _syscall_(SYS_undone, syscall_type, 0, 0);
+  return -1;
+}
+
 void _exit(int status) { _syscall_(SYS_exit, status, 0, 0); }
 
 int _open(const char *path, int flags, mode_t mode) 
 { 
-  _syscall_(SYS_undone, SYS_open, 0, 0);
-  return -1;
+  return _unimplemented(SYS_open);
 }
 
 int _write(int fd, void *buf, size_t count) 
@@ -39,20 +44,17 @@ void *_sbrk(intptr_t increment) { return (void *)-1; }
 
 int _read(int fd, void *buf, size_t count) 
 { 
-  _syscall_(SYS_undone, SYS_read, 0, 0);
-  return -1;
+  return _unimplemented(SYS_read);
 }
 
 int _close(int fd) 
 { 
-  _syscall_(SYS_undone, SYS_close, 0, 0);
-  return -1;
+  return _unimplemented(SYS_close);
 }
 
 off_t _lseek(int fd, off_t offset, int whence) 
 { 
-  _syscall_(SYS_undone, SYS_lseek, 0, 0);
-  return -1;
+  return _unimplemented(SYS_lseek);
 }
 
 // The code below is not used by Nanos-lite.
@@ -71,13 +73,13 @@ int _execve(const char *fname, char *const argv[], char *const envp[]) {
 }
 
 int _kill(int pid, int sig) {
-  _syscall_(SYS_undone, SYS_kill, 0, 0);
+  return _unimplemented(SYS_kill);
   _exit(-SYS_kill);
   return -1;
 }
 
 pid_t _getpid() {
-  _syscall_(SYS_undone, SYS_getpid, 0, 0);
+  return _unimplemented(SYS_getpid);
   _exit(-SYS_getpid);
   return 1;
 }
