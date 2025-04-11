@@ -32,7 +32,7 @@ static inline _RegSet* sys_exit(_RegSet* r)   // 4
 
 static inline _RegSet* sys_brk(_RegSet* r)   // 9
 {
-  SYSCALL_ARG1(r) = 0;
+  SYSCALL_ARG1(r) = 999;
   return NULL;
 }
 

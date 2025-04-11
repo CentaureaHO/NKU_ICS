@@ -42,7 +42,8 @@ int _write(int fd, void *buf, size_t count)
 
 extern char end;
 
-void *_sbrk(intptr_t increment) {
+void *_sbrk(intptr_t increment) 
+{
   static intptr_t program_break = 0;
   intptr_t old_break;
   
