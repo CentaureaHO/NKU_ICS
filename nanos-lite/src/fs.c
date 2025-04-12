@@ -34,6 +34,18 @@ void init_fs() {
   // TODO: initialize the size of /dev/fb
 }
 
+int fs_open(const char *pathname, int flags, int mode)
+{
+  panic("Not implemented: open %s", pathname);
+  return -1;
+}
+
+ssize_t fs_read(int fd, void *buf, size_t len)
+{
+  panic("Not implemented: read %d", fd);
+  return -1;
+}
+
 ssize_t fs_write(int fd, const void *buf, size_t len) 
 {
   if (fd < 0 || fd >= NR_FILES) panic("Invalid file descriptor: %d", fd);
@@ -50,5 +62,23 @@ ssize_t fs_write(int fd, const void *buf, size_t len)
       panic("Not implemented: write to %s", file_table[fd].name);
   }
 
+  return -1;
+}
+
+off_t   fs_lseek(int fd, off_t offset, int whence)
+{
+  panic("Not implemented: lseek %d", fd);
+  return -1;
+}
+
+int     fs_close(int fd)
+{
+  panic("Not implemented: close %d", fd);
+  return -1;
+}
+
+size_t  fs_filesz(int fd)
+{
+  panic("Not implemented: filesz %d", fd);
   return -1;
 }
