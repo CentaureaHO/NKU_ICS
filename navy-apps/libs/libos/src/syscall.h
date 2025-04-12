@@ -3,7 +3,7 @@
 
 #define SYSCALLS                                                               \
   X(none, 0, Y)                                                                \
-  X(open, 1, N)                                                                \
+  X(open, 1, Y)                                                                \
   X(read, 2, N)                                                                \
   X(write, 3, Y)                                                               \
   X(exit, 4, Y)                                                                \

@@ -8,6 +8,16 @@ static inline _RegSet *sys_none(_RegSet *r) // 0
   return NULL;
 }
 
+static inline _RegSet *sys_open(_RegSet *r) // 1
+{
+  const char *path = (const char *)SYSCALL_ARG2(r);
+  int flags = SYSCALL_ARG3(r);
+  int mode = SYSCALL_ARG4(r);
+  SYSCALL_ARG1(r) = fs_open(path, flags, mode);
+
+  return NULL;
+}
+
 static inline _RegSet *sys_write(_RegSet *r) // 3
 {
   int fd = SYSCALL_ARG2(r);
