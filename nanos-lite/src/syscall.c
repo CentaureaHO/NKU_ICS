@@ -1,5 +1,6 @@
 #include "syscall.h"
 #include "common.h"
+#include "fs.h"
 
 static inline _RegSet *sys_none(_RegSet *r) // 0
 {
@@ -9,14 +10,11 @@ static inline _RegSet *sys_none(_RegSet *r) // 0
 
 static inline _RegSet *sys_write(_RegSet *r) // 3
 {
-  char *buf = (char *)SYSCALL_ARG3(r);
+  int fd = SYSCALL_ARG2(r);
+  const char *buf = (const char *)SYSCALL_ARG3(r);
   size_t len = SYSCALL_ARG4(r);
 
-  SYSCALL_ARG1(r) = 0;
-  while (len--) {
-    _putc(*buf++);
-    ++SYSCALL_ARG1(r);
-  }
+  SYSCALL_ARG1(r) = fs_write(fd, (void *)buf, len);
 
   return NULL;
 }

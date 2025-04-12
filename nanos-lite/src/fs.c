@@ -33,3 +33,22 @@ static Finfo file_table[] __attribute__((used)) = {
 void init_fs() {
   // TODO: initialize the size of /dev/fb
 }
+
+ssize_t fs_write(int fd, const void *buf, size_t len) 
+{
+  if (fd < 0 || fd >= NR_FILES) panic("Invalid file descriptor: %d", fd);
+  
+  switch(fd) 
+  {
+    case FD_STDIN:
+      return 0;
+    case FD_STDOUT:
+    case FD_STDERR:
+      for (size_t i = 0; i < len; i++) _putc(((char *)buf)[i]);
+      return len;
+    default:
+      panic("Not implemented: write to %s", file_table[fd].name);
+  }
+
+  return -1;
+}
