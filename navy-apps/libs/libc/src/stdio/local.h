@@ -25,8 +25,8 @@
 #include <_ansi.h>
 #include <reent.h>
 #include <stdarg.h>
-#include <unistd.h>
 #include <stdio.h>
+#include <unistd.h>
 
 extern int _EXFUN(__svfscanf, (FILE *, _CONST char *, va_list));
 extern FILE *_EXFUN(__sfp, (struct _reent *));

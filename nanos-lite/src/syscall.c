@@ -1,20 +1,19 @@
 #include "syscall.h"
 #include "common.h"
 
-static inline _RegSet* sys_none(_RegSet* r)   // 0
+static inline _RegSet *sys_none(_RegSet *r) // 0
 {
-  SYSCALL_ARG1(r)=1;
+  SYSCALL_ARG1(r) = 1;
   return NULL;
 }
 
-static inline _RegSet* sys_write(_RegSet* r)   // 3
+static inline _RegSet *sys_write(_RegSet *r) // 3
 {
-  char* buf = (char*)SYSCALL_ARG3(r);
+  char *buf = (char *)SYSCALL_ARG3(r);
   size_t len = SYSCALL_ARG4(r);
 
   SYSCALL_ARG1(r) = 0;
-  while (len--)
-  {
+  while (len--) {
     _putc(*buf++);
     ++SYSCALL_ARG1(r);
   }
@@ -22,7 +21,7 @@ static inline _RegSet* sys_write(_RegSet* r)   // 3
   return NULL;
 }
 
-static inline _RegSet* sys_exit(_RegSet* r)   // 4
+static inline _RegSet *sys_exit(_RegSet *r) // 4
 {
   uintptr_t ret = SYSCALL_ARG2(r);
   Log("Program exit with code %d", ret);
@@ -30,24 +29,26 @@ static inline _RegSet* sys_exit(_RegSet* r)   // 4
   return NULL;
 }
 
-static inline _RegSet* sys_brk(_RegSet* r)   // 9
+static inline _RegSet *sys_brk(_RegSet *r) // 9
 {
   SYSCALL_ARG1(r) = 0;
   return NULL;
 }
 
-static inline _RegSet* sys_undone(_RegSet* r)   // 999
+static inline _RegSet *sys_undone(_RegSet *r) // 999
 {
   uintptr_t target = SYSCALL_ARG2(r);
 
   switch (target) {
-    #define X(name, idx, done) \
-      case SYS_##name: \
-      panic("Not implemented function for %s in navy-apps/libs/libos/src/nanos.c", #name);
+#define X(name, idx, done)                                                     \
+  case SYS_##name:                                                             \
+    panic(                                                                     \
+        "Not implemented function for %s in navy-apps/libs/libos/src/nanos.c", \
+        #name);
     SYSCALLS
-    #undef X
-    default:
-      panic("Unhandled syscall ID = %d", target);
+#undef X
+  default:
+    panic("Unhandled syscall ID = %d", target);
   }
 
   return NULL;
@@ -61,8 +62,8 @@ _RegSet *do_syscall(_RegSet *r) {
   switch (call_num) {
 #define HANDLER_Y(name) return sys_##name(r);
 #define HANDLER_N(name) panic("Unhandled syscall ID = %d", call_num);
-#define X(name, idx, done) \
-  case SYS_##name:         \
+#define X(name, idx, done)                                                     \
+  case SYS_##name:                                                             \
     HANDLER_##done(name)
     SYSCALLS
   default:

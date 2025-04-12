@@ -1,27 +1,26 @@
 #include <am.h>
 #include <x86.h>
 
-void print(const char *s) 
-{
-    for (; *s; s++) _putc(*s);
+void print(const char *s) {
+  for (; *s; s++)
+    _putc(*s);
 }
 
-void print_hex(uint32_t val) 
-{
-    char hex_chars[] = "0123456789ABCDEF";
-    print("0x");
-    for (int i = 7; i >= 0; i--) _putc(hex_chars[(val >> (i * 4)) & 0xF]);
+void print_hex(uint32_t val) {
+  char hex_chars[] = "0123456789ABCDEF";
+  print("0x");
+  for (int i = 7; i >= 0; i--)
+    _putc(hex_chars[(val >> (i * 4)) & 0xF]);
 }
 
-void print_dec(int val) 
-{
-  if (val < 0) 
-  {
+void print_dec(int val) {
+  if (val < 0) {
     _putc('-');
     val = -val;
   }
-  
-  if (val >= 10) print_dec(val / 10);
+
+  if (val >= 10)
+    print_dec(val / 10);
   _putc('0' + (val % 10));
 }
 

@@ -4,6 +4,7 @@ typedef struct {
   char *name;
   size_t size;
   off_t disk_offset;
+  off_t open_offset;
 } Finfo;
 
 enum {

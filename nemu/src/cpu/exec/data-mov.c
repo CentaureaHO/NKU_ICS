@@ -36,8 +36,7 @@ make_EHelper(pusha)
 {
     rtl_lr(r0, R_ESP, 4);
 
-    if (decoding.is_operand_size_16)
-    {
+    if (decoding.is_operand_size_16) {
         rtl_lr(r1, R_AX, 2);
         rtl_push(r1);
         rtl_lr(r1, R_CX, 2);
@@ -78,8 +77,10 @@ make_EHelper(pusha)
 
 make_EHelper(popa)
 {
-    if (decoding.is_operand_size_16) rtl_li(r0, 2);
-    else                             rtl_li(r0, 4);
+    if (decoding.is_operand_size_16)
+        rtl_li(r0, 2);
+    else
+        rtl_li(r0, 4);
 
     rtl_pop(r1);
     rtl_sr(R_EDI, t0, r1);

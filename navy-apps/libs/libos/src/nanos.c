@@ -17,21 +17,18 @@ int _syscall_(int type, uintptr_t a0, uintptr_t a1, uintptr_t a2) {
   return ret;
 }
 
-static int _unimplemented(int syscall_type)
-{
+static int _unimplemented(int syscall_type) {
   _syscall_(SYS_undone, syscall_type, 0, 0);
   return -1;
 }
 
 void _exit(int status) { _syscall_(SYS_exit, status, 0, 0); }
 
-int _open(const char *path, int flags, mode_t mode) 
-{ 
+int _open(const char *path, int flags, mode_t mode) {
   return _unimplemented(SYS_open);
 }
 
-int _write(int fd, void *buf, size_t count) 
-{ 
+int _write(int fd, void *buf, size_t count) {
   // 不是哥们，指导书就一句话
   // 扫一眼就过去了
   // 牛魔的我找了半天
@@ -42,38 +39,29 @@ int _write(int fd, void *buf, size_t count)
 
 extern char end;
 
-void *_sbrk(intptr_t increment) 
-{
+void *_sbrk(intptr_t increment) {
   static intptr_t program_break = 0;
   intptr_t old_break;
-  
+
   if (program_break == 0)
     program_break = (intptr_t)&end;
-  
+
   old_break = program_break;
   intptr_t new_break = old_break + increment;
-  
-  if (_syscall_(SYS_brk, new_break, 0, 0) == 0) 
-  {
+
+  if (_syscall_(SYS_brk, new_break, 0, 0) == 0) {
     program_break = new_break;
     return (void *)old_break;
   }
-  
+
   return (void *)-1;
 }
 
-int _read(int fd, void *buf, size_t count) 
-{ 
-  return _unimplemented(SYS_read);
-}
+int _read(int fd, void *buf, size_t count) { return _unimplemented(SYS_read); }
 
-int _close(int fd) 
-{ 
-  return _unimplemented(SYS_close);
-}
+int _close(int fd) { return _unimplemented(SYS_close); }
 
-off_t _lseek(int fd, off_t offset, int whence) 
-{ 
+off_t _lseek(int fd, off_t offset, int whence) {
   return _unimplemented(SYS_lseek);
 }
 
