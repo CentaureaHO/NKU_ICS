@@ -25,7 +25,8 @@ static int _unimplemented(int syscall_type) {
 void _exit(int status) { _syscall_(SYS_exit, status, 0, 0); }
 
 int _open(const char *path, int flags, mode_t mode) {
-  return _unimplemented(SYS_open);
+  _syscall_(SYS_open, (uintptr_t)path, flags, mode);
+  return 0;
 }
 
 int _write(int fd, void *buf, size_t count) {
