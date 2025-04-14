@@ -99,6 +99,8 @@ int     fs_close(int fd)
 
 size_t  fs_filesz(int fd)
 {
-  panic("Not implemented: filesz %d", fd);
-  return -1;
+  if (fd < 0 || fd >= NR_FILES)
+    panic("Invalid file descriptor: %d", fd);
+
+  return file_table[fd].size;
 }
