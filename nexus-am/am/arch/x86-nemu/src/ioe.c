@@ -11,7 +11,7 @@ unsigned long _uptime() { return inl(RTC_PORT) - boot_time; }
 uint32_t *const fb = (uint32_t *)0x40000;
 
 _Screen _screen = {
-    .width = 400, .height = 300,
+    .width = 1920, .height = 1080,
 };
 
 extern void *memcpy(void *, const void *, int);
