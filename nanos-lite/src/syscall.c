@@ -18,6 +18,17 @@ static inline _RegSet *sys_open(_RegSet *r) // 1
   return NULL;
 }
 
+static inline _RegSet *sys_read(_RegSet *r) // 2
+{
+  int fd = SYSCALL_ARG2(r);
+  char *buf = (char *)SYSCALL_ARG3(r);
+  size_t len = SYSCALL_ARG4(r);
+
+  SYSCALL_ARG1(r) = fs_read(fd, buf, len);
+
+  return NULL;
+}
+
 static inline _RegSet *sys_write(_RegSet *r) // 3
 {
   int fd = SYSCALL_ARG2(r);

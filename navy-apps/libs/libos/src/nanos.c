@@ -58,7 +58,12 @@ void *_sbrk(intptr_t increment) {
   return (void *)-1;
 }
 
-int _read(int fd, void *buf, size_t count) { return _unimplemented(SYS_read); }
+int _read(int fd, void *buf, size_t count) 
+{ 
+  _syscall_(SYS_read, fd, (uintptr_t)buf, count);
+  return 0;
+  // return _unimplemented(SYS_read); 
+}
 
 int _close(int fd) { return _unimplemented(SYS_close); }
 
