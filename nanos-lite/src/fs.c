@@ -91,8 +91,10 @@ off_t   fs_lseek(int fd, off_t offset, int whence)
 
 int     fs_close(int fd)
 {
-  panic("Not implemented: close %d", fd);
-  return -1;
+  if (fd < 0 || fd >= NR_FILES)
+    panic("Invalid file descriptor: %d", fd);
+    
+  return 0;
 }
 
 size_t  fs_filesz(int fd)
