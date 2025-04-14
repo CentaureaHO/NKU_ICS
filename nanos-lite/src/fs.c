@@ -30,6 +30,8 @@ static Finfo file_table[] __attribute__((used)) = {
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
 
+extern void ramdisk_read(void *buf, off_t offset, size_t len);
+
 void init_fs() {
   // TODO: initialize the size of /dev/fb
 }
@@ -57,8 +59,25 @@ ssize_t fs_read(int fd, void *buf, size_t len)
     case FD_STDOUT:
     case FD_STDERR:
       return 0;
+    case FD_FB:
+      panic("Not implemented for read FD_FB");
+    case FD_EVENTS:
+      panic("Not implemented for read FD_EVENTS");
+    case FD_DISPINFO:
+      panic("Not implemented for read FD_DISPINFO");
+    case FD_NORMAL:
+      panic("Not implemented for read FD_NORMAL");
     default:
-      panic("Not implemented for fd %d: read from %s", fd, file_table[fd].name);
+      break;
+  }
+
+  size_t remain_bytes = file_table[fd].size - file_table[fd].open_offset;
+  if (remain_bytes < len) len = remain_bytes;
+  
+  if (len > 0)
+  {
+    ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
+    file_table[fd].open_offset += len;
   }
   
   return len;
