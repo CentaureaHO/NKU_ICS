@@ -57,6 +57,8 @@ ssize_t fs_read(int fd, void *buf, size_t len)
     case FD_STDOUT:
     case FD_STDERR:
       return 0;
+      case FD_NORMAL:
+      panic("Not implemented in FD_NORMAL");
     default:
       panic("Not implemented: read from %s", file_table[fd].name);
   }
