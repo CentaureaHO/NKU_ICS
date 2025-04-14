@@ -56,6 +56,17 @@ static inline _RegSet *sys_close(_RegSet *r) // 5
   return NULL;
 }
 
+static inline _RegSet *sys_lseek(_RegSet *r) // 6
+{
+  int fd = SYSCALL_ARG2(r);
+  off_t offset = SYSCALL_ARG3(r);
+  int whence = SYSCALL_ARG4(r);
+
+  SYSCALL_ARG1(r) = fs_lseek(fd, offset, whence);
+
+  return NULL;
+}
+
 static inline _RegSet *sys_brk(_RegSet *r) // 9
 {
   SYSCALL_ARG1(r) = 0;

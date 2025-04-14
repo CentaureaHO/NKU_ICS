@@ -73,7 +73,8 @@ int _close(int fd)
 }
 
 off_t _lseek(int fd, off_t offset, int whence) {
-  return _unimplemented(SYS_lseek);
+  _syscall_(SYS_lseek, fd, offset, whence);
+  return 0;
 }
 
 // The code below is not used by Nanos-lite.
