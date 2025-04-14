@@ -2,6 +2,9 @@
 
 #define NAME(key) [_KEY_##key] = #key,
 
+extern const size_t get_screen_width();
+extern const size_t get_screen_height();
+
 static const char *keyname[256]
     __attribute__((used)) = {[_KEY_NONE] = "NONE", _KEYS(NAME)};
 
