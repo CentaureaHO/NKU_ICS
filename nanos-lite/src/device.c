@@ -14,10 +14,11 @@ static char dispinfo[128] __attribute__((used));
 
 void dispinfo_read(void *buf, off_t offset, size_t len) 
 {
-  if (offset >= strlen(dispinfo)) return;
-  if (offset + len > strlen(dispinfo)) len = strlen(dispinfo) - offset;
+  ssize_t it = 0;
   
-  memcpy(buf, dispinfo + offset, len);
+  char* buffer = (char*)buf;
+  for (; it < len && offset + it < 128; ++it)
+    buffer[it] = dispinfo[offset + it];
 }
 
 void fb_write(const void *buf, off_t offset, size_t len) 
