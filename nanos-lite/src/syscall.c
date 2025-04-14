@@ -96,7 +96,7 @@ _RegSet *do_syscall(_RegSet *r) {
 
   int call_num = SYSCALL_ARG1(r);
 
-  // Log("syscall: %d", call_num);
+  Log("syscall: %d", call_num);
   switch (call_num) {
 #define HANDLER_Y(name) return sys_##name(r);
 #define HANDLER_N(name) panic("Unhandled syscall ID = %d", call_num);
