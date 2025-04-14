@@ -38,5 +38,6 @@ void init_device() {
 
   const size_t width = get_screen_width();
   const size_t height = get_screen_height();
+  Log("width = %d, height = %d", width, height);
   sprintf(dispinfo, "WIDTH:%d\nHEIGHT:%d\n", width, height);
 }
