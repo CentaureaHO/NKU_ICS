@@ -49,8 +49,19 @@ int fs_open(const char *pathname, int flags, int mode)
 
 ssize_t fs_read(int fd, void *buf, size_t len)
 {
-  panic("Not implemented: read %d", fd);
-  return -1;
+  if (fd < 0 || fd >= NR_FILES)
+    panic("Invalid file descriptor: %d", fd);
+  
+  switch(fd) {
+    case FD_STDIN:
+    case FD_STDOUT:
+    case FD_STDERR:
+      return 0;
+    default:
+      panic("Not implemented: read from %s", file_table[fd].name);
+  }
+  
+  return len;
 }
 
 ssize_t fs_write(int fd, const void *buf, size_t len) 
