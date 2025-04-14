@@ -63,6 +63,8 @@ static inline _RegSet *sys_lseek(_RegSet *r) // 6
   int whence = SYSCALL_ARG4(r);
 
   SYSCALL_ARG1(r) = fs_lseek(fd, offset, whence);
+  Log("lseek fd = %d, offset = %d, whence = %d", fd, offset, whence);
+  Log("lseek return = %d", SYSCALL_ARG1(r));
 
   return NULL;
 }
