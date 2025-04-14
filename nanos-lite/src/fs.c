@@ -39,8 +39,15 @@ static Finfo file_table[] __attribute__((used)) = {
 extern void ramdisk_read(void *buf, off_t offset, size_t len);
 extern void ramdisk_write(const void *buf, off_t offset, size_t len);
 
+extern const size_t get_screen_width();
+extern const size_t get_screen_height();
+
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  const size_t screen_width = get_screen_width();
+  const size_t screen_height = get_screen_height();
+
+  file_table[FD_FB].size = screen_width * screen_height * sizeof(uint32_t);
 }
 
 int fs_open(const char *pathname, int flags, int mode)

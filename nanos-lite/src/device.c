@@ -14,11 +14,22 @@ static char dispinfo[128] __attribute__((used));
 
 void dispinfo_read(void *buf, off_t offset, size_t len) {}
 
-void fb_write(const void *buf, off_t offset, size_t len) {}
+void fb_write(const void *buf, off_t offset, size_t len) 
+{
+  const size_t width = get_screen_width();
+  int x = (offset / sizeof(uint32_t)) % width;
+  int y = (offset / sizeof(uint32_t)) / width;
+
+  _draw_rect((uint32_t *)buf, x, y, len / sizeof(uint32_t), 1);
+}
 
 void init_device() {
   _ioe_init();
 
   // TODO: print the string to array `dispinfo` with the format
   // described in the Navy-apps convention
+
+  const size_t width = get_screen_width();
+  const size_t height = get_screen_height();
+  sprintf(dispinfo, "WIDTH:%d\nHEIGHT:%d\n", width, height);
 }
