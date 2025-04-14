@@ -38,6 +38,7 @@ static Finfo file_table[] __attribute__((used)) = {
 
 extern void ramdisk_read(void *buf, off_t offset, size_t len);
 extern void ramdisk_write(const void *buf, off_t offset, size_t len);
+extern void dispinfo_read(void *buf, off_t offset, size_t len);
 
 extern const size_t get_screen_width();
 extern const size_t get_screen_height();
@@ -78,7 +79,9 @@ ssize_t fs_read(int fd, void *buf, size_t len)
     case FD_EVENTS:
       panic("Not implemented for read FD_EVENTS");
     case FD_DISPINFO:
-      panic("Not implemented for read FD_DISPINFO");
+      dispinfo_read(buf, file_table[fd].open_offset, len);
+      file_table[fd].open_offset += len;
+      return len;
     case FD_NORMAL:
       panic("Not implemented for read FD_NORMAL");
     default:
