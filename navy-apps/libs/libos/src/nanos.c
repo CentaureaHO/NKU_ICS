@@ -65,7 +65,12 @@ int _read(int fd, void *buf, size_t count)
   // return _unimplemented(SYS_read); 
 }
 
-int _close(int fd) { return _unimplemented(SYS_close); }
+int _close(int fd) 
+{ 
+  _syscall_(SYS_close, fd, 0, 0);
+  return 0;
+  // return _unimplemented(SYS_close); 
+}
 
 off_t _lseek(int fd, off_t offset, int whence) {
   return _unimplemented(SYS_lseek);

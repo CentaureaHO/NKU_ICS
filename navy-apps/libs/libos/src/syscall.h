@@ -9,7 +9,7 @@
   X(exit, 4, Y)                                                                \
   X(kill, 5, N)                                                                \
   X(getpid, 6, N)                                                              \
-  X(close, 7, N)                                                               \
+  X(close, 7, Y)                                                               \
   X(lseek, 8, N)                                                               \
   X(brk, 9, Y)                                                                 \
   X(fstat, 10, N)                                                              \

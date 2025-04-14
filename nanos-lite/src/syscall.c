@@ -48,6 +48,14 @@ static inline _RegSet *sys_exit(_RegSet *r) // 4
   return NULL;
 }
 
+static inline _RegSet *sys_close(_RegSet *r) // 5
+{
+  int fd = SYSCALL_ARG2(r);
+  SYSCALL_ARG1(r) = fs_close(fd);
+
+  return NULL;
+}
+
 static inline _RegSet *sys_brk(_RegSet *r) // 9
 {
   SYSCALL_ARG1(r) = 0;
