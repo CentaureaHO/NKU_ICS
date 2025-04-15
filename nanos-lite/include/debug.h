@@ -3,6 +3,7 @@
 
 #include "common.h"
 
+#ifndef NDEBUG
 #define Log(format, ...)                                                       \
   printk("\33[1;35m[%s,%d,%s] " format "\33[0m\n", __FILE__, __LINE__,         \
          __func__, ##__VA_ARGS__)
@@ -25,5 +26,21 @@
   } while (0)
 
 #define TODO() panic("please implement me")
+#else
+
+#define Log(format, ...)                                                       \
+  do {                                                                         \
+  } while (0)
+#define panic(format, ...)                                                     \
+  do {                                                                         \
+  } while (0)
+#define assert(cond)                                                           \
+  do {                                                                         \
+  } while (0)
+#define TODO()                                                                \
+  do {                                                                         \
+  } while (0)
+
+#endif
 
 #endif
