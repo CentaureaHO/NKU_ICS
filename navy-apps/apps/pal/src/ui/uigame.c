@@ -100,8 +100,11 @@ INT PAL_OpeningMenu(VOID)
     //
     wItemSelected =
         PAL_ReadMenu(NULL, rgMainMenuItem, 2, wDefaultItem, MENUITEM_COLOR);
+
+    int cond1 = wItemSelected == 0;
+    int cond2 = wItemSelected == MENUITEM_VALUE_CANCELLED;
         
-    if (wItemSelected == 0 || wItemSelected == MENUITEM_VALUE_CANCELLED) {
+    if (cond1 || cond2) {
       //
       // Start a new game
       //
