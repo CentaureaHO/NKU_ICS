@@ -30,6 +30,11 @@ void cpu_exec(uint64_t n)
          * instruction decode, and the actual execution. */
         exec_wrapper(print_flag);
 
+        if (check_wp()) {
+            printf("Current eip: 0x%08x\n", cpu.eip);
+            nemu_state = NEMU_STOP;
+        }
+
 #ifdef DEBUG
         if (check_wp()) {
             printf("Current eip: 0x%08x\n", cpu.eip);
