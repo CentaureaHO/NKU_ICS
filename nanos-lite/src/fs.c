@@ -40,6 +40,7 @@ extern void    ramdisk_read(void *buf, off_t offset, size_t len);
 extern void    ramdisk_write(const void *buf, off_t offset, size_t len);
 extern ssize_t dispinfo_read(void *buf, off_t offset, size_t len);
 extern void    fb_write(const void *buf, off_t offset, size_t len); 
+extern size_t  events_read(void *buf, size_t len);
 
 extern const size_t get_screen_width();
 extern const size_t get_screen_height();
@@ -81,7 +82,8 @@ ssize_t fs_read(int fd, void *buf, size_t len)
     case FD_FB:
       panic("Not implemented for read FD_FB");
     case FD_EVENTS:
-      panic("Not implemented for read FD_EVENTS");
+      read_len = events_read(buf, len);
+      return read_len;
     case FD_DISPINFO:
       read_len = dispinfo_read(buf, file_table[fd].open_offset, len);
       file_table[fd].open_offset += read_len;

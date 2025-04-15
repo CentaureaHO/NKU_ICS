@@ -8,7 +8,21 @@ extern const size_t get_screen_height();
 static const char *keyname[256]
     __attribute__((used)) = {[_KEY_NONE] = "NONE", _KEYS(NAME)};
 
-size_t events_read(void *buf, size_t len) { return 0; }
+size_t events_read(void *buf, size_t len) 
+{ 
+  int key = _read_key();
+  bool down = false;
+  if (key & 0x8000) 
+  {
+    key ^= 0x8000;
+    down = true;
+  }
+  
+  if (key != _KEY_NONE) return snprintf(buf, len, "%s %s\n", down ? "kd" : "ku", keyname[key]);
+
+  uint32_t time = _uptime();
+  return snprintf(buf, len, "t %d\n", time);
+}
 
 static char dispinfo[128] __attribute__((used));
 
