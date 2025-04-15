@@ -337,6 +337,10 @@ make_DHelper(out_a2dx)
 #endif
 }
 
+make_DHelper(movsb) {
+    decoding.src.width = decoding.dest.width = 1;
+}
+
 void operand_write(Operand* op, rtlreg_t* src)
 {
     if (op->type == OP_TYPE_REG) {

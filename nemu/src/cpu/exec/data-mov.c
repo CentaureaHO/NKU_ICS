@@ -176,6 +176,35 @@ make_EHelper(movzx)
     print_asm_template2(movzx);
 }
 
+make_EHelper(movsb)
+{
+  rtl_lr(&t0, R_ESI, 4);
+  rtl_lm(&t2, &t0, 1);
+
+  rtl_lr(&t1, R_EDI, 4);
+  rtl_sm(&t1, 1, &t2);
+
+  rtl_lr(&t0, R_ESI, 4);
+  rtl_lr(&t1, R_EDI, 4);
+  
+  rtl_get_DF(&t3);
+  if (t3 == 0) 
+  {
+    rtl_addi(&t0, &t0, 1);
+    rtl_addi(&t1, &t1, 1);
+  } 
+  else 
+  {
+    rtl_subi(&t0, &t0, 1);
+    rtl_subi(&t1, &t1, 1);
+  }
+  
+  rtl_sr(R_ESI, 4, &t0);
+  rtl_sr(R_EDI, 4, &t1);
+
+  print_asm("movsb");
+}
+
 make_EHelper(lea)
 {
     // Flags Affected: None
