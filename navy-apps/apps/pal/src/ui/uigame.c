@@ -100,6 +100,7 @@ INT PAL_OpeningMenu(VOID)
     //
     wItemSelected =
         PAL_ReadMenu(NULL, rgMainMenuItem, 2, wDefaultItem, MENUITEM_COLOR);
+    printf("wItemSelected = %d\n", wItemSelected);
 
     if (wItemSelected == 0 || wItemSelected == MENUITEM_VALUE_CANCELLED) {
       //
@@ -124,6 +125,8 @@ INT PAL_OpeningMenu(VOID)
   //
   PAL_PlayMUS(0, FALSE, 1);
   PAL_FadeOut(1);
+
+  printf("final wItemSelected = %d\n", wItemSelected);
 
   return (INT)wItemSelected;
 }
