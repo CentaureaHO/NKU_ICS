@@ -105,14 +105,12 @@ INT PAL_OpeningMenu(VOID)
       //
       // Start a new game
       //
-      printf("Enter new game\n");
       wItemSelected = 0;
       break;
     } else {
       //
       // Load game
       //
-      printf("Enter load game\n");
       wItemSelected = PAL_SaveSlotMenu(1);
       if (wItemSelected != MENUITEM_VALUE_CANCELLED) {
         break;
@@ -126,8 +124,6 @@ INT PAL_OpeningMenu(VOID)
   //
   PAL_PlayMUS(0, FALSE, 1);
   PAL_FadeOut(1);
-
-  printf("final wItemSelected = %d\n", wItemSelected);
 
   return (INT)wItemSelected;
 }
