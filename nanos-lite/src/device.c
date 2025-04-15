@@ -12,13 +12,14 @@ size_t events_read(void *buf, size_t len) { return 0; }
 
 static char dispinfo[128] __attribute__((used));
 
-void dispinfo_read(void *buf, off_t offset, size_t len) 
+ssize_t dispinfo_read(void *buf, off_t offset, size_t len) 
 {
-  ssize_t it = 0;
+  if (offset >= strlen(dispinfo)) return 0;
   
-  char* buffer = (char*)buf;
-  for (; it < len && offset + it < 128; ++it)
-    buffer[it] = dispinfo[offset + it];
+  if (offset + len > strlen(dispinfo)) len = strlen(dispinfo) - offset;
+  
+  memcpy(buf, dispinfo + offset, len);
+  return len;
 }
 
 void fb_write(const void *buf, off_t offset, size_t len) 

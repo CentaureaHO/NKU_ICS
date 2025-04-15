@@ -36,9 +36,9 @@ static Finfo file_table[] __attribute__((used)) = {
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
 
-extern void ramdisk_read(void *buf, off_t offset, size_t len);
-extern void ramdisk_write(const void *buf, off_t offset, size_t len);
-extern void dispinfo_read(void *buf, off_t offset, size_t len);
+extern void    ramdisk_read(void *buf, off_t offset, size_t len);
+extern void    ramdisk_write(const void *buf, off_t offset, size_t len);
+extern ssize_t dispinfo_read(void *buf, off_t offset, size_t len);
 
 extern const size_t get_screen_width();
 extern const size_t get_screen_height();
@@ -67,6 +67,8 @@ int fs_open(const char *pathname, int flags, int mode)
 
 ssize_t fs_read(int fd, void *buf, size_t len)
 {
+  ssize_t read_len = 0;
+
   if (fd < 0 || fd >= NR_FILES)
     panic("Invalid file descriptor: %d", fd);
   
@@ -80,9 +82,9 @@ ssize_t fs_read(int fd, void *buf, size_t len)
     case FD_EVENTS:
       panic("Not implemented for read FD_EVENTS");
     case FD_DISPINFO:
-      dispinfo_read(buf, file_table[fd].open_offset, len);
-      file_table[fd].open_offset += len;
-      return len;
+      read_len = dispinfo_read(buf, file_table[fd].open_offset, len);
+      file_table[fd].open_offset += read_len;
+      return read_len;
     case FD_NORMAL:
       panic("Not implemented for read FD_NORMAL");
     default:
