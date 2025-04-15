@@ -10,18 +10,27 @@ static const char *keyname[256]
 
 size_t events_read(void *buf, size_t len) 
 { 
+  size_t retsize;
   int key = _read_key();
+  char buffer[128];
   bool down = false;
-  if (key & 0x8000) 
-  {
+  if (key & 0x8000) {
     key ^= 0x8000;
     down = true;
   }
   
-  if (key != _KEY_NONE) return snprintf(buf, len, "%s %s\n", down ? "kd" : "ku", keyname[key]);
-
-  uint32_t time = _uptime();
-  return snprintf(buf, len, "t %d\n", time);
+  if (key != _KEY_NONE) {
+    sprintf(buffer, "k%s %s\n", down ? "d" : "u", keyname[key]);
+    retsize = strlen(buffer) > len ? len : strlen(buffer);
+    memcpy(buf, buffer, retsize);
+    return retsize;
+  }
+  else {
+    sprintf(buffer, "t %d\n", _uptime());
+    retsize = strlen(buffer) > len ? len : strlen(buffer);
+    memcpy(buf, buffer, retsize);
+    return retsize;
+  }
 }
 
 static char dispinfo[128] __attribute__((used));
