@@ -82,6 +82,7 @@ ssize_t fs_read(int fd, void *buf, size_t len)
     case FD_FB:
       panic("Not implemented for read FD_FB");
     case FD_EVENTS:
+    Log("Reading events");
       read_len = events_read(buf, len);
       return read_len;
     case FD_DISPINFO:
