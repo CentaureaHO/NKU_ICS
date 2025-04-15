@@ -7,6 +7,8 @@
 #include <readline/readline.h>
 #include <stdlib.h>
 
+extern bool exec_diff_test;
+
 void cpu_exec(uint64_t);
 
 /* We use the `readline' library to provide more flexibility to read from stdin.
@@ -313,6 +315,20 @@ static int cmd_rx(char* args)
     return 0;
 }
 
+static int cmd_re(char* args)
+{
+    exec_diff_test = true;
+    printf("Enable diff test\n");
+    return 0;
+}
+
+static int cmd_rd(char* args)
+{
+    exec_diff_test = false;
+    printf("Disable diff test\n");
+    return 0;
+}
+
 #endif
 
 static int cmd_help(char* args);
@@ -338,6 +354,8 @@ static struct
 #ifdef DIFF_TEST
     {"ri", "Show register from gdb", cmd_ri},
     {"rx", "Show memory from gdb", cmd_rx},
+    {"re", "Enable diff test", cmd_re},
+    {"rd", "Disable diff test", cmd_rd},
 #endif
 
     /* TODO: Add more commands */

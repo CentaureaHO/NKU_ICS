@@ -604,6 +604,9 @@ static inline void update_eip(void)
     cpu.eip = (decoding.is_jmp ? (decoding.is_jmp = 0, decoding.jmp_eip) : decoding.seq_eip);
 }
 
+
+bool exec_diff_test = true;
+
 void exec_wrapper(bool print_flag)
 {
 #ifdef DEBUG
@@ -630,6 +633,8 @@ void exec_wrapper(bool print_flag)
 #endif
 
     update_eip();
+
+    if (!exec_diff_test) return;
 
 #ifdef DIFF_TEST
     void difftest_step(uint32_t);
