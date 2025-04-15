@@ -21,6 +21,8 @@ size_t events_read(void *buf, size_t len)
   if (key != _KEY_NONE) return snprintf(buf, len, "%s %s\n", down ? "kd" : "ku", keyname[key]);
 
   uint32_t time = _uptime();
+  snprintf(buf, len, "t %d\n", time);
+  printf("%s", buf);
   return snprintf(buf, len, "t %d\n", time);
 }
 
