@@ -76,7 +76,6 @@ ssize_t fs_read(int fd, void *buf, size_t len) {
     panic("Not implemented for read FD_FB");
   case FD_EVENTS:
     read_len = events_read(buf, len);
-    printf("events_read: %d\n", read_len);
     return read_len;
   case FD_DISPINFO:
     read_len = dispinfo_read(buf, file_table[fd].open_offset, len);
