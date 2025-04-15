@@ -8,10 +8,8 @@ extern const size_t get_screen_height();
 static const char *keyname[256]
     __attribute__((used)) = {[_KEY_NONE] = "NONE", _KEYS(NAME)};
 
+static char buffer[64] __attribute__((used));
 size_t events_read(void *buf, size_t len) {
-  char buffer[128];
-  size_t retsize;
-
   int key = _read_key();
   bool down = false;
   if (key & 0x8000) {
@@ -24,9 +22,9 @@ size_t events_read(void *buf, size_t len) {
   else
     sprintf(buffer, "t %d\n", _uptime());
 
-  retsize = strlen(buffer) > len ? len : strlen(buffer);
-  memcpy(buf, buffer, retsize);
-  return retsize;
+  size_t ret = strlen(buffer) > len ? len : strlen(buffer);
+  memcpy(buf, buffer, ret);
+  return ret;
 }
 
 static char dispinfo[128] __attribute__((used));
