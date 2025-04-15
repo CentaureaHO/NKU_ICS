@@ -21,38 +21,27 @@ int NDL_OpenDisplay(int w, int h) {
   canvas = malloc(sizeof(uint32_t) * w * h);
   assert(canvas);
 
-  printf("OpenDisplay breakpoint 1\n");
-
   if (getenv("NWM_APP")) {
     has_nwm = 1;
   } else {
     has_nwm = 0;
   }
 
-  printf("OpenDisplay breakpoint 2\n");
-
   if (has_nwm) {
-    printf("OpenDisplay breakpoint 2.1\n");
     printf("\033[X%d;%ds", w, h);
     fflush(stdout);
     evtdev = stdin;
   } else {
-    printf("OpenDisplay breakpoint 2.5\n");
     get_display_info();
-    printf("OpenDisplay breakpoint 2.6\n");
     assert(screen_w >= canvas_w);
     assert(screen_h >= canvas_h);
     pad_x = (screen_w - canvas_w) / 2;
     pad_y = (screen_h - canvas_h) / 2;
     fbdev = fopen("/dev/fb", "w");
-    printf("OpenDisplay breakpoint 2.7\n");
     assert(fbdev);
     evtdev = fopen("/dev/events", "r");
-    printf("OpenDisplay breakpoint 2.8\n");
     assert(evtdev);
   }
-
-  printf("OpenDisplay breakpoint 3\n");
 }
 
 int NDL_CloseDisplay() {
@@ -147,7 +136,6 @@ static void get_display_info() {
     *(delim = strchr(buf, ':')) = '\0';
     sscanf(buf, "%s", key);
     sscanf(delim + 1, "%s", value);
-    printf("key: %s, value: %s\n", key, value);
     if (strcmp(key, "WIDTH") == 0)
       sscanf(value, "%d", &screen_w);
     if (strcmp(key, "HEIGHT") == 0)
