@@ -16,7 +16,7 @@ make_EHelper(push)
 
     rtl_li(r0, id_dest->val);
     // rtl_push(r0);
-    rtl_sext(&t0, r0, id_dest->width);
+    rtl_sext(&t0, r0, id_dest->width, RTL_MAX_WIDTH);
     rtl_push(&t0);
 
     print_asm_template1(push);
@@ -144,13 +144,13 @@ make_EHelper(cwtl)
 {
     if (decoding.is_operand_size_16) {
         rtl_lr(r0, R_AL, 1);
-        rtl_sext(r0, r0, 1);
+        rtl_sext(r0, r0, 1, RTL_MAX_WIDTH);
         rtl_sr(R_AX, 2, r0);
     }
     else
     {
         rtl_lr(r0, R_AX, 2);
-        rtl_sext(r0, r0, 2);
+        rtl_sext(r0, r0, 2, RTL_MAX_WIDTH);
         rtl_sr(R_EAX, 4, r0);
     }
 
@@ -162,7 +162,7 @@ make_EHelper(movsx)
     // Flags Affected: None
 
     id_dest->width = decoding.is_operand_size_16 ? 2 : 4;
-    rtl_sext(&t2, &id_src->val, id_src->width);
+    rtl_sext(&t2, &id_src->val, id_src->width, RTL_MAX_WIDTH);
     operand_write(id_dest, &t2);
     print_asm_template2(movsx);
 }

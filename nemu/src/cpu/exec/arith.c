@@ -6,7 +6,7 @@ make_EHelper(add)
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width, id_dest->width);
 
     /* r0: add src0, r1: add src1 */
 
@@ -49,7 +49,7 @@ make_EHelper(sub)
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width, id_dest->width);
 
     /* r0: minuend, r1: subtrahend */
 
@@ -90,10 +90,7 @@ make_EHelper(cmp)
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1) {
-        rtl_sext(r1, r1, id_src->width);
-        if (id_dest->width < 4) rtl_sext(r0, r0, id_dest->width);
-    }
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width, id_dest->width);
 
     /* r0: minuend, r1: subtrahend */
 
@@ -218,7 +215,7 @@ make_EHelper(adc)
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width, id_dest->width);
 
     uint32_t  _dest = t0, _src = t1;
     uint32_t* dest = &_dest;
@@ -268,7 +265,7 @@ make_EHelper(sbb)
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width, id_dest->width);
 
     uint32_t  _dest = t0, _src = t1;
     uint32_t* dest = &_dest;
@@ -375,7 +372,7 @@ make_EHelper(imul1)
     {
         case 1:
             rtl_sr_w(R_AX, r0);
-            rtl_sext(r2, r0, 1);
+            rtl_sext(r2, r0, 1, RTL_MAX_WIDTH);
             // rtl_eq(r3, r0, r2);
             rtl_sub(r3, r0, r2);
             rtl_eq0(r3, r3);
@@ -424,8 +421,8 @@ make_EHelper(imul2)
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    rtl_sext(r2, r0, id_dest->width);
-    rtl_sext(r3, r1, id_src->width);
+    rtl_sext(r2, r0, id_dest->width, RTL_MAX_WIDTH);
+    rtl_sext(r3, r1, id_src->width, RTL_MAX_WIDTH);
 
     rtl_imul(r1, r0, r2, r3);
 
@@ -449,9 +446,9 @@ make_EHelper(imul3)
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
     rtl_li(r2, id_src2->val);
-    rtl_sext(r0, r0, id_dest->width);
-    rtl_sext(r1, r1, id_src->width);
-    rtl_sext(r2, r2, id_src->width);
+    rtl_sext(r0, r0, id_dest->width, RTL_MAX_WIDTH);
+    rtl_sext(r1, r1, id_src->width, RTL_MAX_WIDTH);
+    rtl_sext(r2, r2, id_src->width, RTL_MAX_WIDTH);
 
     rtl_imul(r1, r0, r1, r2);
 
@@ -501,12 +498,12 @@ make_EHelper(idiv)
 {
     // OF, SF, ZF, AR(AF), PF, CF are undefined.
 
-    rtl_sext(r0, &id_dest->val, id_dest->width);
+    rtl_sext(r0, &id_dest->val, id_dest->width, RTL_MAX_WIDTH);
     switch (id_dest->width)
     {
         case 1:
             rtl_lr_w(r1, R_AX);
-            rtl_sext(r1, r1, 2);
+            rtl_sext(r1, r1, 2, RTL_MAX_WIDTH);
             rtl_msb(r2, r1, 4);
             rtl_sub(r2, rzero, r2);
             break;
