@@ -91,7 +91,11 @@ make_EHelper(cmp)
 
     rtl_li(r0, id_dest->val);
     rtl_li(r1, id_src->val);
-    if (id_src->width == 1 && id_dest->width > 1) rtl_sext(r1, r1, id_src->width);
+    if (id_src->width == 1 && id_dest->width > 1)
+    {
+        rtl_sext(r1, r1, id_src->width);
+        if (id_dest->width < 4) rtl_sext(r0, r0, id_dest->width);
+    }
 
     /* r0: minuend, r1: subtrahend */
 
