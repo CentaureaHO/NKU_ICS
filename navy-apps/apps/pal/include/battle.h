@@ -27,8 +27,8 @@ extern "C" {
 #endif
 
 #include "global.h"
-#include "uibattle.h"
 #include "palcommon.h"
+#include "uibattle.h"
 
 #define BATTLE_FPS 25
 #define BATTLE_FRAME_TIME (1000 / BATTLE_FPS)
