@@ -8,45 +8,41 @@ extern const size_t get_screen_height();
 static const char *keyname[256]
     __attribute__((used)) = {[_KEY_NONE] = "NONE", _KEYS(NAME)};
 
-size_t events_read(void *buf, size_t len) 
-{ 
-  size_t retsize;
-  int key = _read_key();
+size_t events_read(void *buf, size_t len) {
   char buffer[128];
+  size_t retsize;
+
+  int key = _read_key();
   bool down = false;
   if (key & 0x8000) {
     key ^= 0x8000;
     down = true;
   }
-  
-  if (key != _KEY_NONE) {
-    sprintf(buffer, "k%s %s\n", down ? "d" : "u", keyname[key]);
-    retsize = strlen(buffer) > len ? len : strlen(buffer);
-    memcpy(buf, buffer, retsize);
-    return retsize;
-  }
-  else {
+
+  if (key != _KEY_NONE)
+    sprintf(buffer, "%s %s\n", down ? "kd" : "ku", keyname[key]);
+  else
     sprintf(buffer, "t %d\n", _uptime());
-    retsize = strlen(buffer) > len ? len : strlen(buffer);
-    memcpy(buf, buffer, retsize);
-    return retsize;
-  }
+
+  retsize = strlen(buffer) > len ? len : strlen(buffer);
+  memcpy(buf, buffer, retsize);
+  return retsize;
 }
 
 static char dispinfo[128] __attribute__((used));
 
-ssize_t dispinfo_read(void *buf, off_t offset, size_t len) 
-{
-  if (offset >= strlen(dispinfo)) return 0;
-  
-  if (offset + len > strlen(dispinfo)) len = strlen(dispinfo) - offset;
-  
+ssize_t dispinfo_read(void *buf, off_t offset, size_t len) {
+  if (offset >= strlen(dispinfo))
+    return 0;
+
+  if (offset + len > strlen(dispinfo))
+    len = strlen(dispinfo) - offset;
+
   memcpy(buf, dispinfo + offset, len);
   return len;
 }
 
-void fb_write(const void *buf, off_t offset, size_t len) 
-{
+void fb_write(const void *buf, off_t offset, size_t len) {
   const size_t width = get_screen_width();
   int x = (offset / sizeof(uint32_t)) % width;
   int y = (offset / sizeof(uint32_t)) / width;
