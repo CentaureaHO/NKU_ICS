@@ -272,13 +272,32 @@ static int cmd_wm(char* args)
 }
 
 #ifdef DIFF_TEST
+#include "../diff-test/protocol.h"
 
 bool gdb_memcpy_from_qemu(uint32_t src, void* dest, int len);
+extern bool gdb_getregs(union gdb_regs*);
 
 static int cmd_ri(char* args)
 {
     // show register from gdb
     // args: none
+    union gdb_regs r;
+    gdb_getregs(&r);
+
+    printf("eax: 0x%08x\n", r.eax);
+    printf("ecx: 0x%08x\n", r.ecx);
+    printf("edx: 0x%08x\n", r.edx);
+    printf("ebx: 0x%08x\n", r.ebx);
+    printf("esp: 0x%08x\n", r.esp);
+    printf("ebp: 0x%08x\n", r.ebp);
+    printf("esi: 0x%08x\n", r.esi);
+    printf("edi: 0x%08x\n", r.edi);
+    printf("eip: 0x%08x\n", r.eip);
+    printf("eflags: 0x%08x\n", r.eflags);
+    printf("CF: %d\n", r.eflags & (0x1 << 0));
+    printf("ZF: %d\n", r.eflags & (0x1 << 6));
+    printf("SF: %d\n", r.eflags & (0x1 << 7));
+    printf("OF: %d\n", r.eflags & (0x1 << 11));
 
     return 0;
 }
