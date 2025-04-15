@@ -105,6 +105,8 @@ INT PAL_OpeningMenu(VOID)
     printf("If wItemSelected == 0 ? %d\n", wItemSelected == 0);
     printf("If wItemSelected == MENUITEM_VALUE_CANCELLED ? %d\n",
            wItemSelected == MENUITEM_VALUE_CANCELLED);
+    printf("If wItemSelected == 0 or wItemSelected == MENUITEM_VALUE_CANCELLED ? %d\n",
+           wItemSelected == 0 || wItemSelected == MENUITEM_VALUE_CANCELLED);
     if (wItemSelected == 0 || wItemSelected == MENUITEM_VALUE_CANCELLED) {
       //
       // Start a new game
