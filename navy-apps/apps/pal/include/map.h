@@ -27,6 +27,7 @@ extern "C" {
 #endif
 
 #include "_common.h"
+#include "palcommon.h"
 
 //
 // Map format:
