@@ -512,7 +512,6 @@ game).
   //
   // try loading from the saved game file.
   //
-  printf("Loading game from %s%d%s\n", PAL_SAVE_PREFIX, iSaveSlot, ".rpg");
   if (iSaveSlot == 0 ||
       PAL_LoadGame(va("%s%d%s", PAL_SAVE_PREFIX, iSaveSlot, ".rpg")) != 0) {
     //
