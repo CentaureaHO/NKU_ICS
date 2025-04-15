@@ -24,6 +24,7 @@ class Terminal
     size_t write_escape(const char* str, size_t count);
     void scroll_up();
 
+<<<<<<< HEAD
     void esc_move(int* args);
     void esc_movefirst(int* args);
     void esc_moveup(int* args);
@@ -46,6 +47,23 @@ class Terminal
         raw,
         cook,
     } mode;
+=======
+  void esc_move(int *args);
+  void esc_movefirst(int *args);
+  void esc_moveup(int *args);
+  void esc_movedown(int *args);
+  void esc_moveleft(int *args);
+  void esc_moveright(int *args);
+  void esc_save(int *args);
+  void esc_restore(int *args);
+  void esc_clear(int *args);
+  void esc_erase(int *args);
+  void esc_setattr1(int *args);
+  void esc_setattr2(int *args);
+  void esc_setattr3(int *args);
+  void esc_rawmode(int *args);
+  void esc_cookmode(int *args);
+>>>>>>> master
 
     int w, h;
     struct Cursor

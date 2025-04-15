@@ -45,6 +45,7 @@ int fn;
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_scalb(x, fn);
 #else
     double z;
@@ -63,6 +64,28 @@ int fn;
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return (double)_scalbf_r(_R4, (float)x, fn);
+=======
+  return __ieee754_scalb(x, fn);
+#else
+  double z;
+  z = __ieee754_scalb(x, fn);
+  if (_LIB_VERSION == _IEEE_)
+    return z;
+  if (!(finite(z) || isnan(z)) && finite(x)) {
+    return __kernel_standard(_R4, x, (double)fn, 32); /* scalb overflow */
+  }
+  if (z == 0.0 && z != x) {
+    return __kernel_standard(_R4, x, (double)fn, 33); /* scalb underflow */
+  }
+#ifndef _SCALB_INT
+  if (!finite(fn))
+    _R4->_errno = ERANGE;
+#endif
+  return z;
+#endif
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_scalbf_r(_R4, (float)x, fn);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

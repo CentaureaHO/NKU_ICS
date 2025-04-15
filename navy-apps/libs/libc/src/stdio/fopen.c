@@ -117,6 +117,7 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 #include <errno.h>
 #include <stdio.h>
 
+<<<<<<< HEAD
 FILE* _DEFUN(_fopen_r, (ptr, file, mode), struct _reent* ptr _AND _CONST char* file _AND _CONST char* mode)
 {
     register FILE* fp;
@@ -139,12 +140,45 @@ FILE* _DEFUN(_fopen_r, (ptr, file, mode), struct _reent* ptr _AND _CONST char* f
     fp->_close  = __sclose;
 
     if (fp->_flags & __SAPP) fseek(fp, 2, 0);
+=======
+FILE *_DEFUN(_fopen_r, (ptr, file, mode),
+             struct _reent *ptr _AND _CONST char *file _AND _CONST char *mode) {
+  register FILE *fp;
+  register int f;
+  int flags, oflags;
+
+  if ((flags = __sflags(ptr, mode, &oflags)) == 0)
+    return NULL;
+  if ((fp = __sfp(ptr)) == NULL)
+    return NULL;
+  if ((f = _open_r(fp->_data, file, oflags, 0666)) < 0) {
+    fp->_flags = 0; /* release */
+    return NULL;
+  }
+
+  fp->_file = f;
+  fp->_flags = flags;
+  fp->_cookie = (_PTR)fp;
+  fp->_read = __sread;
+  fp->_write = __swrite;
+  fp->_seek = __sseek;
+  fp->_close = __sclose;
+
+  if (fp->_flags & __SAPP)
+    fseek(fp, 2, 0);
+>>>>>>> master
 
     return fp;
 }
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 FILE* _DEFUN(fopen, (file, mode), _CONST char* file _AND _CONST char* mode) { return _fopen_r(_REENT, file, mode); }
+=======
+FILE *_DEFUN(fopen, (file, mode), _CONST char *file _AND _CONST char *mode) {
+  return _fopen_r(_REENT, file, mode);
+}
+>>>>>>> master
 
 #endif

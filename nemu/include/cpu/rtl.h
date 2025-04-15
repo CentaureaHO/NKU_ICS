@@ -3,8 +3,26 @@
 
 #include "nemu.h"
 
+<<<<<<< HEAD
 extern rtlreg_t       t0, t1, t2, t3;
 extern const rtlreg_t tzero;
+=======
+#define TRUNCATE_MASK(width) (~0u >> ((4 - width) << 3))
+#define SIGNED_BIT_MASK(width) (1u << ((width << 3) - 1))
+#define RANGE_MASK(high, low) ((~0u >> (31 - (high))) & (~0u << (low)))
+
+extern rtlreg_t        t0, t1, t2, t3;
+extern rtlreg_t*       r0;
+extern rtlreg_t*       r1;
+extern rtlreg_t*       r2;
+extern rtlreg_t*       r3;
+extern const rtlreg_t  tzero;
+extern const rtlreg_t* rzero;
+
+extern const rtlreg_t  ENABLE, DISABLE;
+extern const rtlreg_t* enable;
+extern const rtlreg_t* disable;
+>>>>>>> master
 
 /* RTL basic instructions */
 
@@ -72,6 +90,13 @@ static inline void rtl_sr_b(int r, const rtlreg_t* src1) { reg_b(r) = *src1; }
 static inline void rtl_sr_w(int r, const rtlreg_t* src1) { reg_w(r) = *src1; }
 
 static inline void rtl_sr_l(int r, const rtlreg_t* src1) { reg_l(r) = *src1; }
+<<<<<<< HEAD
+=======
+
+static inline void rtl_sr_idtr_b(const rtlreg_t* src1) { cpu.idtr.base = *src1; }
+
+static inline void rtl_sr_idtr_w(const rtlreg_t* src1) { cpu.idtr.limit = *src1; }
+>>>>>>> master
 
 /* RTL psuedo instructions */
 
@@ -97,6 +122,7 @@ static inline void rtl_sr(int r, int width, const rtlreg_t* src1)
     }
 }
 
+<<<<<<< HEAD
 #define make_rtl_setget_eflags(f)                                           \
     static inline void concat(rtl_set_, f)(const rtlreg_t* src) { TODO(); } \
     static inline void concat(rtl_get_, f)(rtlreg_t * dest) { TODO(); }
@@ -107,11 +133,26 @@ make_rtl_setget_eflags(CF) make_rtl_setget_eflags(OF) make_rtl_setget_eflags(ZF)
 {
     // dest <- src1
     TODO();
+=======
+#define make_rtl_setget_eflags(f)                                                 \
+    static inline void concat(rtl_set_, f)(const rtlreg_t* src) { cpu.f = *src; } \
+    static inline void concat(rtl_get_, f)(rtlreg_t * dest) { *dest = cpu.f; }
+
+make_rtl_setget_eflags(CF) make_rtl_setget_eflags(OF) make_rtl_setget_eflags(ZF) make_rtl_setget_eflags(SF)
+    make_rtl_setget_eflags(PF) make_rtl_setget_eflags(AF) make_rtl_setget_eflags(DF)
+
+        static inline void rtl_mv(rtlreg_t* dest, const rtlreg_t* src1)
+{
+    // dest <- src1
+    // TODO();
+    *dest = *src1;
+>>>>>>> master
 }
 
 static inline void rtl_not(rtlreg_t* dest)
 {
     // dest <- ~dest
+<<<<<<< HEAD
     TODO();
 }
 
@@ -119,19 +160,54 @@ static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width)
 {
     // dest <- signext(src1[(width * 8 - 1) .. 0])
     TODO();
+=======
+    // TODO();
+    *dest = ~*dest;
+}
+
+#define RTL_MAX_WIDTH 4
+static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width, int target_width)
+{
+    if (width == target_width) 
+    {
+        *dest = *src1;
+        return;
+    }
+
+    if (target_width == 4) 
+        switch (width)
+        {
+            case 1: *dest = (int8_t)(*src1 & 0xFF); break;
+            case 2: *dest = (int16_t)(*src1 & 0xFFFF); break;
+            default: Assert(0, "Invalid width");
+        }
+    else if (target_width == 2) 
+        switch (width)
+        {
+            case 1: *dest = (int16_t)(int8_t)(*src1 & 0xFF) & 0xFFFF; break;
+            default: Assert(0, "Invalid width for target_width=2");
+        }
+    else Assert(0, "Invalid target width");
+>>>>>>> master
 }
 
 static inline void rtl_push(const rtlreg_t* src1)
 {
     // esp <- esp - 4
     // M[esp] <- src1
+<<<<<<< HEAD
     TODO();
+=======
+    cpu.esp -= 4;
+    vaddr_write(cpu.esp, 4, *src1);
+>>>>>>> master
 }
 
 static inline void rtl_pop(rtlreg_t* dest)
 {
     // dest <- M[esp]
     // esp <- esp + 4
+<<<<<<< HEAD
     TODO();
 }
 
@@ -171,10 +247,126 @@ static inline void rtl_update_SF(const rtlreg_t* result, int width)
     TODO();
 }
 
+=======
+    *dest = vaddr_read(cpu.esp, 4);
+    cpu.esp += 4;
+}
+
+static inline void rtl_rol(rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t* src2, int width)
+{
+    // dest <- { src1[width * 8 - 1 - src2: 0], src1[width * 8 - 1: src2] }
+    // CF <- dest[0]
+    // Assert(*src2 < width << 3, "Invalid src2 = %d for width = %d", *src2, width);
+
+    int total_bits = width << 3;
+    int shift      = *src2 % total_bits;
+
+    if (shift == 0)
+        *dest = *src1;
+    else
+    {
+        uint32_t mask = TRUNCATE_MASK(width);
+        *dest         = ((*src1 << shift) | (*src1 >> (total_bits - shift))) & mask;
+    }
+}
+
+static inline void rtl_ror(rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t* src2, int width)
+{
+    // dest <- { src1[src2 - 1: 0], src1[width * 8 - 1: src2] }
+    // CF <- dest[width * 8 - 1]
+    // Assert(*src2 < width << 3, "Invalid src2 = %d for width = %d", *src2, width);
+
+    int total_bits = width << 3;
+    int shift      = *src2 % total_bits;
+
+    if (shift == 0)
+        *dest = *src1;
+    else
+    {
+        uint32_t mask = TRUNCATE_MASK(width);
+        *dest         = ((*src1 >> shift) | (*src1 << (total_bits - shift))) & mask;
+    }
+}
+
+static inline void rtl_eq0(rtlreg_t* dest, const rtlreg_t* src1)
+{
+    // dest <- (src1 == 0 ? 1 : 0)
+    *dest = (*src1 == 0) ? 1 : 0;
+}
+
+static inline void rtl_eqi(rtlreg_t* dest, const rtlreg_t* src1, int imm)
+{
+    // dest <- (src1 == imm ? 1 : 0)
+    *dest = (*src1 == imm) ? 1 : 0;
+}
+
+static inline void rtl_neq0(rtlreg_t* dest, const rtlreg_t* src1)
+{
+    // dest <- (src1 != 0 ? 1 : 0)
+    *dest = (*src1 != 0) ? 1 : 0;
+}
+
+static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width)
+{
+    // dest <- src1[width * 8 - 1]
+    *dest = (*src1 & SIGNED_BIT_MASK(width)) ? 1 : 0;
+}
+
+static inline void rtl_mtb(rtlreg_t* dest, const rtlreg_t* src1, int tar)
+{
+    // dest <- src1[tar]
+    *dest = (*src1 >> tar) & 1;
+}
+
+static inline void rtl_update_ZF(const rtlreg_t* result, int width)
+{
+    // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
+    // TODO();
+    if ((*result & TRUNCATE_MASK(width)) == 0)
+        rtl_set_ZF(enable);
+    else
+        rtl_set_ZF(disable);
+}
+
+static inline void rtl_update_SF(const rtlreg_t* result, int width)
+{
+    // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
+    // TODO();
+    if (*result & SIGNED_BIT_MASK(width))
+        rtl_set_SF(enable);
+    else
+        rtl_set_SF(disable);
+}
+
+>>>>>>> master
 static inline void rtl_update_ZFSF(const rtlreg_t* result, int width)
 {
     rtl_update_ZF(result, width);
     rtl_update_SF(result, width);
+<<<<<<< HEAD
+=======
+}
+
+static inline void rtl_update_PF(const rtlreg_t* result)
+{
+    uint8_t src = *result & TRUNCATE_MASK(1);
+    int     cnt = 0;
+    while (src) {
+        src &= src - 1;
+        ++cnt;
+    }
+
+    if (cnt % 2 == 0)
+        rtl_set_PF(enable);
+    else
+        rtl_set_PF(disable);
+}
+
+static inline void rtl_update_PFZFSF(const rtlreg_t* result, int width)
+{
+    rtl_update_PF(result);
+    rtl_update_ZFSF(result, width);
+>>>>>>> master
 }
 
 #endif

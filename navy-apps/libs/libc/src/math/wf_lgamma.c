@@ -29,6 +29,7 @@ float lgammaf(_R2 x) _R3 float x;
 #endif
 {
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_lgammaf_r(x, &_R4->_signgam);
 #else
     float y;
@@ -43,6 +44,22 @@ float lgammaf(_R2 x) _R3 float x;
     }
     else
         return y;
+=======
+  return __ieee754_lgammaf_r(x, &_R4->_signgam);
+#else
+  float y;
+  y = __ieee754_lgammaf_r(x, &_R4->_signgam);
+  if (_LIB_VERSION == _IEEE_)
+    return y;
+  if (!finitef(y) && finitef(x)) {
+    if (floorf(x) == x && x <= (float)0.0) /* lgamma pole */
+      return (float)__kernel_standard(_R4, (double)x, (double)x, 115);
+    else
+      /* lgamma overflow */
+      return (float)__kernel_standard(_R4, (double)x, (double)x, 114);
+  } else
+    return y;
+>>>>>>> master
 #endif
 }
 

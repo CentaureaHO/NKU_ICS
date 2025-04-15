@@ -13,6 +13,7 @@ typedef int pid_t;
 extern char** environ;
 
 void _EXFUN(_exit, (int _status));
+<<<<<<< HEAD
 int _EXFUN(access, (const char* _path, int _amode));
 unsigned _EXFUN(alarm, (unsigned _secs));
 int _EXFUN(chdir, (const char* _path));
@@ -33,16 +34,44 @@ pid_t _EXFUN(fork, (void));
 pid_t _EXFUN(vfork, (void));
 long _EXFUN(fpathconf, (int _fd, int _name));
 char _EXFUN(*getcwd, (char* _buf, size_t _size));
+=======
+int _EXFUN(access, (const char *_path, int _amode));
+unsigned _EXFUN(alarm, (unsigned _secs));
+int _EXFUN(chdir, (const char *_path));
+int _EXFUN(chmod, (const char *_path, mode_t _mode));
+int _EXFUN(chown, (const char *_path, uid_t _owner, gid_t _group));
+int _EXFUN(close, (int _fildes));
+char _EXFUN(*ctermid, (char *_s));
+char _EXFUN(*cuserid, (char *_s));
+int _EXFUN(dup, (int _fildes));
+int _EXFUN(dup2, (int _fildes, int _fildes2));
+int _EXFUN(execl, (const char *_path, const char *, ...));
+int _EXFUN(execle, (const char *_path, const char *, ...));
+int _EXFUN(execlp, (const char *_file, const char *, ...));
+int _EXFUN(execv, (const char *_path, char *const _argv[]));
+int _EXFUN(execve,
+           (const char *_path, char *const _argv[], char *const _envp[]));
+int _EXFUN(execvp, (const char *_file, char *const _argv[]));
+pid_t _EXFUN(fork, (void));
+pid_t _EXFUN(vfork, (void));
+long _EXFUN(fpathconf, (int _fd, int _name));
+char _EXFUN(*getcwd, (char *_buf, size_t _size));
+>>>>>>> master
 gid_t _EXFUN(getegid, (void));
 uid_t _EXFUN(geteuid, (void));
 gid_t _EXFUN(getgid, (void));
 int _EXFUN(getgroups, (int _gidsetsize, gid_t _grouplist[]));
+<<<<<<< HEAD
 char  _EXFUN(*getlogin, (void));
+=======
+char _EXFUN(*getlogin, (void));
+>>>>>>> master
 pid_t _EXFUN(getpgrp, (void));
 pid_t _EXFUN(getpid, (void));
 pid_t _EXFUN(getppid, (void));
 uid_t _EXFUN(getuid, (void));
 int _EXFUN(isatty, (int _fildes));
+<<<<<<< HEAD
 int _EXFUN(link, (const char* _path1, const char* _path2));
 off_t _EXFUN(lseek, (int _fildes, off_t _offset, int _whence));
 long _EXFUN(pathconf, (char* _path, int _name));
@@ -51,6 +80,16 @@ int _EXFUN(pipe, (int _fildes[2]));
 int _EXFUN(read, (int _fildes, void* _buf, size_t _nbyte));
 int _EXFUN(rmdir, (char* _path));
 void* _EXFUN(sbrk, (size_t incr));
+=======
+int _EXFUN(link, (const char *_path1, const char *_path2));
+off_t _EXFUN(lseek, (int _fildes, off_t _offset, int _whence));
+long _EXFUN(pathconf, (char *_path, int _name));
+int _EXFUN(pause, (void));
+int _EXFUN(pipe, (int _fildes[2]));
+int _EXFUN(read, (int _fildes, void *_buf, size_t _nbyte));
+int _EXFUN(rmdir, (char *_path));
+void *_EXFUN(sbrk, (size_t incr));
+>>>>>>> master
 int _EXFUN(setgid, (gid_t _gid));
 int _EXFUN(setpgid, (pid_t _pid, pid_t _pgid));
 pid_t _EXFUN(setsid, (void));
@@ -60,8 +99,13 @@ long _EXFUN(sysconf, (int _name));
 pid_t _EXFUN(tcgetpgrp, (int _fildes));
 int _EXFUN(tcsetpgrp, (int _fildes, pid_t _pgrp_id));
 char _EXFUN(*ttyname, (int _fildes));
+<<<<<<< HEAD
 int _EXFUN(unlink, (const char* _path));
 int _EXFUN(write, (int _fildes, const void* _buf, size_t _nbyte));
+=======
+int _EXFUN(unlink, (const char *_path));
+int _EXFUN(write, (int _fildes, const void *_buf, size_t _nbyte));
+>>>>>>> master
 
 #define F_OK 0
 #define R_OK 4

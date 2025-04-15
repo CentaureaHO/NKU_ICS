@@ -3,10 +3,16 @@
 
 #define NAME(key) [_KEY_##key] = #key,
 
+<<<<<<< HEAD
 const char* names[256] = {[_KEY_NONE] = "NONE", _KEYS(NAME)};
 int         main()
 {
     _ioe_init();
+=======
+const char *names[256] = {[_KEY_NONE] = "NONE", _KEYS(NAME)};
+int main() {
+  _ioe_init();
+>>>>>>> master
 
     while (1) {
         int  key  = _read_key();

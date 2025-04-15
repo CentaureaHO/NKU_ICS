@@ -35,6 +35,7 @@ float atan2f(_R2 y, x) /* wrapper atan2 */
 #endif
 {
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_atan2f(y, x);
 #else
     float z;
@@ -46,6 +47,19 @@ float atan2f(_R2 y, x) /* wrapper atan2 */
     }
     else
         return z;
+=======
+  return __ieee754_atan2f(y, x);
+#else
+  float z;
+  z = __ieee754_atan2f(y, x);
+  if (_LIB_VERSION == _IEEE_ || isnanf(x) || isnanf(y))
+    return z;
+  if (x == (float)0.0 && y == (float)0.0) {
+    /* atan2f(+-0,+-0) */
+    return (float)__kernel_standard(_R4, (double)y, (double)x, 103);
+  } else
+    return z;
+>>>>>>> master
 #endif
 }
 

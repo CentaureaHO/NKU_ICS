@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+<<<<<<< HEAD
 int _DEFUN(putenv, (str), _CONST char* str)
 {
     register char *p, *equal;
@@ -39,4 +40,20 @@ int _DEFUN(putenv, (str), _CONST char* str)
     rval   = setenv(p, equal + 1, 1);
     (void)free(p);
     return rval;
+=======
+int _DEFUN(putenv, (str), _CONST char *str) {
+  register char *p, *equal;
+  int rval;
+
+  if (!(p = strdup(str)))
+    return 1;
+  if (!(equal = index(p, '='))) {
+    (void)free(p);
+    return 1;
+  }
+  *equal = '\0';
+  rval = setenv(p, equal + 1, 1);
+  (void)free(p);
+  return rval;
+>>>>>>> master
 }

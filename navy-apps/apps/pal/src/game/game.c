@@ -37,6 +37,7 @@ static VOID PAL_GameStart(VOID)
 
 --*/
 {
+<<<<<<< HEAD
     PAL_SetLoadFlags(kLoadScene | kLoadPlayerSprite);
 
     if (!gpGlobals->fEnteringScene) {
@@ -48,6 +49,19 @@ static VOID PAL_GameStart(VOID)
 
     gpGlobals->fNeedToFadeIn = TRUE;
     gpGlobals->dwFrameNum    = 0;
+=======
+  PAL_SetLoadFlags(kLoadScene | kLoadPlayerSprite);
+
+  if (!gpGlobals->fEnteringScene) {
+    //
+    // Fade in music if the player has loaded an old game.
+    //
+    PAL_PlayMUS(gpGlobals->wNumMusic, TRUE, 1);
+  }
+
+  gpGlobals->fNeedToFadeIn = TRUE;
+  gpGlobals->dwFrameNum = 0;
+>>>>>>> master
 }
 
 VOID PAL_GameMain(VOID)
@@ -66,6 +80,7 @@ VOID PAL_GameMain(VOID)
 
 --*/
 {
+<<<<<<< HEAD
     DWORD dwTime;
 
     //
@@ -122,4 +137,62 @@ VOID PAL_GameMain(VOID)
         //
         PAL_StartFrame();
     }
+=======
+  DWORD dwTime;
+
+  //
+  // Show the opening menu.
+  //
+  gpGlobals->bCurrentSaveSlot = (BYTE)PAL_OpeningMenu();
+
+  //
+  // Initialize game data and set the flags to load the game resources.
+  //
+  PAL_InitGameData(gpGlobals->bCurrentSaveSlot);
+
+  //
+  // Run the main game loop.
+  //
+  dwTime = SDL_GetTicks();
+
+  while (TRUE) {
+    //
+    // Do some initialization at game start.
+    //
+    if (gpGlobals->fGameStart) {
+      PAL_GameStart();
+      gpGlobals->fGameStart = FALSE;
+    }
+
+    //
+    // Load the game resources if needed.
+    //
+    PAL_LoadResources();
+
+    //
+    // Clear the input state of previous frame.
+    //
+    PAL_ClearKeyState();
+
+    //
+    // Wait for the time of one frame. Accept input here.
+    //
+
+    PAL_ProcessEvent();
+    while (SDL_GetTicks() <= dwTime) {
+      PAL_ProcessEvent();
+      SDL_Delay(1);
+    }
+
+    //
+    // Set the time of the next frame.
+    //
+    dwTime = SDL_GetTicks() + FRAME_TIME;
+
+    //
+    // Run the main frame routine.
+    //
+    PAL_StartFrame();
+  }
+>>>>>>> master
 }

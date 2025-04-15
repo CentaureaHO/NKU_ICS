@@ -31,6 +31,7 @@ static float zero = 0.0;
 #ifdef __STDC__
 float __ieee754_atanhf(float x)
 #else
+<<<<<<< HEAD
 float        __ieee754_atanhf(x) float x;
 #endif
 {
@@ -53,4 +54,29 @@ float        __ieee754_atanhf(x) float x;
         return t;
     else
         return -t;
+=======
+float __ieee754_atanhf(x) float x;
+#endif
+{
+  float t;
+  __int32_t hx, ix;
+  GET_FLOAT_WORD(hx, x);
+  ix = hx & 0x7fffffff;
+  if (ix > 0x3f800000) /* |x|>1 */
+    return (x - x) / (x - x);
+  if (ix == 0x3f800000)
+    return x / zero;
+  if (ix < 0x31800000 && (huge + x) > zero)
+    return x; /* x<2**-28 */
+  SET_FLOAT_WORD(x, ix);
+  if (ix < 0x3f000000) { /* x < 0.5 */
+    t = x + x;
+    t = (float)0.5 * log1pf(t + t * x / (one - x));
+  } else
+    t = (float)0.5 * log1pf((x + x) / (one - x));
+  if (hx >= 0)
+    return t;
+  else
+    return -t;
+>>>>>>> master
 }

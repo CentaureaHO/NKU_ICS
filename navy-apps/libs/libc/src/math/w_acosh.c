@@ -97,6 +97,7 @@ double acosh(_R2 x) /* wrapper acosh */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_acosh(x);
 #else
     double z;
@@ -110,6 +111,21 @@ double acosh(_R2 x) /* wrapper acosh */
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return (double)_acoshf_r(_R4, (float)x);
+=======
+  return __ieee754_acosh(x);
+#else
+  double z;
+  z = __ieee754_acosh(x);
+  if (_LIB_VERSION == _IEEE_ || isnan(x))
+    return z;
+  if (x < 1.0) {
+    return __kernel_standard(_R4, x, x, 29); /* acosh(x<1) */
+  } else
+    return z;
+#endif
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_acoshf_r(_R4, (float)x);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

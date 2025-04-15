@@ -1,6 +1,11 @@
 #ifndef _MALLOC_H_
 #define _MALLOC_H_
 
+<<<<<<< HEAD
+=======
+#include <_ansi.h>
+
+>>>>>>> master
 typedef _PTR mptr; /* a generic pointer, eg: (void *) */
 
 /* #define debug */

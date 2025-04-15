@@ -74,22 +74,37 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 
 #include "local.h"
 
+<<<<<<< HEAD
 long _DEFUN(ftell, (fp), register FILE* fp)
 {
     fpos_t pos;
+=======
+long _DEFUN(ftell, (fp), register FILE *fp) {
+  fpos_t pos;
+>>>>>>> master
 
     /* Ensure stdio is set up.  */
 
+<<<<<<< HEAD
     CHECK_INIT(fp);
 
     if (fp->_seek == NULL) {
         fp->_data->_errno = ESPIPE;
         return -1L;
     }
+=======
+  CHECK_INIT(fp);
+
+  if (fp->_seek == NULL) {
+    fp->_data->_errno = ESPIPE;
+    return -1L;
+  }
+>>>>>>> master
 
     /* Find offset of underlying I/O object, then
        adjust for buffered bytes.  */
 
+<<<<<<< HEAD
     if (fp->_flags & __SOFF)
         pos = fp->_offset;
     else
@@ -115,6 +130,32 @@ long _DEFUN(ftell, (fp), register FILE* fp)
          */
         pos += fp->_p - fp->_bf._base;
     }
+=======
+  if (fp->_flags & __SOFF)
+    pos = fp->_offset;
+  else {
+    pos = (*fp->_seek)(fp->_cookie, (fpos_t)0, SEEK_CUR);
+    if (pos == -1L)
+      return pos;
+  }
+  if (fp->_flags & __SRD) {
+    /*
+     * Reading.  Any unread characters (including
+     * those from ungetc) cause the position to be
+     * smaller than that in the underlying object.
+     */
+    pos -= fp->_r;
+    if (HASUB(fp))
+      pos -= fp->_ur;
+  } else if (fp->_flags & __SWR && fp->_p != NULL) {
+    /*
+     * Writing.  Any buffered characters cause the
+     * position to be greater than that in the
+     * underlying object.
+     */
+    pos += fp->_p - fp->_bf._base;
+  }
+>>>>>>> master
 
     return pos;
 }

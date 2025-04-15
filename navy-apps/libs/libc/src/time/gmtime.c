@@ -47,9 +47,16 @@ ANSI C requires <<gmtime>>.
 
 #define _GMT_OFFSET 0
 
+<<<<<<< HEAD
 struct tm* _DEFUN(gmtime, (tim_p), _CONST time_t* tim_p)
 {
     time_t tim = *tim_p + _GMT_OFFSET;
 
     return (localtime(&tim));
+=======
+struct tm *_DEFUN(gmtime, (tim_p), _CONST time_t *tim_p) {
+  time_t tim = *tim_p + _GMT_OFFSET;
+
+  return (localtime(&tim));
+>>>>>>> master
 }

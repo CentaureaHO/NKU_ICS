@@ -11,10 +11,15 @@ bash init.sh
 ```
 
 The following subprojects/components are included. Some of them are not fully implemented.
-* [NEMU](https://github.com/NJU-ProjectN/nemu)
+* [NEMU](GitHub - NJU-ProjectN/nemu: NJU EMUlator, a full system x86/mips32/riscv32/riscv64 emulator for teac)
 * [Nexus-am](https://github.com/NJU-ProjectN/nexus-am)
+<<<<<<< HEAD
 * [Nanos-lite](https://github.com/NJU-ProjectN/nanos-lite)
 * [Navy-apps](https://github.com/NJU-ProjectN/navy-apps)
+=======
+* [Nanos-lite](GitHub - NJU-ProjectN/nanos-lite)
+* [Navy-apps](GitHub - NJU-ProjectN/navy-apps)
+>>>>>>> master
 
 # Git提交记录
 

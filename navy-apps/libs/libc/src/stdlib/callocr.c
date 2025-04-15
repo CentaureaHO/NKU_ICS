@@ -8,6 +8,7 @@ using other library routines which call calloc_r.
 
 #include <stdlib.h>
 #include <string.h>
+<<<<<<< HEAD
 _PTR _DEFUN(_calloc_r, (ptr, n, size), struct _reent* ptr _AND size_t n _AND size_t size)
 {
     register char* cp;
@@ -17,4 +18,16 @@ _PTR _DEFUN(_calloc_r, (ptr, n, size), struct _reent* ptr _AND size_t n _AND siz
     if (cp == 0) return 0;
     memset(cp, '\0', n);
     return cp;
+=======
+_PTR _DEFUN(_calloc_r, (ptr, n, size),
+            struct _reent *ptr _AND size_t n _AND size_t size) {
+  register char *cp;
+
+  n *= size;
+  cp = _malloc_r(ptr, n);
+  if (cp == 0)
+    return 0;
+  memset(cp, '\0', n);
+  return cp;
+>>>>>>> master
 }

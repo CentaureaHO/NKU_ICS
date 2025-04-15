@@ -33,7 +33,13 @@ Neither ANSI C nor the System V Interface Definition (Issue 2) require
 #include <string.h>
 
 _VOID
+<<<<<<< HEAD
 _DEFUN(bzero, (b, length), char* b _AND size_t length)
 {
     while (length--) *b++ = 0;
+=======
+_DEFUN(bzero, (b, length), char *b _AND size_t length) {
+  while (length--)
+    *b++ = 0;
+>>>>>>> master
 }

@@ -69,12 +69,18 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 
 #include <stdio.h>
 
+<<<<<<< HEAD
 char* _gets_r(ptr, buf) struct _reent* ptr;
 char* buf;
+=======
+char *_gets_r(ptr, buf) struct _reent *ptr;
+char *buf;
+>>>>>>> master
 {
     register int   c;
     register char* s = buf;
 
+<<<<<<< HEAD
     while ((c = _getchar_r(ptr)) != '\n')
         if (c == EOF)
             if (s == buf)
@@ -85,13 +91,30 @@ char* buf;
             *s++ = c;
     *s           = 0;
     return buf;
+=======
+  while ((c = _getchar_r(ptr)) != '\n')
+    if (c == EOF)
+      if (s == buf)
+        return NULL;
+      else
+        break;
+    else
+      *s++ = c;
+  *s = 0;
+  return buf;
+>>>>>>> master
 }
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 char* gets(buf) char* buf;
 {
     return _gets_r(_REENT, buf);
 }
+=======
+char *gets(buf) char *buf;
+{ return _gets_r(_REENT, buf); }
+>>>>>>> master
 
 #endif

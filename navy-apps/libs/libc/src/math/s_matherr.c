@@ -111,9 +111,15 @@ PORTABILITY
 #include "fdlibm.h"
 
 #ifdef __STDC__
+<<<<<<< HEAD
 int matherr(struct exception* x)
 #else
 int matherr(x) struct exception* x;
+=======
+int matherr(struct exception *x)
+#else
+int matherr(x) struct exception *x;
+>>>>>>> master
 #endif
 {
     assert(0);

@@ -2,12 +2,30 @@
 #include "cpu/rtl.h"
 
 /* shared by all helper functions */
+<<<<<<< HEAD
 DecodeInfo     decoding;
 rtlreg_t       t0, t1, t2, t3;
 const rtlreg_t tzero = 0;
 
 #define make_DopHelper(name) void concat(decode_op_, name)(vaddr_t * eip, Operand * op, bool load_val)
 
+=======
+DecodeInfo      decoding;
+rtlreg_t        t0, t1, t2, t3;
+rtlreg_t*       r0    = &t0;
+rtlreg_t*       r1    = &t1;
+rtlreg_t*       r2    = &t2;
+rtlreg_t*       r3    = &t3;
+const rtlreg_t  tzero = 0;
+const rtlreg_t* rzero = &tzero;
+
+const rtlreg_t  ENABLE = 1, DISABLE = 0;
+const rtlreg_t* enable  = &ENABLE;
+const rtlreg_t* disable = &DISABLE;
+
+#define make_DopHelper(name) void concat(decode_op_, name)(vaddr_t * eip, Operand * op, bool load_val)
+
+>>>>>>> master
 /* Refer to Appendix A in i386 manual for the explanations of these
  * abbreviations */
 
@@ -41,13 +59,28 @@ static inline make_DopHelper(SI)
      *
      op->simm = ???
      */
+<<<<<<< HEAD
     TODO();
 
     rtl_li(&op->val, op->simm);
+=======
+    // TODO();
+    // Log("Here follows the function decode_op_SI");
+    op->simm = instr_fetch(eip, op->width);
+
+    rtl_li(&op->val, op->simm);
+    rtl_sext(&op->val, &op->val, op->width, RTL_MAX_WIDTH);
+    op->simm = op->val;
+
+// Log("op->simm = %d", op->simm);
+// Log("op->val = %d", op->val);
+>>>>>>> master
 
 #ifdef DEBUG
     snprintf(op->str, OP_STR_SIZE, "$0x%x", op->simm);
 #endif
+
+    // Log("Here ends the function decode_op_SI");
 }
 
 /* I386 manual does not contain this abbreviation.
@@ -179,6 +212,16 @@ make_DHelper(mov_I2r)
 
 /* used by unary operations */
 make_DHelper(I) { decode_op_I(eip, id_dest, true); }
+<<<<<<< HEAD
+=======
+
+make_DHelper(int3)
+{
+    id_dest->type = OP_TYPE_IMM;
+    id_dest->imm  = 3;
+    rtl_li(&id_dest->val, id_dest->imm);
+}
+>>>>>>> master
 
 make_DHelper(r) { decode_op_r(eip, id_dest, true); }
 
@@ -265,9 +308,19 @@ make_DHelper(J)
 {
     decode_op_SI(eip, id_dest, false);
     // the target address can be computed in the decode stage
+<<<<<<< HEAD
     decoding.jmp_eip = id_dest->simm + *eip;
 }
 
+=======
+    // Log("id_dest->simm = %x", id_dest->simm);
+    // Log("*eip = %x", *eip);
+    decoding.jmp_eip = id_dest->simm + *eip;
+}
+
+make_DHelper(gp5_J) { decoding.jmp_eip = id_dest->val; }
+
+>>>>>>> master
 make_DHelper(push_SI) { decode_op_SI(eip, id_dest, true); }
 
 make_DHelper(in_I2a)
@@ -308,6 +361,11 @@ make_DHelper(out_a2dx)
 #endif
 }
 
+<<<<<<< HEAD
+=======
+make_DHelper(movsb) { decoding.src.width = decoding.dest.width = 1; }
+
+>>>>>>> master
 void operand_write(Operand* op, rtlreg_t* src)
 {
     if (op->type == OP_TYPE_REG) {

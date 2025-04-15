@@ -66,6 +66,7 @@ double sqrt(_R2 x) /* wrapper sqrt */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_sqrt(x);
 #else
     double z;
@@ -79,6 +80,21 @@ double sqrt(_R2 x) /* wrapper sqrt */
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return (double)_sqrtf_r(_R4, (float)x);
+=======
+  return __ieee754_sqrt(x);
+#else
+  double z;
+  z = __ieee754_sqrt(x);
+  if (_LIB_VERSION == _IEEE_ || isnan(x))
+    return z;
+  if (x < 0.0) {
+    return __kernel_standard(_R4, x, x, 26); /* sqrt(negative) */
+  } else
+    return z;
+#endif
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_sqrtf_r(_R4, (float)x);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

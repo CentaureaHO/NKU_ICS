@@ -25,7 +25,11 @@
 
 volatile PALINPUTSTATE g_InputState;
 #ifdef PAL_HAS_JOYSTICKS
+<<<<<<< HEAD
 static SDL_Joystick* g_pJoy = NULL;
+=======
+static SDL_Joystick *g_pJoy = NULL;
+>>>>>>> master
 #endif
 BOOL g_fUseJoystick = TRUE;
 
@@ -54,6 +58,7 @@ VOID PAL_KeyPressHandler(int keycode)
 
 --*/
 {
+<<<<<<< HEAD
     switch (keycode)
     {
 
@@ -110,6 +115,94 @@ VOID PAL_KeyPressHandler(int keycode)
 
         default: break;
     }
+=======
+  switch (keycode) {
+
+  case K_UP:
+    g_InputState.prevdir =
+        (gpGlobals->fInBattle ? kDirUnknown : g_InputState.dir);
+    g_InputState.dir = kDirNorth;
+    g_InputState.dwKeyPress |= kKeyUp;
+    break;
+
+  case K_DOWN:
+    g_InputState.prevdir =
+        (gpGlobals->fInBattle ? kDirUnknown : g_InputState.dir);
+    g_InputState.dir = kDirSouth;
+    g_InputState.dwKeyPress |= kKeyDown;
+    break;
+
+  case K_LEFT:
+    g_InputState.prevdir =
+        (gpGlobals->fInBattle ? kDirUnknown : g_InputState.dir);
+    g_InputState.dir = kDirWest;
+    g_InputState.dwKeyPress |= kKeyLeft;
+    break;
+
+  case K_RIGHT:
+    g_InputState.prevdir =
+        (gpGlobals->fInBattle ? kDirUnknown : g_InputState.dir);
+    g_InputState.dir = kDirEast;
+    g_InputState.dwKeyPress |= kKeyRight;
+    break;
+
+  case K_ESCAPE:
+    g_InputState.dwKeyPress |= kKeyMenu;
+    break;
+
+  case K_RETURN:
+  case K_SPACE:
+    g_InputState.dwKeyPress |= kKeySearch;
+    break;
+
+  case K_PAGEUP:
+    g_InputState.dwKeyPress |= kKeyPgUp;
+    break;
+
+  case K_PAGEDOWN:
+    g_InputState.dwKeyPress |= kKeyPgDn;
+    break;
+
+  case K_r:
+    g_InputState.dwKeyPress |= kKeyRepeat;
+    break;
+
+  case K_a:
+    g_InputState.dwKeyPress |= kKeyAuto;
+    break;
+
+  case K_d:
+    g_InputState.dwKeyPress |= kKeyDefend;
+    break;
+
+  case K_e:
+    g_InputState.dwKeyPress |= kKeyUseItem;
+    break;
+
+  case K_w:
+    g_InputState.dwKeyPress |= kKeyThrowItem;
+    break;
+
+  case K_q:
+    g_InputState.dwKeyPress |= kKeyFlee;
+    break;
+
+  case K_s:
+    g_InputState.dwKeyPress |= kKeyStatus;
+    break;
+
+  case K_f:
+    g_InputState.dwKeyPress |= kKeyForce;
+    break;
+
+  case K_p:
+    VIDEO_SaveScreenshot();
+    break;
+
+  default:
+    break;
+  }
+>>>>>>> master
 }
 
 VOID PAL_KeyReleaseHandler(int keycode)
@@ -128,6 +221,7 @@ VOID PAL_KeyReleaseHandler(int keycode)
 
 --*/
 {
+<<<<<<< HEAD
     switch (keycode)
     {
         case K_UP:
@@ -160,6 +254,40 @@ VOID PAL_KeyReleaseHandler(int keycode)
 
         default: break;
     }
+=======
+  switch (keycode) {
+  case K_UP:
+    if (g_InputState.dir == kDirNorth) {
+      g_InputState.dir = g_InputState.prevdir;
+    }
+    g_InputState.prevdir = kDirUnknown;
+    break;
+
+  case K_DOWN:
+    if (g_InputState.dir == kDirSouth) {
+      g_InputState.dir = g_InputState.prevdir;
+    }
+    g_InputState.prevdir = kDirUnknown;
+    break;
+
+  case K_LEFT:
+    if (g_InputState.dir == kDirWest) {
+      g_InputState.dir = g_InputState.prevdir;
+    }
+    g_InputState.prevdir = kDirUnknown;
+    break;
+
+  case K_RIGHT:
+    if (g_InputState.dir == kDirEast) {
+      g_InputState.dir = g_InputState.prevdir;
+    }
+    g_InputState.prevdir = kDirUnknown;
+    break;
+
+  default:
+    break;
+  }
+>>>>>>> master
 }
 
 VOID PAL_ClearKeyState(VOID)
@@ -178,7 +306,11 @@ VOID PAL_ClearKeyState(VOID)
 
 --*/
 {
+<<<<<<< HEAD
     g_InputState.dwKeyPress = 0;
+=======
+  g_InputState.dwKeyPress = 0;
+>>>>>>> master
 }
 
 VOID PAL_InitInput(VOID)
@@ -197,20 +329,35 @@ VOID PAL_InitInput(VOID)
 
 --*/
 {
+<<<<<<< HEAD
     memset((void*)&g_InputState, 0, sizeof(g_InputState));
     g_InputState.dir     = kDirUnknown;
     g_InputState.prevdir = kDirUnknown;
+=======
+  memset((void *)&g_InputState, 0, sizeof(g_InputState));
+  g_InputState.dir = kDirUnknown;
+  g_InputState.prevdir = kDirUnknown;
+>>>>>>> master
 
 //
 // Check for joystick
 //
 #ifdef PAL_HAS_JOYSTICKS
+<<<<<<< HEAD
     if (SDL_NumJoysticks() > 0 && g_fUseJoystick) {
         g_pJoy = SDL_JoystickOpen(0);
         if (g_pJoy != NULL) {
             SDL_JoystickEventState(SDL_ENABLE);
         }
     }
+=======
+  if (SDL_NumJoysticks() > 0 && g_fUseJoystick) {
+    g_pJoy = SDL_JoystickOpen(0);
+    if (g_pJoy != NULL) {
+      SDL_JoystickEventState(SDL_ENABLE);
+    }
+  }
+>>>>>>> master
 #endif
 }
 
@@ -232,6 +379,7 @@ VOID PAL_ShutdownInput(VOID)
 {
 #ifdef PAL_HAS_JOYSTICKS
 #if SDL_VERSION_ATLEAST(2, 0, 0)
+<<<<<<< HEAD
     if (g_pJoy != NULL) {
         SDL_JoystickClose(g_pJoy);
         g_pJoy = NULL;
@@ -242,6 +390,18 @@ VOID PAL_ShutdownInput(VOID)
         SDL_JoystickClose(g_pJoy);
         g_pJoy = NULL;
     }
+=======
+  if (g_pJoy != NULL) {
+    SDL_JoystickClose(g_pJoy);
+    g_pJoy = NULL;
+  }
+#else
+  if (SDL_JoystickOpened(0)) {
+    assert(g_pJoy != NULL);
+    SDL_JoystickClose(g_pJoy);
+    g_pJoy = NULL;
+  }
+>>>>>>> master
 #endif
 #endif
 }
@@ -263,8 +423,15 @@ VOID PAL_ProcessEvent(VOID)
 --*/
 {
 #ifdef PAL_HAS_NATIVEMIDI
+<<<<<<< HEAD
     MIDI_CheckLoop();
 #endif
     while (PAL_PollEvent(NULL))
         ;
+=======
+  MIDI_CheckLoop();
+#endif
+  while (PAL_PollEvent(NULL))
+    ;
+>>>>>>> master
 }

@@ -24,6 +24,7 @@
 #include "fdlibm.h"
 
 #ifdef __STDC__
+<<<<<<< HEAD
 float __ieee754_gammaf_r(float x, int* signgamp)
 #else
 float __ieee754_gammaf_r(x, signgamp) float x;
@@ -31,4 +32,13 @@ int*  signgamp;
 #endif
 {
     return __ieee754_lgammaf_r(x, signgamp);
+=======
+float __ieee754_gammaf_r(float x, int *signgamp)
+#else
+float __ieee754_gammaf_r(x, signgamp) float x;
+int *signgamp;
+#endif
+{
+  return __ieee754_lgammaf_r(x, signgamp);
+>>>>>>> master
 }

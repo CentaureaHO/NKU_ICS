@@ -11,6 +11,7 @@
 int nemu_state = NEMU_STOP;
 
 void exec_wrapper(bool);
+bool check_wp();
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n)
@@ -28,9 +29,23 @@ void cpu_exec(uint64_t n)
         /* Execute one instruction, including instruction fetch,
          * instruction decode, and the actual execution. */
         exec_wrapper(print_flag);
+<<<<<<< HEAD
 
 #ifdef DEBUG
 /* TODO: check watchpoints here. */
+=======
+
+        if (check_wp()) {
+            printf("Current eip: 0x%08x\n", cpu.eip);
+            nemu_state = NEMU_STOP;
+        }
+
+#ifdef DEBUG
+        if (check_wp()) {
+            printf("Current eip: 0x%08x\n", cpu.eip);
+            nemu_state = NEMU_STOP;
+        }
+>>>>>>> master
 
 #endif
 

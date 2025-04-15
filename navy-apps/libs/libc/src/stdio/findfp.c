@@ -24,8 +24,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+<<<<<<< HEAD
 static void    std(ptr, flags, file, data) FILE* ptr;
 struct _reent* data;
+=======
+static void std(ptr, flags, file, data) FILE *ptr;
+struct _reent *data;
+>>>>>>> master
 {
     ptr->_p        = 0;
     ptr->_r        = 0;
@@ -42,12 +47,18 @@ struct _reent* data;
     ptr->_data     = data;
 };
 
+<<<<<<< HEAD
 struct _glue* __sfmoreglue(d, n) struct _reent* d;
 register int  n;
+=======
+struct _glue *__sfmoreglue(d, n) struct _reent *d;
+register int n;
+>>>>>>> master
 {
     struct _glue* g;
     FILE*         p;
 
+<<<<<<< HEAD
     g = (struct _glue*)_malloc_r(d, sizeof(*g) + n * sizeof(FILE));
     if (g == NULL) return NULL;
     p         = (FILE*)(g + 1);
@@ -56,18 +67,34 @@ register int  n;
     g->_iobs  = p;
     memset(p, 0, n * sizeof(FILE));
     return g;
+=======
+  g = (struct _glue *)_malloc_r(d, sizeof(*g) + n * sizeof(FILE));
+  if (g == NULL)
+    return NULL;
+  p = (FILE *)(g + 1);
+  g->_next = NULL;
+  g->_niobs = n;
+  g->_iobs = p;
+  memset(p, 0, n * sizeof(FILE));
+  return g;
+>>>>>>> master
 }
 
 /*
  * Find a free FILE for fopen et al.
  */
 
+<<<<<<< HEAD
 FILE* __sfp(d) struct _reent* d;
+=======
+FILE *__sfp(d) struct _reent *d;
+>>>>>>> master
 {
     FILE*         fp;
     int           n;
     struct _glue* g;
 
+<<<<<<< HEAD
     if (!d->__sdidinit) __sinit(d);
     for (g = &d->__sglue;; g = g->_next) {
         for (fp = g->_iobs, n = g->_niobs; --n >= 0; fp++)
@@ -93,6 +120,36 @@ found:
     fp->_lb._size = 0;
     fp->_data     = d;
     return fp;
+=======
+  if (!d->__sdidinit)
+    __sinit(d);
+  for (g = &d->__sglue;; g = g->_next) {
+    for (fp = g->_iobs, n = g->_niobs; --n >= 0; fp++)
+      if (fp->_flags == 0)
+        goto found;
+    if (g->_next == NULL && (g->_next = __sfmoreglue(d, NDYNAMIC)) == NULL)
+      break;
+  }
+  d->_errno = ENOMEM;
+  return NULL;
+
+found:
+  fp->_flags = 1; /* reserve this slot; caller sets real flags */
+  fp->_p = NULL;  /* no current pointer */
+  fp->_w = 0;     /* nothing to read or write */
+  fp->_r = 0;
+  fp->_bf._base = NULL; /* no buffer */
+  fp->_bf._size = 0;
+  fp->_lbfsize = 0;          /* not line buffered */
+  fp->_file = -1;            /* no file */
+  /* fp->_cookie = <any>; */ /* caller sets cookie, _read/_write etc */
+  fp->_ub._base = NULL;      /* no ungetc buffer */
+  fp->_ub._size = 0;
+  fp->_lb._base = NULL; /* no line buffer */
+  fp->_lb._size = 0;
+  fp->_data = d;
+  return fp;
+>>>>>>> master
 }
 
 /*
@@ -103,10 +160,17 @@ found:
  * The name `_cleanup' is, alas, fairly well known outside stdio.
  */
 
+<<<<<<< HEAD
 void _cleanup_r(ptr) struct _reent* ptr;
 {
     /* (void) _fwalk(fclose); */
     (void)_fwalk(ptr, fflush); /* `cheating' */
+=======
+void _cleanup_r(ptr) struct _reent *ptr;
+{
+  /* (void) _fwalk(fclose); */
+  (void)_fwalk(ptr, fflush); /* `cheating' */
+>>>>>>> master
 }
 
 #ifndef _REENT_ONLY
@@ -117,6 +181,7 @@ void _cleanup() { _cleanup_r(_REENT); }
  * __sinit() is called whenever stdio's internal variables must be set up.
  */
 
+<<<<<<< HEAD
 void __sinit(s) struct _reent* s;
 {
     /* make sure we clean up on exit */
@@ -126,6 +191,17 @@ void __sinit(s) struct _reent* s;
     std(s->__sf + 0, __SRD, 0, s);
     std(s->__sf + 1, __SWR | __SLBF, 1, s);
     std(s->__sf + 2, __SWR | __SNBF, 2, s);
+=======
+void __sinit(s) struct _reent *s;
+{
+  /* make sure we clean up on exit */
+  s->__cleanup = _cleanup_r; /* conservative */
+  s->__sdidinit = 1;
+
+  std(s->__sf + 0, __SRD, 0, s);
+  std(s->__sf + 1, __SWR | __SLBF, 1, s);
+  std(s->__sf + 2, __SWR | __SNBF, 2, s);
+>>>>>>> master
 
     s->__sglue._next  = NULL;
     s->__sglue._niobs = 3;

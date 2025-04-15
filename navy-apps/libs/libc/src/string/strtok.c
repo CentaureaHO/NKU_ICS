@@ -74,6 +74,7 @@ QUICKREF
 #include <reent.h>
 #include <string.h>
 
+<<<<<<< HEAD
 char* /* NULL if no token left */
     _DEFUN(_strtok_r, (r, s, delim), struct _reent* r _AND char* s _AND _CONST char* delim)
 {
@@ -88,11 +89,28 @@ char* /* NULL if no token left */
         scan = s;
     else
         scan = r->_scanpoint;
+=======
+char * /* NULL if no token left */
+    _DEFUN(_strtok_r, (r, s, delim),
+           struct _reent *r _AND char *s _AND _CONST char *delim) {
+  char *scan;
+  char *tok;
+  _CONST char *dscan;
+
+  if (s == NULL && r->_scanpoint == NULL) {
+    return NULL;
+  }
+  if (s != NULL)
+    scan = s;
+  else
+    scan = r->_scanpoint;
+>>>>>>> master
 
     /*
      * Scan leading delimiters.
      */
 
+<<<<<<< HEAD
     for (; *scan != '\0'; scan++) {
         for (dscan = delim; *dscan != '\0'; dscan++) {
             if (*scan == *dscan) break;
@@ -104,6 +122,21 @@ char* /* NULL if no token left */
         r->_scanpoint = NULL;
         return NULL;
     }
+=======
+  for (; *scan != '\0'; scan++) {
+    for (dscan = delim; *dscan != '\0'; dscan++) {
+      if (*scan == *dscan)
+        break;
+    }
+
+    if (*dscan == '\0')
+      break;
+  }
+  if (*scan == '\0') {
+    r->_scanpoint = NULL;
+    return NULL;
+  }
+>>>>>>> master
 
     tok = scan;
 
@@ -111,6 +144,7 @@ char* /* NULL if no token left */
      * Scan token.
      */
 
+<<<<<<< HEAD
     for (; *scan != '\0'; scan++) {
         for (dscan = delim; *dscan != '\0';) /* ++ moved down. */
             if (*scan == *dscan++) {
@@ -119,6 +153,16 @@ char* /* NULL if no token left */
                 return tok;
             }
     }
+=======
+  for (; *scan != '\0'; scan++) {
+    for (dscan = delim; *dscan != '\0';) /* ++ moved down. */
+      if (*scan == *dscan++) {
+        r->_scanpoint = scan + 1;
+        *scan = '\0';
+        return tok;
+      }
+  }
+>>>>>>> master
 
     /* Reached end of string. */
     r->_scanpoint = NULL;
@@ -127,6 +171,12 @@ char* /* NULL if no token left */
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 char* _DEFUN(strtok, (s, delim), char* s _AND _CONST char* delim) { return _strtok_r(_REENT, s, delim); }
+=======
+char *_DEFUN(strtok, (s, delim), char *s _AND _CONST char *delim) {
+  return _strtok_r(_REENT, s, delim);
+}
+>>>>>>> master
 
 #endif

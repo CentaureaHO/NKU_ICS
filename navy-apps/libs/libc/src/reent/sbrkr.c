@@ -49,6 +49,7 @@ DESCRIPTION
         <<errno>>.
 */
 
+<<<<<<< HEAD
 void*  _sbrk_r(ptr, incr) struct _reent* ptr;
 size_t incr;
 {
@@ -58,6 +59,18 @@ size_t incr;
     ret                         = (char*)(_sbrk(incr));
     if (errno != 0) ptr->_errno = errno;
     return ret;
+=======
+void *_sbrk_r(ptr, incr) struct _reent *ptr;
+size_t incr;
+{
+  char *ret;
+  void *_sbrk(size_t);
+  errno = 0;
+  ret = (char *)(_sbrk(incr));
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
+>>>>>>> master
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

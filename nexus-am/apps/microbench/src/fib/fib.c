@@ -20,10 +20,29 @@ static inline void mult(uint32_t* c, uint32_t* a, uint32_t* b)
         }
 }
 
+<<<<<<< HEAD
 static inline void assign(uint32_t* a, uint32_t* b)
 {
     for (int i = 0; i < M; i++)
         for (int j = 0; j < M; j++) put(a, i, j, get(b, i, j));
+=======
+static uint32_t get(uint32_t *m, int i, int j) { return m[i * M + j]; }
+
+static inline void mult(uint32_t *c, uint32_t *a, uint32_t *b) {
+  for (int i = 0; i < M; i++)
+    for (int j = 0; j < M; j++) {
+      put(c, i, j, 0);
+      for (int k = 0; k < M; k++) {
+        put(c, i, j, get(c, i, j) + get(a, i, k) * get(b, k, j));
+      }
+    }
+}
+
+static inline void assign(uint32_t *a, uint32_t *b) {
+  for (int i = 0; i < M; i++)
+    for (int j = 0; j < M; j++)
+      put(a, i, j, get(b, i, j));
+>>>>>>> master
 }
 
 static uint32_t *A, *ans, *T, *tmp;
@@ -38,6 +57,7 @@ void bench_fib_prepare()
     tmp    = bench_alloc(sz);
 }
 
+<<<<<<< HEAD
 void bench_fib_run()
 {
     for (int i = 0; i < M; i++)
@@ -55,6 +75,15 @@ void bench_fib_run()
         }
         mult(tmp, T, T);
         assign(T, tmp);
+=======
+void bench_fib_run() {
+  for (int i = 0; i < M; i++)
+    for (int j = 0; j < M; j++) {
+      uint32_t x = (i == M - 1 || j == i + 1);
+      put(A, i, j, x);
+      put(T, i, j, x);
+      put(ans, i, j, i == j);
+>>>>>>> master
     }
 }
 

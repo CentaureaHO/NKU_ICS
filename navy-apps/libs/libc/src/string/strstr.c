@@ -36,13 +36,40 @@ QUICKREF
 
 #include <string.h>
 
+<<<<<<< HEAD
 char* _DEFUN(strstr, (searchee, lookfor), _CONST char* searchee _AND _CONST char* lookfor)
 {
     if (*searchee == 0) {
         if (*lookfor) return (char*)NULL;
         return (char*)searchee;
-    }
+=======
+char *_DEFUN(strstr, (searchee, lookfor),
+             _CONST char *searchee _AND _CONST char *lookfor) {
+  if (*searchee == 0) {
+    if (*lookfor)
+      return (char *)NULL;
+    return (char *)searchee;
+  }
 
+  while (*searchee) {
+    size_t i;
+    i = 0;
+
+    while (1) {
+      if (lookfor[i] == 0) {
+        return (char *)searchee;
+      }
+
+      if (lookfor[i] != searchee[i]) {
+        break;
+      }
+      i++;
+>>>>>>> master
+    }
+    searchee++;
+  }
+
+<<<<<<< HEAD
     while (*searchee) {
         size_t i;
         i = 0;
@@ -61,4 +88,7 @@ char* _DEFUN(strstr, (searchee, lookfor), _CONST char* searchee _AND _CONST char
     }
 
     return (char*)NULL;
+=======
+  return (char *)NULL;
+>>>>>>> master
 }

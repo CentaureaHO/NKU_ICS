@@ -33,9 +33,17 @@ INT PAL_InitFont(VOID);
 
 VOID PAL_FreeFont(VOID);
 
+<<<<<<< HEAD
 VOID PAL_DrawCharOnSurface(WORD wChar, SDL_Surface* lpSurface, PAL_POS pos, BYTE bColor);
 
 VOID PAL_DrawASCIICharOnSurface(BYTE bChar, SDL_Surface* lpSurface, PAL_POS pos, BYTE bColor);
+=======
+VOID PAL_DrawCharOnSurface(WORD wChar, SDL_Surface *lpSurface, PAL_POS pos,
+                           BYTE bColor);
+
+VOID PAL_DrawASCIICharOnSurface(BYTE bChar, SDL_Surface *lpSurface, PAL_POS pos,
+                                BYTE bColor);
+>>>>>>> master
 
 #ifdef __cplusplus
 }

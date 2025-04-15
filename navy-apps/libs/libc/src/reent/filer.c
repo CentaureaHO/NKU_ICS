@@ -50,17 +50,32 @@ DESCRIPTION
         <<errno>>.
 */
 
+<<<<<<< HEAD
 int          _open_r(ptr, file, flags, mode) struct _reent* ptr;
 _CONST char* file;
 int          flags;
 int          mode;
+=======
+int _open_r(ptr, file, flags, mode) struct _reent *ptr;
+_CONST char *file;
+int flags;
+int mode;
+>>>>>>> master
 {
     int ret;
 
+<<<<<<< HEAD
     errno                       = 0;
     ret                         = _open(file, flags, mode);
     if (errno != 0) ptr->_errno = errno;
     return ret;
+=======
+  errno = 0;
+  ret = _open(file, flags, mode);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
+>>>>>>> master
 }
 
 /*
@@ -86,15 +101,27 @@ DESCRIPTION
         <<errno>>.
 */
 
+<<<<<<< HEAD
 int _close_r(ptr, fd) struct _reent* ptr;
+=======
+int _close_r(ptr, fd) struct _reent *ptr;
+>>>>>>> master
 int fd;
 {
     int ret;
 
+<<<<<<< HEAD
     errno                       = 0;
     ret                         = _close(fd);
     if (errno != 0) ptr->_errno = errno;
     return ret;
+=======
+  errno = 0;
+  ret = _close(fd);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
+>>>>>>> master
 }
 
 /*
@@ -123,17 +150,32 @@ DESCRIPTION
         <<errno>>.
 */
 
+<<<<<<< HEAD
 off_t _lseek_r(ptr, fd, pos, whence) struct _reent* ptr;
 int   fd;
 off_t pos;
 int   whence;
+=======
+off_t _lseek_r(ptr, fd, pos, whence) struct _reent *ptr;
+int fd;
+off_t pos;
+int whence;
+>>>>>>> master
 {
     off_t ret;
 
+<<<<<<< HEAD
     errno                       = 0;
     ret                         = _lseek(fd, pos, whence);
     if (errno != 0) ptr->_errno = errno;
     return ret;
+=======
+  errno = 0;
+  ret = _lseek(fd, pos, whence);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
+>>>>>>> master
 }
 
 /*
@@ -162,17 +204,31 @@ DESCRIPTION
         <<errno>>.
 */
 
+<<<<<<< HEAD
 long   _read_r(ptr, fd, buf, cnt) struct _reent* ptr;
 int    fd;
 _PTR   buf;
+=======
+long _read_r(ptr, fd, buf, cnt) struct _reent *ptr;
+int fd;
+_PTR buf;
+>>>>>>> master
 size_t cnt;
 {
     long ret;
 
+<<<<<<< HEAD
     errno                       = 0;
     ret                         = _read(fd, buf, cnt);
     if (errno != 0) ptr->_errno = errno;
     return ret;
+=======
+  errno = 0;
+  ret = _read(fd, buf, cnt);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
+>>>>>>> master
 }
 
 /*
@@ -201,17 +257,32 @@ DESCRIPTION
         <<errno>>.
 */
 
+<<<<<<< HEAD
 long   _write_r(ptr, fd, buf, cnt) struct _reent* ptr;
 int    fd;
 _CONST _PTR buf;
 size_t      cnt;
+=======
+long _write_r(ptr, fd, buf, cnt) struct _reent *ptr;
+int fd;
+_CONST _PTR buf;
+size_t cnt;
+>>>>>>> master
 {
     long ret;
 
+<<<<<<< HEAD
     errno                       = 0;
     ret                         = _write(fd, buf, cnt);
     if (errno != 0) ptr->_errno = errno;
     return ret;
+=======
+  errno = 0;
+  ret = _write(fd, buf, cnt);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
+>>>>>>> master
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

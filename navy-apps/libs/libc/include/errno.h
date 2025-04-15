@@ -12,7 +12,11 @@ extern "C" {
 
 #ifndef _REENT_ONLY
 #define errno (*__errno())
+<<<<<<< HEAD
 extern int* __errno _PARAMS((void));
+=======
+extern int *__errno _PARAMS((void));
+>>>>>>> master
 #endif
 
 #define __errno_r(ptr) ((ptr)->_errno)

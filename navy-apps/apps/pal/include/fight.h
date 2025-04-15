@@ -63,7 +63,12 @@ VOID PAL_BattleDelay(WORD wDuration, WORD wObjectID, BOOL fUpdateGesture);
 
 VOID PAL_BattleStealFromEnemy(WORD wTarget, WORD wStealRate);
 
+<<<<<<< HEAD
 VOID PAL_BattleSimulateMagic(SHORT sTarget, WORD wMagicObjectID, WORD wBaseDamage);
+=======
+VOID PAL_BattleSimulateMagic(SHORT sTarget, WORD wMagicObjectID,
+                             WORD wBaseDamage);
+>>>>>>> master
 
 #ifdef __cplusplus
 }

@@ -2,7 +2,12 @@
 #define _STRICT_ANSI
 
 /* exceptions first */
+<<<<<<< HEAD
 #if defined(__H8300__) || defined(__H8500__) || defined(__H8300H__) || defined(__W65__)
+=======
+#if defined(__H8300__) || defined(__H8500__) || defined(__H8300H__) ||         \
+    defined(__W65__)
+>>>>>>> master
 #define _FLOAT_ARG float
 #define __SMALL_BITFIELDS
 #define H8300 1
@@ -21,8 +26,13 @@
 #endif
 
 /* 16 bit integer machines */
+<<<<<<< HEAD
 #if defined(__Z8001__) || defined(__Z8002__) || defined(__H8300__) || defined(__H8500__) || defined(__W65__) || \
     defined(__H8300H__)
+=======
+#if defined(__Z8001__) || defined(__Z8002__) || defined(__H8300__) ||          \
+    defined(__H8500__) || defined(__W65__) || defined(__H8300H__)
+>>>>>>> master
 
 #undef INT_MAX
 #undef UINT_MAX

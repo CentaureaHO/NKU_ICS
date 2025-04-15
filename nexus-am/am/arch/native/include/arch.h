@@ -4,8 +4,12 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+<<<<<<< HEAD
 struct _RegSet
 {
 };
+=======
+struct _RegSet {};
+>>>>>>> master
 
 #endif

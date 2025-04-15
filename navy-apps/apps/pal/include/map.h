@@ -27,6 +27,7 @@ extern "C" {
 #endif
 
 #include "_common.h"
+#include "palcommon.h"
 
 //
 // Map format:
@@ -60,17 +61,28 @@ extern "C" {
 //  d & 0x2000
 //
 
+<<<<<<< HEAD
 typedef struct tagPALMAP
 {
     DWORD    Tiles[128][64][2];
     LPSPRITE pTileSprite;
     INT      iMapNum;
+=======
+typedef struct tagPALMAP {
+  DWORD Tiles[128][64][2];
+  LPSPRITE pTileSprite;
+  INT iMapNum;
+>>>>>>> master
 } PALMAP, *LPPALMAP;
 
 typedef const PALMAP* LPCPALMAP;
 
 LPPALMAP
+<<<<<<< HEAD
 PAL_LoadMap(INT iMapNum, FILE* fpMapMKF, FILE* fpGopMKF);
+=======
+PAL_LoadMap(INT iMapNum, FILE *fpMapMKF, FILE *fpGopMKF);
+>>>>>>> master
 
 VOID PAL_FreeMap(LPPALMAP lpMap);
 
@@ -79,9 +91,17 @@ PAL_MapGetTileBitmap(BYTE x, BYTE y, BYTE h, BYTE ucLayer, LPCPALMAP lpMap);
 
 BOOL PAL_MapTileIsBlocked(BYTE x, BYTE y, BYTE h, LPCPALMAP lpMap);
 
+<<<<<<< HEAD
 BYTE PAL_MapGetTileHeight(BYTE x, BYTE y, BYTE h, BYTE ucLayer, LPCPALMAP lpMap);
 
 VOID PAL_MapBlitToSurface(LPCPALMAP lpMap, SDL_Surface* lpSurface, const SDL_Rect* lpSrcRect, BYTE ucLayer);
+=======
+BYTE PAL_MapGetTileHeight(BYTE x, BYTE y, BYTE h, BYTE ucLayer,
+                          LPCPALMAP lpMap);
+
+VOID PAL_MapBlitToSurface(LPCPALMAP lpMap, SDL_Surface *lpSurface,
+                          const SDL_Rect *lpSrcRect, BYTE ucLayer);
+>>>>>>> master
 
 //
 // Convert map location to the real location
@@ -91,12 +111,21 @@ VOID PAL_MapBlitToSurface(LPCPALMAP lpMap, SDL_Surface* lpSurface, const SDL_Rec
 //
 // Convert real location to map location
 //
+<<<<<<< HEAD
 #define PAL_POS_TO_XYH(pos, x, y, h)                    \
     {                                                   \
         (h) = (BYTE)(((PAL_X(pos) % 32) != 0) ? 1 : 0); \
         (x) = (BYTE)(PAL_X(pos) / 32);                  \
         (y) = (BYTE)(PAL_Y(pos) / 16);                  \
     }
+=======
+#define PAL_POS_TO_XYH(pos, x, y, h)                                           \
+  {                                                                            \
+    (h) = (BYTE)(((PAL_X(pos) % 32) != 0) ? 1 : 0);                            \
+    (x) = (BYTE)(PAL_X(pos) / 32);                                             \
+    (y) = (BYTE)(PAL_Y(pos) / 16);                                             \
+  }
+>>>>>>> master
 
 #ifdef __cplusplus
 }

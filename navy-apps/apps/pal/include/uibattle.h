@@ -29,6 +29,7 @@ extern "C" {
 #include "ui.h"
 
 typedef enum tagBATTLEUISTATE {
+<<<<<<< HEAD
     kBattleUIWait,
     kBattleUISelectMove,
     kBattleUISelectTargetEnemy,
@@ -51,6 +52,30 @@ typedef enum tagBATTLEUIACTION {
     kBattleUIActionMagic,
     kBattleUIActionCoopMagic,
     kBattleUIActionMisc,
+=======
+  kBattleUIWait,
+  kBattleUISelectMove,
+  kBattleUISelectTargetEnemy,
+  kBattleUISelectTargetPlayer,
+  kBattleUISelectTargetEnemyAll,
+  kBattleUISelectTargetPlayerAll,
+} BATTLEUISTATE;
+
+typedef enum tagBATTLEMENUSTATE {
+  kBattleMenuMain,
+  kBattleMenuMagicSelect,
+  kBattleMenuUseItemSelect,
+  kBattleMenuThrowItemSelect,
+  kBattleMenuMisc,
+  kBattleMenuMiscItemSubMenu,
+} BATTLEMENUSTATE;
+
+typedef enum tagBATTLEUIACTION {
+  kBattleUIActionAttack,
+  kBattleUIActionMagic,
+  kBattleUIActionCoopMagic,
+  kBattleUIActionMisc,
+>>>>>>> master
 } BATTLEUIACTION;
 
 #define SPRITENUM_BATTLEICON_ATTACK 40
@@ -80,6 +105,7 @@ typedef enum tagBATTLEUIACTION {
 
 #define BATTLEUI_MAX_SHOWNUM 16
 
+<<<<<<< HEAD
 typedef struct tagSHOWNUM
 {
     WORD     wNum;
@@ -112,6 +138,39 @@ typedef struct tagBATTLEUI
 } BATTLEUI;
 
 VOID PAL_PlayerInfoBox(PAL_POS pos, WORD wPlayerRole, INT iTimeMeter, BYTE bTimeMeterColor, BOOL fUpdate);
+=======
+typedef struct tagSHOWNUM {
+  WORD wNum;
+  PAL_POS pos;
+  DWORD dwTime;
+  NUMCOLOR color;
+} SHOWNUM;
+
+typedef struct tagBATTLEUI {
+  BATTLEUISTATE state;
+  BATTLEMENUSTATE MenuState;
+
+  CHAR szMsg[256];       // message to be shown on the screen
+  CHAR szNextMsg[256];   // next message to be shown on the screen
+  DWORD dwMsgShowTime;   // the end time of showing the message
+  WORD wNextMsgDuration; // duration of the next message
+
+  WORD wCurPlayerIndex;  // index of the current player
+  WORD wSelectedAction;  // current selected action
+  WORD wSelectedIndex;   // current selected index of player or enemy
+  WORD wPrevEnemyTarget; // previous enemy target
+
+  WORD wActionType; // type of action to be performed
+  WORD wObjectID;   // object ID of the item or magic to use
+
+  BOOL fAutoAttack; // TRUE if auto attack
+
+  SHOWNUM rgShowNum[BATTLEUI_MAX_SHOWNUM];
+} BATTLEUI;
+
+VOID PAL_PlayerInfoBox(PAL_POS pos, WORD wPlayerRole, INT iTimeMeter,
+                       BYTE bTimeMeterColor, BOOL fUpdate);
+>>>>>>> master
 
 VOID PAL_BattleUIShowText(LPCSTR lpszText, WORD wDuration);
 

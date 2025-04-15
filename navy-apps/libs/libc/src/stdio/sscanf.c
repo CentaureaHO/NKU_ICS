@@ -352,6 +352,7 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 /* | ARGSUSED */
 /*SUPPRESS 590*/
 static int eofread(cookie, buf, len) _PTR cookie;
+<<<<<<< HEAD
 char*      buf;
 int        len;
 {
@@ -363,6 +364,17 @@ int _DEFUN(sscanf, (str, fmt), _CONST char* str _AND _CONST char* fmt _DOTS)
 #else
 int          sscanf(str, fmt, va_alist) _CONST char* str;
 _CONST char* fmt;
+=======
+char *buf;
+int len;
+{ return 0; }
+
+#ifdef _HAVE_STDC
+int _DEFUN(sscanf, (str, fmt), _CONST char *str _AND _CONST char *fmt _DOTS)
+#else
+int sscanf(str, fmt, va_alist) _CONST char *str;
+_CONST char *fmt;
+>>>>>>> master
 va_dcl
 #endif
 {
@@ -370,6 +382,7 @@ va_dcl
     va_list ap;
     FILE    f;
 
+<<<<<<< HEAD
     f._flags    = __SRD;
     f._bf._base = f._p = (unsigned char*)str;
     f._bf._size = f._r = strlen(str);
@@ -385,4 +398,21 @@ va_dcl
     ret = __svfscanf(&f, fmt, ap);
     va_end(ap);
     return ret;
+=======
+  f._flags = __SRD;
+  f._bf._base = f._p = (unsigned char *)str;
+  f._bf._size = f._r = strlen(str);
+  f._read = eofread;
+  f._ub._base = NULL;
+  f._lb._base = NULL;
+  f._data = _REENT;
+#ifdef _HAVE_STDC
+  va_start(ap, fmt);
+#else
+  va_start(ap);
+#endif
+  ret = __svfscanf(&f, fmt, ap);
+  va_end(ap);
+  return ret;
+>>>>>>> master
 }

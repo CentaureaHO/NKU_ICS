@@ -8,8 +8,14 @@ int flag;
 int arg;
 {
 #ifdef REENTRANT_SYSCALLS_PROVIDED
+<<<<<<< HEAD
     return _fcntl_r(_REENT, fd, flag, arg);
 #else
     return _fcntl(fd, flag, arg);
+=======
+  return _fcntl_r(_REENT, fd, flag, arg);
+#else
+  return _fcntl(fd, flag, arg);
+>>>>>>> master
 #endif
 }

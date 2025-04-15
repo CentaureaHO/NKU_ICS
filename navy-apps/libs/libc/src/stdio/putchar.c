@@ -72,11 +72,17 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 
 #undef putchar
 
+<<<<<<< HEAD
 int _putchar_r(ptr, c) struct _reent* ptr;
 int c;
 {
     return __sputc(c, _stdout_r(ptr));
 }
+=======
+int _putchar_r(ptr, c) struct _reent *ptr;
+int c;
+{ return __sputc(c, _stdout_r(ptr)); }
+>>>>>>> master
 
 #ifndef _REENT_ONLY
 
@@ -84,7 +90,11 @@ int putchar(c) int c;
 {
     /* CHECK_INIT is (eventually) called by __swbuf.  */
 
+<<<<<<< HEAD
     _putchar_r(_REENT, c);
+=======
+  _putchar_r(_REENT, c);
+>>>>>>> master
 }
 
 #endif

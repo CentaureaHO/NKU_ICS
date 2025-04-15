@@ -35,6 +35,7 @@ QUICKREF
 
 #include <string.h>
 
+<<<<<<< HEAD
 char* _DEFUN(strchr, (s, i), _CONST char* s _AND int i)
 {
     char c = i;
@@ -48,4 +49,18 @@ char* _DEFUN(strchr, (s, i), _CONST char* s _AND int i)
     }
 
     return (char*)s;
+=======
+char *_DEFUN(strchr, (s, i), _CONST char *s _AND int i) {
+  char c = i;
+
+  while (*s && *s != c) {
+    s++;
+  }
+
+  if (*s != c) {
+    s = NULL;
+  }
+
+  return (char *)s;
+>>>>>>> master
 }

@@ -54,6 +54,7 @@ Supporting OS subroutines required: <<_exit>>.
  * Exit, flushing stdio buffers if necessary.
  */
 
+<<<<<<< HEAD
 void _DEFUN(exit, (code), int code)
 {
     register struct _atexit* p;
@@ -63,6 +64,18 @@ void _DEFUN(exit, (code), int code)
         for (n = p->_ind; --n >= 0;) (*p->_fns[n])();
     if (_REENT->__cleanup) (*_REENT->__cleanup)(_REENT);
     _exit(code);
+=======
+void _DEFUN(exit, (code), int code) {
+  register struct _atexit *p;
+  register int n;
+
+  for (p = _REENT->_atexit; p; p = p->_next)
+    for (n = p->_ind; --n >= 0;)
+      (*p->_fns[n])();
+  if (_REENT->__cleanup)
+    (*_REENT->__cleanup)(_REENT);
+  _exit(code);
+>>>>>>> master
 }
 
 #endif

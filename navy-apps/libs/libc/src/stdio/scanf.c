@@ -31,7 +31,11 @@ int
 #ifdef _HAVE_STDC
 scanf (const char *fmt, ...)
 #else
+<<<<<<< HEAD
     scanf(fmt, va_alist) char* fmt;
+=======
+    scanf(fmt, va_alist) char *fmt;
+>>>>>>> master
 va_dcl
 #endif
 {
@@ -39,6 +43,7 @@ va_dcl
     va_list ap;
 
 #ifdef _HAVE_STDC
+<<<<<<< HEAD
     va_start(ap, fmt);
 #else
     va_start(ap);
@@ -46,6 +51,15 @@ va_dcl
     ret = __svfscanf(_stdin_r(_REENT), fmt, ap);
     va_end(ap);
     return ret;
+=======
+  va_start(ap, fmt);
+#else
+  va_start(ap);
+#endif
+  ret = __svfscanf(_stdin_r(_REENT), fmt, ap);
+  va_end(ap);
+  return ret;
+>>>>>>> master
 }
 
 #endif
@@ -54,8 +68,13 @@ int
 #ifdef _HAVE_STDC
 _scanf_r (struct _reent *ptr, const char *fmt, ...)
 #else
+<<<<<<< HEAD
     _scanf_r(ptr, fmt, va_alist) struct _reent* ptr;
 char* fmt;
+=======
+    _scanf_r(ptr, fmt, va_alist) struct _reent *ptr;
+char *fmt;
+>>>>>>> master
 va_dcl
 #endif
 {
@@ -63,6 +82,7 @@ va_dcl
     va_list ap;
 
 #ifdef _HAVE_STDC
+<<<<<<< HEAD
     va_start(ap, fmt);
 #else
     va_start(ap);
@@ -70,4 +90,13 @@ va_dcl
     ret = __svfscanf(_stdin_r(ptr), fmt, ap);
     va_end(ap);
     return (ret);
+=======
+  va_start(ap, fmt);
+#else
+  va_start(ap);
+#endif
+  ret = __svfscanf(_stdin_r(ptr), fmt, ap);
+  va_end(ap);
+  return (ret);
+>>>>>>> master
 }

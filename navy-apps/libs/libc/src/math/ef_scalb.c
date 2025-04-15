@@ -20,7 +20,11 @@
 float __ieee754_scalbf(float x, int fn)
 #else
 float __ieee754_scalbf(x, fn) float x;
+<<<<<<< HEAD
 int   fn;
+=======
+int fn;
+>>>>>>> master
 #endif
 #else
 #ifdef __STDC__
@@ -31,6 +35,7 @@ float __ieee754_scalbf(x, fn) float x, fn;
 #endif
 {
 #ifdef _SCALB_INT
+<<<<<<< HEAD
     return scalbnf(x, fn);
 #else
     if (isnanf(x) || isnanf(fn)) return x * fn;
@@ -44,5 +49,24 @@ float __ieee754_scalbf(x, fn) float x, fn;
     if (fn > (float)65000.0) return scalbnf(x, 65000);
     if (-fn > (float)65000.0) return scalbnf(x, -65000);
     return scalbnf(x, (int)fn);
+=======
+  return scalbnf(x, fn);
+#else
+  if (isnanf(x) || isnanf(fn))
+    return x * fn;
+  if (!finitef(fn)) {
+    if (fn > (float)0.0)
+      return x * fn;
+    else
+      return x / (-fn);
+  }
+  if (rintf(fn) != fn)
+    return (fn - fn) / (fn - fn);
+  if (fn > (float)65000.0)
+    return scalbnf(x, 65000);
+  if (-fn > (float)65000.0)
+    return scalbnf(x, -65000);
+  return scalbnf(x, (int)fn);
+>>>>>>> master
 #endif
 }

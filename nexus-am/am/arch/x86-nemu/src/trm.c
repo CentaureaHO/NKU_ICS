@@ -2,7 +2,7 @@
 #include <x86.h>
 
 // Define this macro after serial has been implemented
-//#define HAS_SERIAL
+#define HAS_SERIAL
 
 #define SERIAL_PORT 0x3f8
 
@@ -30,6 +30,7 @@ static void serial_init()
 void _putc(char ch)
 {
 #ifdef HAS_SERIAL
+<<<<<<< HEAD
     while ((inb(SERIAL_PORT + 5) & 0x20) == 0)
         ;
     outb(SERIAL_PORT, ch);
@@ -43,6 +44,20 @@ void _halt(int code)
     // should not reach here
     while (1)
         ;
+=======
+  while ((inb(SERIAL_PORT + 5) & 0x20) == 0)
+    ;
+  outb(SERIAL_PORT, ch);
+#endif
+}
+
+void _halt(int code) {
+  asm volatile(".byte 0xd6" : : "a"(code));
+
+  // should not reach here
+  while (1)
+    ;
+>>>>>>> master
 }
 
 void _trm_init()

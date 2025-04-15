@@ -35,16 +35,29 @@ QUICKREF
 #include <_ansi.h>
 #include <stddef.h>
 
+<<<<<<< HEAD
 _PTR _DEFUN(memcpy, (out, in, length), _PTR out _AND _CONST _PTR in _AND size_t length)
 {
     char* dst = (char*)out;
     char* src = (char*)in;
+=======
+_PTR _DEFUN(memcpy, (out, in, length),
+            _PTR out _AND _CONST _PTR in _AND size_t length) {
+  char *dst = (char *)out;
+  char *src = (char *)in;
+>>>>>>> master
 
     _PTR save = out;
 
+<<<<<<< HEAD
     while (length--) {
         *dst++ = *src++;
     }
+=======
+  while (length--) {
+    *dst++ = *src++;
+  }
+>>>>>>> master
 
     return save;
 }

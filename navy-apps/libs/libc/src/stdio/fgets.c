@@ -65,6 +65,7 @@ extern int __srefill();
  * Return first argument, or NULL if no characters were read.
  */
 
+<<<<<<< HEAD
 char* _DEFUN(fgets, (buf, n, fp), char* buf _AND int n _AND FILE* fp)
 {
     size_t         len;
@@ -114,4 +115,55 @@ char* _DEFUN(fgets, (buf, n, fp), char* buf _AND int n _AND FILE* fp)
     } while ((n -= len) != 0);
     *s = 0;
     return buf;
+=======
+char *_DEFUN(fgets, (buf, n, fp), char *buf _AND int n _AND FILE *fp) {
+  size_t len;
+  char *s;
+  unsigned char *p, *t;
+
+  if (n < 2) /* sanity check */
+    return 0;
+
+  s = buf;
+  n--; /* leave space for NUL */
+  do {
+    /*
+     * If the buffer is empty, refill it.
+     */
+    if ((len = fp->_r) <= 0) {
+      if (__srefill(fp)) {
+        /* EOF: stop with partial or no line */
+        if (s == buf)
+          return 0;
+        break;
+      }
+      len = fp->_r;
+    }
+    p = fp->_p;
+
+    /*
+     * Scan through at most n bytes of the current buffer,
+     * looking for '\n'.  If found, copy up to and including
+     * newline, and stop.  Otherwise, copy entire chunk
+     * and loop.
+     */
+    if (len > n)
+      len = n;
+    t = (unsigned char *)memchr((_PTR)p, '\n', len);
+    if (t != 0) {
+      len = ++t - p;
+      fp->_r -= len;
+      fp->_p = t;
+      (void)memcpy((_PTR)s, (_PTR)p, len);
+      s[len] = 0;
+      return (buf);
+    }
+    fp->_r -= len;
+    fp->_p += len;
+    (void)memcpy((_PTR)s, (_PTR)p, len);
+    s += len;
+  } while ((n -= len) != 0);
+  *s = 0;
+  return buf;
+>>>>>>> master
 }

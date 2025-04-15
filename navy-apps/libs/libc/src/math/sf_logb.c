@@ -21,6 +21,7 @@ float logbf(float x)
 float logbf(x) float x;
 #endif
 {
+<<<<<<< HEAD
     __int32_t ix;
     GET_FLOAT_WORD(ix, x);
     ix &= 0x7fffffff; /* high |x| */
@@ -30,4 +31,17 @@ float logbf(x) float x;
         return -126.0;
     else
         return (float)(ix - 127);
+=======
+  __int32_t ix;
+  GET_FLOAT_WORD(ix, x);
+  ix &= 0x7fffffff; /* high |x| */
+  if (ix == 0)
+    return (float)-1.0 / fabsf(x);
+  if (ix >= 0x7f800000)
+    return x * x;
+  if ((ix >>= 23) == 0) /* IEEE 754 logb */
+    return -126.0;
+  else
+    return (float)(ix - 127);
+>>>>>>> master
 }

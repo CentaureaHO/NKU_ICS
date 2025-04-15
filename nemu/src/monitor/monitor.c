@@ -118,7 +118,14 @@ static inline void load_img()
 static inline void restart()
 {
     /* Set the initial instruction pointer. */
+<<<<<<< HEAD
     cpu.eip = ENTRY_START;
+=======
+    cpu.eip      = ENTRY_START;
+    cpu.eflags   = 0x6;
+    cpu.cs       = 0x8;
+    cpu.exec_cnt = 0;
+>>>>>>> master
 
 #ifdef DIFF_TEST
     init_qemu_reg();
@@ -182,3 +189,7 @@ int init_monitor(int argc, char* argv[])
 
     return is_batch_mode;
 }
+
+void destroy_wp_pool();
+
+void resource_clean() { destroy_wp_pool(); }

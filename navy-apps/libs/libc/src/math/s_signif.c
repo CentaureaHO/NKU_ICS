@@ -26,8 +26,14 @@ double significand(x) double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
+<<<<<<< HEAD
     return __ieee754_scalb(x, (double)-ilogb(x));
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return (double)significandf((float)x);
+=======
+  return __ieee754_scalb(x, (double)-ilogb(x));
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)significandf((float)x);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

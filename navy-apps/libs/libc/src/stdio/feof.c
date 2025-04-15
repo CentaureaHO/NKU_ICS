@@ -32,4 +32,8 @@ No supporting OS subroutines are required.
 
 #undef feof
 
+<<<<<<< HEAD
 int _DEFUN(feof, (fp), FILE* fp) { return __sfeof(fp); }
+=======
+int _DEFUN(feof, (fp), FILE *fp) { return __sfeof(fp); }
+>>>>>>> master

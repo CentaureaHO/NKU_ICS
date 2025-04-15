@@ -69,11 +69,18 @@ static char sccsid[] = "%W% (Berkeley) %G%";
  * Write the given string to stdout, appending a newline.
  */
 
+<<<<<<< HEAD
 int _DEFUN(_puts_r, (ptr, s), struct _reent* ptr _AND _CONST char* s)
 {
     size_t        c = strlen(s);
     struct __suio uio;
     struct __siov iov[2];
+=======
+int _DEFUN(_puts_r, (ptr, s), struct _reent *ptr _AND _CONST char *s) {
+  size_t c = strlen(s);
+  struct __suio uio;
+  struct __siov iov[2];
+>>>>>>> master
 
     iov[0].iov_base = s;
     iov[0].iov_len  = c;
@@ -83,11 +90,19 @@ int _DEFUN(_puts_r, (ptr, s), struct _reent* ptr _AND _CONST char* s)
     uio.uio_iov     = &iov[0];
     uio.uio_iovcnt  = 2;
 
+<<<<<<< HEAD
     return (__sfvwrite(_stdout_r(ptr), &uio) ? EOF : '\n');
+=======
+  return (__sfvwrite(_stdout_r(ptr), &uio) ? EOF : '\n');
+>>>>>>> master
 }
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 int _DEFUN(puts, (s), char _CONST* s) { return _puts_r(_REENT, s); }
+=======
+int _DEFUN(puts, (s), char _CONST *s) { return _puts_r(_REENT, s); }
+>>>>>>> master
 
 #endif

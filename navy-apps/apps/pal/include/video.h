@@ -45,13 +45,21 @@ VIDEO_Init(
 
 VOID VIDEO_Shutdown(VOID);
 
+<<<<<<< HEAD
 VOID VIDEO_UpdateScreen(const SDL_Rect* lpRect);
+=======
+VOID VIDEO_UpdateScreen(const SDL_Rect *lpRect);
+>>>>>>> master
 
 VOID VIDEO_SetPalette(SDL_Color rgPalette[256]);
 
 VOID VIDEO_Resize(INT w, INT h);
 
+<<<<<<< HEAD
 SDL_Color* VIDEO_GetPalette(VOID);
+=======
+SDL_Color *VIDEO_GetPalette(VOID);
+>>>>>>> master
 
 VOID VIDEO_ToggleFullscreen(VOID);
 

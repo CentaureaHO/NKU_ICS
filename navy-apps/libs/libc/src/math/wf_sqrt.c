@@ -33,6 +33,7 @@ float sqrt(_R2 x) /* wrapper sqrtf */
 #endif
 {
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_sqrtf(x);
 #else
     float z;
@@ -44,6 +45,19 @@ float sqrt(_R2 x) /* wrapper sqrtf */
     }
     else
         return z;
+=======
+  return __ieee754_sqrtf(x);
+#else
+  float z;
+  z = __ieee754_sqrtf(x);
+  if (_LIB_VERSION == _IEEE_ || isnanf(x))
+    return z;
+  if (x < (float)0.0) {
+    /* sqrtf(negative) */
+    return (float)__kernel_standard(_R4, (double)x, (double)x, 126);
+  } else
+    return z;
+>>>>>>> master
 #endif
 }
 

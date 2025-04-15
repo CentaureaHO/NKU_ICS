@@ -27,6 +27,7 @@ extern "C" {
 
 typedef int32_t fix16_t;
 
+<<<<<<< HEAD
 static const fix16_t FOUR_DIV_PI             = 0x145F3;    /*!< Fix16 value of 4/PI */
 static const fix16_t _FOUR_DIV_PI2           = 0xFFFF9840; /*!< Fix16 value of -4/PI² */
 static const fix16_t X4_CORRECTION_COMPONENT = 0x399A;     /*!< Fix16 value of 0.225 */
@@ -37,9 +38,25 @@ static const fix16_t fix16_maximum  = 0x7FFFFFFF; /*!< the maximum value of fix1
 static const fix16_t fix16_minimum  = 0x80000000; /*!< the minimum value of fix16_t */
 static const fix16_t fix16_overflow = 0x80000000; /*!< the value used to indicate overflows when
                                                      FIXMATH_NO_OVERFLOW is not specified */
+=======
+static const fix16_t FOUR_DIV_PI = 0x145F3;      /*!< Fix16 value of 4/PI */
+static const fix16_t _FOUR_DIV_PI2 = 0xFFFF9840; /*!< Fix16 value of -4/PI² */
+static const fix16_t X4_CORRECTION_COMPONENT =
+    0x399A;                                       /*!< Fix16 value of 0.225 */
+static const fix16_t PI_DIV_4 = 0x0000C90F;       /*!< Fix16 value of PI/4 */
+static const fix16_t THREE_PI_DIV_4 = 0x00025B2F; /*!< Fix16 value of 3PI/4 */
 
-static const fix16_t fix16_pi  = 205887;     /*!< fix16_t value of pi */
-static const fix16_t fix16_e   = 178145;     /*!< fix16_t value of e */
+static const fix16_t fix16_maximum =
+    0x7FFFFFFF; /*!< the maximum value of fix16_t */
+static const fix16_t fix16_minimum =
+    0x80000000; /*!< the minimum value of fix16_t */
+static const fix16_t fix16_overflow =
+    0x80000000; /*!< the value used to indicate overflows when
+                   FIXMATH_NO_OVERFLOW is not specified */
+>>>>>>> master
+
+static const fix16_t fix16_pi = 205887;      /*!< fix16_t value of pi */
+static const fix16_t fix16_e = 178145;       /*!< fix16_t value of e */
 static const fix16_t fix16_one = 0x00010000; /*!< fix16_t value of 1 */
 
 /* Conversion functions between fix16_t and float/integer.
@@ -49,11 +66,11 @@ static inline fix16_t fix16_from_int(int a) { return a * fix16_one; }
 static inline float fix16_to_float(fix16_t a) { return (float)a / fix16_one; }
 static inline double fix16_to_dbl(fix16_t a) { return (double)a / fix16_one; }
 
-static inline int fix16_to_int(fix16_t a)
-{
+static inline int fix16_to_int(fix16_t a) {
 #ifdef FIXMATH_NO_ROUNDING
-    return (a >> 16);
+  return (a >> 16);
 #else
+<<<<<<< HEAD
     if (a >= 0) return (a + (fix16_one >> 1)) / fix16_one;
     return (a - (fix16_one >> 1)) / fix16_one;
 #endif
@@ -75,6 +92,28 @@ static inline fix16_t fix16_from_dbl(double a)
     temp += (temp >= 0) ? 0.5f : -0.5f;
 #endif
     return (fix16_t)temp;
+=======
+  if (a >= 0)
+    return (a + (fix16_one >> 1)) / fix16_one;
+  return (a - (fix16_one >> 1)) / fix16_one;
+#endif
+}
+
+static inline fix16_t fix16_from_float(float a) {
+  float temp = a * fix16_one;
+#ifndef FIXMATH_NO_ROUNDING
+  temp += (temp >= 0) ? 0.5f : -0.5f;
+#endif
+  return (fix16_t)temp;
+}
+
+static inline fix16_t fix16_from_dbl(double a) {
+  double temp = a * fix16_one;
+#ifndef FIXMATH_NO_ROUNDING
+  temp += (temp >= 0) ? 0.5f : -0.5f;
+#endif
+  return (fix16_t)temp;
+>>>>>>> master
 }
 
 /* Macro for defining fix16_t constant values.
@@ -86,6 +125,7 @@ static inline fix16_t fix16_from_dbl(double a)
    you should only use this for constant values. For runtime-conversions,
    use the functions above.
 */
+<<<<<<< HEAD
 #define F16(x) ((fix16_t)(((x) >= 0) ? ((x)*65536.0 + 0.5) : ((x)*65536.0 - 0.5)))
 
 static inline fix16_t fix16_abs(fix16_t x) { return (x < 0 ? -x : x); }
@@ -94,12 +134,35 @@ static inline fix16_t fix16_ceil(fix16_t x) { return (x & 0xFFFF0000UL) + (x & 0
 static inline fix16_t fix16_min(fix16_t x, fix16_t y) { return (x < y ? x : y); }
 static inline fix16_t fix16_max(fix16_t x, fix16_t y) { return (x > y ? x : y); }
 static inline fix16_t fix16_clamp(fix16_t x, fix16_t lo, fix16_t hi) { return fix16_min(fix16_max(x, lo), hi); }
+=======
+#define F16(x)                                                                 \
+  ((fix16_t)(((x) >= 0) ? ((x)*65536.0 + 0.5) : ((x)*65536.0 - 0.5)))
+
+static inline fix16_t fix16_abs(fix16_t x) { return (x < 0 ? -x : x); }
+static inline fix16_t fix16_floor(fix16_t x) { return (x & 0xFFFF0000UL); }
+static inline fix16_t fix16_ceil(fix16_t x) {
+  return (x & 0xFFFF0000UL) + (x & 0x0000FFFFUL ? fix16_one : 0);
+}
+static inline fix16_t fix16_min(fix16_t x, fix16_t y) {
+  return (x < y ? x : y);
+}
+static inline fix16_t fix16_max(fix16_t x, fix16_t y) {
+  return (x > y ? x : y);
+}
+static inline fix16_t fix16_clamp(fix16_t x, fix16_t lo, fix16_t hi) {
+  return fix16_min(fix16_max(x, lo), hi);
+}
+>>>>>>> master
 
 /* Subtraction and addition with (optional) overflow detection. */
 #ifdef FIXMATH_NO_OVERFLOW
 
-static inline fix16_t fix16_add(fix16_t inArg0, fix16_t inArg1) { return (inArg0 + inArg1); }
-static inline fix16_t fix16_sub(fix16_t inArg0, fix16_t inArg1) { return (inArg0 - inArg1); }
+static inline fix16_t fix16_add(fix16_t inArg0, fix16_t inArg1) {
+  return (inArg0 + inArg1);
+}
+static inline fix16_t fix16_sub(fix16_t inArg0, fix16_t inArg1) {
+  return (inArg0 - inArg1);
+}
 
 #else
 
@@ -139,10 +202,13 @@ extern fix16_t fix16_mod(fix16_t x, fix16_t y) FIXMATH_FUNC_ATTRS;
 /*! Returns the linear interpolation: (inArg0 * (1 - inFract)) + (inArg1 *
  * inFract)
 */
-extern fix16_t fix16_lerp8(fix16_t inArg0, fix16_t inArg1, uint8_t inFract) FIXMATH_FUNC_ATTRS;
-extern fix16_t fix16_lerp16(fix16_t inArg0, fix16_t inArg1, uint16_t inFract) FIXMATH_FUNC_ATTRS;
+extern fix16_t fix16_lerp8(fix16_t inArg0, fix16_t inArg1,
+                           uint8_t inFract) FIXMATH_FUNC_ATTRS;
+extern fix16_t fix16_lerp16(fix16_t inArg0, fix16_t inArg1,
+                            uint16_t inFract) FIXMATH_FUNC_ATTRS;
 #ifndef FIXMATH_NO_64BIT
-extern fix16_t fix16_lerp32(fix16_t inArg0, fix16_t inArg1, uint32_t inFract) FIXMATH_FUNC_ATTRS;
+extern fix16_t fix16_lerp32(fix16_t inArg0, fix16_t inArg1,
+                            uint32_t inFract) FIXMATH_FUNC_ATTRS;
 #endif
 
 /*! Returns the sine of the given fix16_t.
@@ -177,11 +243,23 @@ extern fix16_t fix16_atan(fix16_t inValue) FIXMATH_FUNC_ATTRS;
 */
 extern fix16_t fix16_atan2(fix16_t inY, fix16_t inX) FIXMATH_FUNC_ATTRS;
 
+<<<<<<< HEAD
 static const fix16_t  fix16_rad_to_deg_mult = 3754936;
 static inline fix16_t fix16_rad_to_deg(fix16_t radians) { return fix16_mul(radians, fix16_rad_to_deg_mult); }
 
 static const fix16_t  fix16_deg_to_rad_mult = 1144;
 static inline fix16_t fix16_deg_to_rad(fix16_t degrees) { return fix16_mul(degrees, fix16_deg_to_rad_mult); }
+=======
+static const fix16_t fix16_rad_to_deg_mult = 3754936;
+static inline fix16_t fix16_rad_to_deg(fix16_t radians) {
+  return fix16_mul(radians, fix16_rad_to_deg_mult);
+}
+
+static const fix16_t fix16_deg_to_rad_mult = 1144;
+static inline fix16_t fix16_deg_to_rad(fix16_t degrees) {
+  return fix16_mul(degrees, fix16_deg_to_rad_mult);
+}
+>>>>>>> master
 
 /*! Returns the square root of the given fix16_t.
 */
@@ -223,6 +301,7 @@ extern fix16_t fix16_from_str(const char* buf);
 #define FIXMATH_TOKLEN(token) (sizeof(#token) - 1)
 
 /** Helper macro for F16C. Handles pow(10, n) for n from 0 to 8. */
+<<<<<<< HEAD
 #define FIXMATH_CONSTANT_POW10(times)                                                                               \
     ((times == 0) ? 1ULL : (times == 1) ? 10ULL : (times == 2) ? 100ULL : (times == 3)                              \
                                                                               ? 1000ULL                             \
@@ -235,6 +314,25 @@ extern fix16_t fix16_from_str(const char* buf);
                                                                                                 : (times == 7)      \
                                                                                                       ? 10000000ULL \
                                                                                                       : 100000000ULL\
+=======
+#define FIXMATH_CONSTANT_POW10(times)                                          \
+  ((times == 0)                                                                \
+       ? 1ULL                                                                  \
+       : (times == 1)                                                          \
+             ? 10ULL                                                           \
+             : (times == 2)                                                    \
+                   ? 100ULL                                                    \
+                   : (times == 3)                                              \
+                         ? 1000ULL                                             \
+                         : (times == 4)                                        \
+                               ? 10000ULL                                      \
+                               : (times == 5)                                  \
+                                     ? 100000ULL                               \
+                                     : (times == 6)                            \
+                                           ? 1000000ULL                        \
+                                           : (times == 7) ? 10000000ULL        \
+                                                          : 100000000ULL\
+>>>>>>> master
 )
 
 /** Helper macro for F16C, the type uint64_t is only used at compile time and
@@ -243,6 +341,7 @@ extern fix16_t fix16_from_str(const char* buf);
  * @note We do not use fix16_one instead of 65536ULL, because the
  *       "use of a const variable in a constant expression is nonstandard in C".
  */
+<<<<<<< HEAD
 #define FIXMATH_CONVERT_MANTISSA(m)                                                  \
     \
 ((unsigned)((((uint64_t)(((1##m##ULL) - FIXMATH_CONSTANT_POW10(FIXMATH_TOKLEN(m))) * \
@@ -255,6 +354,21 @@ extern fix16_t fix16_from_str(const char* buf);
 
 #define FIXMATH_COMBINE_I_M(i, m) \
     \
+=======
+#define FIXMATH_CONVERT_MANTISSA(m)                                            \
+  \
+((unsigned)((((uint64_t)(                                                      \
+                  ((1##m##ULL) - FIXMATH_CONSTANT_POW10(FIXMATH_TOKLEN(m))) *  \
+                  FIXMATH_CONSTANT_POW10(5 - FIXMATH_TOKLEN(m))) *             \
+              100000ULL * 65536ULL) +                                          \
+             5000000000ULL /* rounding: + 0.5 */                               \
+             ) /                                                               \
+            10000000000LL)\
+)
+
+#define FIXMATH_COMBINE_I_M(i, m)                                              \
+  \
+>>>>>>> master
 (((i) << 16) | (FIXMATH_CONVERT_MANTISSA(m) & 0xFFFF)\
 )
 
@@ -283,9 +397,16 @@ extern fix16_t fix16_from_str(const char* buf);
  * @param m Positive integer constant in the interval ]0:99999[ (fractional
  * part/mantissa).
  */
+<<<<<<< HEAD
 #define F16C(i, m) \
     \
 ((fix16_t)(((#i[0]) == '-') ? -FIXMATH_COMBINE_I_M((unsigned)(((i) * -1)), m) : FIXMATH_COMBINE_I_M(i, m))\
+=======
+#define F16C(i, m)                                                             \
+  \
+((fix16_t)(((#i[0]) == '-') ? -FIXMATH_COMBINE_I_M((unsigned)(((i) * -1)), m)  \
+                            : FIXMATH_COMBINE_I_M(i, m))\
+>>>>>>> master
 )
 
 #ifdef __cplusplus

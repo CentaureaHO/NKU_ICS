@@ -30,6 +30,7 @@ int NDL_OpenDisplay(int w, int h)
         has_nwm = 0;
     }
 
+<<<<<<< HEAD
     if (has_nwm) {
         printf("\033[X%d;%ds", w, h);
         fflush(stdout);
@@ -47,6 +48,23 @@ int NDL_OpenDisplay(int w, int h)
         evtdev = fopen("/dev/events", "r");
         assert(evtdev);
     }
+=======
+  if (has_nwm) {
+    printf("\033[X%d;%ds", w, h);
+    fflush(stdout);
+    evtdev = stdin;
+  } else {
+    get_display_info();
+    assert(screen_w >= canvas_w);
+    assert(screen_h >= canvas_h);
+    pad_x = (screen_w - canvas_w) / 2;
+    pad_y = (screen_h - canvas_h) / 2;
+    fbdev = fopen("/dev/fb", "w");
+    assert(fbdev);
+    evtdev = fopen("/dev/events", "r");
+    assert(evtdev);
+  }
+>>>>>>> master
 }
 
 int NDL_CloseDisplay()
@@ -57,6 +75,7 @@ int NDL_CloseDisplay()
     return 0;
 }
 
+<<<<<<< HEAD
 int NDL_DrawRect(uint32_t* pixels, int x, int y, int w, int h)
 {
     if (has_nwm) {
@@ -76,9 +95,27 @@ int NDL_DrawRect(uint32_t* pixels, int x, int y, int w, int h)
                 canvas[(i + y) * canvas_w + (j + x)] = pixels[i * w + j];
             }
         }
+=======
+int NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+  if (has_nwm) {
+    for (int i = 0; i < h; i++) {
+      printf("\033[X%d;%d", x, y + i);
+      for (int j = 0; j < w; j++) {
+        putchar(';');
+        fwrite(&pixels[i * w + j], 1, 4, stdout);
+      }
+      printf("d\n");
+    }
+  } else {
+    for (int i = 0; i < h; i++) {
+      for (int j = 0; j < w; j++) {
+        canvas[(i + y) * canvas_w + (j + x)] = pixels[i * w + j];
+      }
+>>>>>>> master
     }
 }
 
+<<<<<<< HEAD
 int NDL_Render()
 {
     if (has_nwm) {
@@ -91,12 +128,26 @@ int NDL_Render()
             fwrite(&canvas[i * canvas_w], sizeof(uint32_t), canvas_w, fbdev);
         }
         fflush(fbdev);
+=======
+int NDL_Render() {
+  if (has_nwm) {
+    fflush(stdout);
+  } else {
+    for (int i = 0; i < canvas_h; i++) {
+      fseek(fbdev, ((i + pad_y) * screen_w + pad_x) * sizeof(uint32_t),
+            SEEK_SET);
+      fwrite(&canvas[i * canvas_w], sizeof(uint32_t), canvas_w, fbdev);
+>>>>>>> master
     }
 }
 
 #define keyname(k) #k,
 
+<<<<<<< HEAD
 static const char* keys[] = {"NONE", _KEYS(keyname)};
+=======
+static const char *keys[] = {"NONE", _KEYS(keyname)};
+>>>>>>> master
 
 #define numkeys (sizeof(keys) / sizeof(keys[0]))
 
@@ -104,11 +155,31 @@ int NDL_WaitEvent(NDL_Event* event)
 {
     char buf[256], *p = buf, ch;
 
+<<<<<<< HEAD
     while (1) {
         while ((ch = getc(evtdev)) != -1) {
             *p++ = ch;
             assert(p - buf < sizeof(buf));
             if (ch == '\n') break;
+=======
+  while (1) {
+    while ((ch = getc(evtdev)) != -1) {
+      *p++ = ch;
+      assert(p - buf < sizeof(buf));
+      if (ch == '\n')
+        break;
+    }
+
+    if (buf[0] == 'k') {
+      char keyname[32];
+      event->type = buf[1] == 'd' ? NDL_EVENT_KEYDOWN : NDL_EVENT_KEYUP;
+      event->data = -1;
+      sscanf(buf + 3, "%s", keyname);
+      for (int i = 0; i < numkeys; i++) {
+        if (strcmp(keys[i], keyname) == 0) {
+          event->data = i;
+          break;
+>>>>>>> master
         }
 
         if (buf[0] == 'k') {
@@ -138,6 +209,7 @@ int NDL_WaitEvent(NDL_Event* event)
     return -1;
 }
 
+<<<<<<< HEAD
 static void get_display_info()
 {
     FILE* dispinfo = fopen("/proc/dispinfo", "r");
@@ -153,4 +225,22 @@ static void get_display_info()
     }
     fclose(dispinfo);
     assert(screen_w > 0 && screen_h > 0);
+=======
+static void get_display_info() {
+  FILE *dispinfo = fopen("/proc/dispinfo", "r");
+  assert(dispinfo);
+  screen_w = screen_h = 0;
+  char buf[128], key[128], value[128], *delim;
+  while (fgets(buf, 128, dispinfo)) {
+    *(delim = strchr(buf, ':')) = '\0';
+    sscanf(buf, "%s", key);
+    sscanf(delim + 1, "%s", value);
+    if (strcmp(key, "WIDTH") == 0)
+      sscanf(value, "%d", &screen_w);
+    if (strcmp(key, "HEIGHT") == 0)
+      sscanf(value, "%d", &screen_h);
+  }
+  fclose(dispinfo);
+  assert(screen_w > 0 && screen_h > 0);
+>>>>>>> master
 }

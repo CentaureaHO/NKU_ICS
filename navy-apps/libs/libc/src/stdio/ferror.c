@@ -59,4 +59,8 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 
 #undef ferror
 
+<<<<<<< HEAD
 int _DEFUN(ferror, (fp), FILE* fp) { return __sferror(fp); }
+=======
+int _DEFUN(ferror, (fp), FILE *fp) { return __sferror(fp); }
+>>>>>>> master

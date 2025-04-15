@@ -15,10 +15,16 @@ extern "C" {
 /* Define HUGE_VAL as infinity, unless HUGE_VAL is already defined
    (which might have been done by something like math-68881.h).  */
 
+<<<<<<< HEAD
 union __dmath
 {
     __uint32_t i[2];
     double     d;
+=======
+union __dmath {
+  __uint32_t i[2];
+  double d;
+>>>>>>> master
 };
 
 extern const union __dmath __infinity;
@@ -144,6 +150,7 @@ extern double _fmod_r _PARAMS((struct _reent*, double, double));
 #define _log1p_r(p, x) log1p(x)
 #define _expm1_r(p, x) expm1(x)
 
+<<<<<<< HEAD
 extern double _acosh_r _PARAMS((struct _reent*, double));
 extern double _atanh_r _PARAMS((struct _reent*, double));
 extern double _remainder_r _PARAMS((struct _reent*, double, double));
@@ -161,6 +168,25 @@ extern double _j1_r _PARAMS((struct _reent*, double));
 extern double _jn_r _PARAMS((struct _reent*, int, double));
 #define _log2_r(p, x) (_log_r((p), (x)) / M_LOG2_E)
 extern double _hypot_r _PARAMS((struct _reent*, double, double));
+=======
+extern double _acosh_r _PARAMS((struct _reent *, double));
+extern double _atanh_r _PARAMS((struct _reent *, double));
+extern double _remainder_r _PARAMS((struct _reent *, double, double));
+extern double _gamma_r _PARAMS((struct _reent *, double));
+extern double _gamma_r_r _PARAMS((struct _reent *, double, int *));
+extern double _lgamma_r _PARAMS((struct _reent *, double));
+extern double _lgamma_r_r _PARAMS((struct _reent *, double, int *));
+extern double _erf_r _PARAMS((struct _reent *, double));
+extern double _erfc_r _PARAMS((struct _reent *, double));
+extern double _y0_r _PARAMS((struct _reent *, double));
+extern double _y1_r _PARAMS((struct _reent *, double));
+extern double _yn_r _PARAMS((struct _reent *, int, double));
+extern double _j0_r _PARAMS((struct _reent *, double));
+extern double _j1_r _PARAMS((struct _reent *, double));
+extern double _jn_r _PARAMS((struct _reent *, int, double));
+#define _log2_r(p, x) (_log_r((p), (x)) / M_LOG2_E)
+extern double _hypot_r _PARAMS((struct _reent *, double, double));
+>>>>>>> master
 
 /* Single precision versions of ANSI functions.  */
 
@@ -262,6 +288,7 @@ extern float _fmodf_r _PARAMS((struct _reent*, float, float));
 #define _log1pf_r(p, x) log1pf(x)
 #define _expm1f_r(p, x) expm1f(x)
 
+<<<<<<< HEAD
 extern float _acoshf_r _PARAMS((struct _reent*, float));
 extern float _atanhf_r _PARAMS((struct _reent*, float));
 extern float _remainderf_r _PARAMS((struct _reent*, float, float));
@@ -279,6 +306,25 @@ extern float _j1f_r _PARAMS((struct _reent*, float));
 extern float _jnf_r _PARAMS((struct _reent*, int, float));
 #define _log2f_r(p, x) (_logf_r((p), (x)) / (float)M_LOG2_E)
 extern float _hypotf_r _PARAMS((struct _reent*, float, float));
+=======
+extern float _acoshf_r _PARAMS((struct _reent *, float));
+extern float _atanhf_r _PARAMS((struct _reent *, float));
+extern float _remainderf_r _PARAMS((struct _reent *, float, float));
+extern float _gammaf_r _PARAMS((struct _reent *, float));
+extern float _gammaf_r_r _PARAMS((struct _reent *, float, int *));
+extern float _lgammaf_r _PARAMS((struct _reent *, float));
+extern float _lgammaf_r_r _PARAMS((struct _reent *, float, int *));
+extern float _erff_r _PARAMS((struct _reent *, float));
+extern float _erfcf_r _PARAMS((struct _reent *, float));
+extern float _y0f_r _PARAMS((struct _reent *, float));
+extern float _y1f_r _PARAMS((struct _reent *, float));
+extern float _ynf_r _PARAMS((struct _reent *, int, float));
+extern float _j0f_r _PARAMS((struct _reent *, float));
+extern float _j1f_r _PARAMS((struct _reent *, float));
+extern float _jnf_r _PARAMS((struct _reent *, int, float));
+#define _log2f_r(p, x) (_logf_r((p), (x)) / (float)M_LOG2_E)
+extern float _hypotf_r _PARAMS((struct _reent *, float, float));
+>>>>>>> master
 
 /* The gamma functions use a global variable, signgam.  */
 
@@ -288,6 +334,7 @@ extern float _hypotf_r _PARAMS((struct _reent*, float, float));
 
 /* The exception structure passed to the matherr routine.  */
 
+<<<<<<< HEAD
 struct exception
 {
     int    type;
@@ -296,6 +343,15 @@ struct exception
     double arg2;
     double retval;
     int    err;
+=======
+struct exception {
+  int type;
+  char *name;
+  double arg1;
+  double arg2;
+  double retval;
+  int err;
+>>>>>>> master
 };
 
 extern int matherr _PARAMS((struct exception * e));
@@ -336,12 +392,20 @@ extern int matherr _PARAMS((struct exception * e));
 
 /* Global control over fdlibm error handling.  */
 
+<<<<<<< HEAD
 enum __fdlibm_version
 {
     __fdlibm_ieee = -1,
     __fdlibm_svid,
     __fdlibm_xopen,
     __fdlibm_posix
+=======
+enum __fdlibm_version {
+  __fdlibm_ieee = -1,
+  __fdlibm_svid,
+  __fdlibm_xopen,
+  __fdlibm_posix
+>>>>>>> master
 };
 
 #define _LIB_VERSION_TYPE enum __fdlibm_version

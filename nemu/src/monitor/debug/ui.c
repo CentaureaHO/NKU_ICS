@@ -6,6 +6,11 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdlib.h>
+<<<<<<< HEAD
+=======
+
+extern bool exec_diff_test;
+>>>>>>> master
 
 void cpu_exec(uint64_t);
 
@@ -55,16 +60,45 @@ static int cmd_si(char* args)
 static int cmd_info(char* args)
 {
     if (strcmp(args, "r") == 0) {
+<<<<<<< HEAD
+=======
+        printf("reg\tvalue(hex)\tvalue(dec)\n");
+>>>>>>> master
         printf("eax\t0x%08x\t%d\n", cpu.eax, cpu.eax);
         printf("ecx\t0x%08x\t%d\n", cpu.ecx, cpu.ecx);
         printf("edx\t0x%08x\t%d\n", cpu.edx, cpu.edx);
         printf("ebx\t0x%08x\t%d\n", cpu.ebx, cpu.ebx);
+<<<<<<< HEAD
         printf("esp\t0x%08x\t0x%08x\n", cpu.esp, cpu.esp);
         printf("ebp\t0x%08x\t0x%08x\n", cpu.ebp, cpu.ebp);
         printf("esi\t0x%08x\t0x%08x\n", cpu.esi, cpu.esi);
         printf("edi\t0x%08x\t0x%08x\n", cpu.edi, cpu.edi);
         printf("eip\t0x%08x\t0x%08x\n", cpu.eip, cpu.eip);
     }
+=======
+        printf("esp\t0x%08x\t%d\n", cpu.esp, cpu.esp);
+        printf("ebp\t0x%08x\t%d\n", cpu.ebp, cpu.ebp);
+        printf("esi\t0x%08x\t%d\n", cpu.esi, cpu.esi);
+        printf("edi\t0x%08x\t%d\n", cpu.edi, cpu.edi);
+        printf("eip\t0x%08x\t%d\n", cpu.eip, cpu.eip);
+        printf("eflags\t0x%08x\t%d\n", cpu.eflags, cpu.eflags);
+        printf("\tCF: %d\tPF: %d\tAF: %d\tZF: %d\tSF: %d\tTF: %d\tIF: %d\tDF: %d\tOF: %d\n",
+            cpu.CF,
+            cpu.PF,
+            cpu.AF,
+            cpu.ZF,
+            cpu.SF,
+            cpu.TF,
+            cpu.IF,
+            cpu.DF,
+            cpu.OF);
+#ifdef DEBUG
+        printf("EXEC CNT: %d\n", cpu.exec_cnt);
+#endif
+    }
+    else if (strcmp(args, "w") == 0)
+        print_wp();
+>>>>>>> master
     else
         Assert(false, "Unknown argument \"%s\" for info", args);
 
@@ -73,6 +107,7 @@ static int cmd_info(char* args)
 
 static int cmd_x(char* args)
 {
+<<<<<<< HEAD
     // Currently, we only support a number as expression
 
     int      step = 0;
@@ -84,6 +119,19 @@ static int cmd_x(char* args)
         // data = vaddr_read(addr + i * 4, 4);
         // printf("0x%08x: 0x%08x\n", addr + i * 4, data);
 
+=======
+    char* expr_ptr = NULL;
+    int   n        = strtol(args, &expr_ptr, 0);
+
+    Assert(n > 0, "Got argument \"%s\" for x, but it should be a positive integer", args);
+    Assert(*expr_ptr == ' ', "Got argument \"%s\" for x, but it should be followed by a space", args);
+
+    bool     success = false;
+    uint32_t addr    = expr(expr_ptr + 1, &success);
+    Assert(success, "Failed to evaluate expression \"%s\"", expr_ptr + 1);
+
+    for (int i = 0; i < n; i++) {
+>>>>>>> master
         printf("0x%08x: 0x%08x\n", addr, vaddr_read(addr, 4));
         addr += 4;
     }
@@ -95,17 +143,254 @@ static int cmd_p(char* args)
 {
     bool     success = false;
     uint32_t result  = expr(args, &success);
+<<<<<<< HEAD
     if (success) {
         printf("Result: %u\n", result);
     }
     else
     {
         printf("Failed to evaluate expression \"%s\"\n", args);
+=======
+    if (success)
+        printf("Result: 0x%08x %d\n", result, result);
+    else
+        printf("Failed to evaluate expression \"%s\"\n", args);
+
+    return 0;
+}
+
+static int cmd_w(char* args)
+{
+    WP* wp = create_wp(args);
+    if (wp == NULL) {
+        Log("Failed to create watchpoint for expression \"%s\"", args);
+        return 0;
+    }
+
+    printf("Watchpoint %d: %s 0x%08x\n", wp->NO, wp->expr_str, wp->prev_val);
+    return 0;
+}
+
+static int cmd_b(char* args)
+{
+    bool     success = false;
+    uint32_t addr    = expr(args, &success);
+    if (!success) {
+        printf("Failed to evaluate expression \"%s\"\n", args);
+        return 0;
+    }
+
+    WP* wp = create_bp(addr);
+
+    if (wp == NULL) {
+        Log("Failed to create breakpoint for address 0x%08x", addr);
+        return 0;
+    }
+
+    printf("Breakpoint %d: %s 0x%08x\n", wp->NO, wp->expr_str, wp->prev_val);
+    return 0;
+}
+
+static int cmd_d(char* args)
+{
+    int n = atoi(args);
+    destroy_wp(n);
+
+    return 0;
+}
+
+static int cmd_wr(char* args)
+{
+    if (args == NULL) {
+        printf("Usage: wr $REG, EXPR\n");
+        return 0;
+    }
+
+    char* comma = strchr(args, ',');
+    if (comma == NULL) {
+        printf("Missing comma separator. Usage: wr $REG, EXPR\n");
+        return 0;
+    }
+
+    *comma         = '\0';
+    char* reg_ptr  = args;
+    char* expr_str = comma + 1;
+
+    while (*reg_ptr && (*reg_ptr == ' ' || *reg_ptr == '\t')) ++reg_ptr;
+
+    char* reg_end                                                                 = reg_ptr + strlen(reg_ptr) - 1;
+    while (reg_end > reg_ptr && (*reg_end == ' ' || *reg_end == '\t')) *reg_end-- = '\0';
+
+    if (*reg_ptr == '$') ++reg_ptr;
+    if (*reg_ptr == '\0') {
+        printf("Missing register name. Usage: wr $REG, EXPR\n");
+        return 0;
+    }
+
+    while (*expr_str && (*expr_str == ' ' || *expr_str == '\t')) ++expr_str;
+
+    if (*expr_str == '\0') {
+        printf("Missing expression. Usage: wr $REG, EXPR\n");
+        return 0;
+    }
+
+    bool     success = false;
+    uint32_t val     = expr(expr_str, &success);
+    if (!success) {
+        printf("Failed to evaluate expression \"%s\"\n", expr_str);
+        return 0;
+    }
+
+#define X(name, width)                                                              \
+    if (strcmp(reg_ptr, #name) == 0) {                                              \
+        cpu.name = val;                                                             \
+        Log("Set register \"%s\" to 0x%08x from expr: %s", reg_ptr, val, expr_str); \
+        return 0;                                                                   \
+    }
+    X86_REGS
+#undef X
+
+    Log("Unknown register \"%s\"", reg_ptr);
+    return 0;
+}
+
+static int cmd_wm(char* args)
+{
+    if (args == NULL) {
+        printf("Usage: wm ADDR_EXPR, VALUE_EXPR\n");
+        return 0;
+    }
+
+    char* comma = strchr(args, ',');
+    if (comma == NULL) {
+        printf("Missing comma separator. Usage: wm ADDR_EXPR, VALUE_EXPR\n");
+        return 0;
+    }
+
+    *comma          = '\0';
+    char* addr_expr = args;
+    char* val_expr  = comma + 1;
+
+    while (*addr_expr && (*addr_expr == ' ' || *addr_expr == '\t')) ++addr_expr;
+
+    char* addr_end = addr_expr + strlen(addr_expr) - 1;
+    while (addr_end > addr_expr && (*addr_end == ' ' || *addr_end == '\t')) *addr_end-- = '\0';
+
+    if (*addr_expr == '\0') {
+        printf("Missing address expression. Usage: wm ADDR_EXPR, VALUE_EXPR\n");
+        return 0;
+    }
+
+    while (*val_expr && (*val_expr == ' ' || *val_expr == '\t')) ++val_expr;
+
+    if (*val_expr == '\0') {
+        printf("Missing value expression. Usage: wm ADDR_EXPR, VALUE_EXPR\n");
+        return 0;
+    }
+
+    bool     success = false;
+    uint32_t addr    = expr(addr_expr, &success);
+    if (!success) {
+        printf("Failed to evaluate address expression \"%s\"\n", addr_expr);
+        return 0;
+    }
+
+    success      = false;
+    uint32_t val = expr(val_expr, &success);
+    if (!success) {
+        printf("Failed to evaluate value expression \"%s\"\n", val_expr);
+        return 0;
+    }
+
+    vaddr_write(addr, 4, val);
+
+    Log("Write 0x%08x to 0x%08x (addr_expr: \"%s\", val_expr: \"%s\")", val, addr, addr_expr, val_expr);
+    return 0;
+}
+
+#ifdef DIFF_TEST
+#include "../diff-test/protocol.h"
+
+bool gdb_memcpy_from_qemu(uint32_t src, void* dest, int len);
+extern bool gdb_getregs(union gdb_regs*);
+
+static int cmd_ri(char* args)
+{
+    // show register from gdb
+    // args: none
+    union gdb_regs r;
+    gdb_getregs(&r);
+
+    printf("eax: 0x%08x\n", r.eax);
+    printf("ecx: 0x%08x\n", r.ecx);
+    printf("edx: 0x%08x\n", r.edx);
+    printf("ebx: 0x%08x\n", r.ebx);
+    printf("esp: 0x%08x\n", r.esp);
+    printf("ebp: 0x%08x\n", r.ebp);
+    printf("esi: 0x%08x\n", r.esi);
+    printf("edi: 0x%08x\n", r.edi);
+    printf("eip: 0x%08x\n", r.eip);
+    printf("eflags: 0x%08x\n", r.eflags);
+    printf("CF: %d\n", r.eflags & (0x1 << 0));
+    printf("ZF: %d\n", r.eflags & (0x1 << 6));
+    printf("SF: %d\n", r.eflags & (0x1 << 7));
+    printf("OF: %d\n", r.eflags & (0x1 << 11));
+
+    return 0;
+}
+
+static int cmd_rx(char* args)
+{
+    // show memory from gdb
+    // args: num of memory, expr of start address
+
+    char* expr_ptr = NULL;
+    int   n        = strtol(args, &expr_ptr, 0);
+
+    Assert(n > 0, "Got argument \"%s\" for x, but it should be a positive integer", args);
+    Assert(*expr_ptr == ' ', "Got argument \"%s\" for x, but it should be followed by a space", args);
+
+    bool     success = false;
+    uint32_t addr    = expr(expr_ptr + 1, &success);
+    Assert(success, "Failed to evaluate expression \"%s\"", expr_ptr + 1);
+
+    uint8_t qemu_mem[4];
+    bool    ok = false;
+
+    for (int i = 0; i < n; i++) {
+        // printf("0x%08x: 0x%08x\n", addr, vaddr_read(addr, 4));
+        ok = gdb_memcpy_from_qemu(addr, qemu_mem, 4);
+        if (!ok) {
+            printf("Failed to read memory from qemu\n");
+            return 0;
+        }
+        printf("0x%08x: 0x%02x%02x%02x%02x\n", addr, qemu_mem[3], qemu_mem[2], qemu_mem[1], qemu_mem[0]);
+        addr += 4;
+>>>>>>> master
     }
 
     return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int cmd_re(char* args)
+{
+    exec_diff_test = true;
+    printf("Enable diff test\n");
+    return 0;
+}
+
+static int cmd_rd(char* args)
+{
+    exec_diff_test = false;
+    printf("Disable diff test\n");
+    return 0;
+}
+
+#endif
+
+>>>>>>> master
 static int cmd_help(char* args);
 
 static struct
@@ -117,10 +402,28 @@ static struct
     {"help", "Display informations about all supported commands", cmd_help},
     {"c", "Continue the execution of the program", cmd_c},
     {"q", "Exit NEMU", cmd_q},
+<<<<<<< HEAD
     {"si", "Execute the program step by step", cmd_si},
     {"info", "Print the information of registers", cmd_info},
     {"x", "Scan memory", cmd_x},
     {"p", "Evaluate expression", cmd_p},
+=======
+    {"si", "Execute the program step by step: si [N]", cmd_si},
+    {"info", "Print the information of registers or watchpoints: info [r/w]", cmd_info},
+    {"x", "Scan memory: x [N] [EXPR]", cmd_x},
+    {"p", "Evaluate expression: p [EXPR]", cmd_p},
+    {"w", "Set watchpoint: w [EXPR]", cmd_w},
+    {"d", "Delete watchpoint: d [N]", cmd_d},
+    {"wr", "Write target register with expression: wr $REG, EXPR", cmd_wr},
+    {"wm", "Write memory at address: wm ADDR_EXPR, VALUE_EXPR", cmd_wm},
+    {"b", "Set breakpoint at address: b [EXPR]", cmd_b},
+#ifdef DIFF_TEST
+    {"ri", "Show register from gdb", cmd_ri},
+    {"rx", "Show memory from gdb", cmd_rx},
+    {"re", "Enable diff test", cmd_re},
+    {"rd", "Disable diff test", cmd_rd},
+#endif
+>>>>>>> master
 
     /* TODO: Add more commands */
 
@@ -197,4 +500,8 @@ void ui_mainloop(int is_batch_mode)
             printf("Unknown command '%s'\n", cmd);
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> master

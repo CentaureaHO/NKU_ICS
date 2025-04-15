@@ -15,6 +15,7 @@
 
 /* ORDER OP */
 
+<<<<<<< HEAD
 LUAI_DDEF const char* const luaP_opnames[NUM_OPCODES + 1] = {"MOVE",
     "LOADK",
     "LOADKX",
@@ -65,6 +66,20 @@ LUAI_DDEF const char* const luaP_opnames[NUM_OPCODES + 1] = {"MOVE",
     NULL};
 
 #define opmode(t, a, b, c, m) (((t) << 7) | ((a) << 6) | ((b) << 4) | ((c) << 2) | (m))
+=======
+LUAI_DDEF const char *const luaP_opnames[NUM_OPCODES + 1] = {
+    "MOVE",     "LOADK",    "LOADKX",   "LOADBOOL", "LOADNIL",  "GETUPVAL",
+    "GETTABUP", "GETTABLE", "SETTABUP", "SETUPVAL", "SETTABLE", "NEWTABLE",
+    "SELF",     "ADD",      "SUB",      "MUL",      "MOD",      "POW",
+    "DIV",      "IDIV",     "BAND",     "BOR",      "BXOR",     "SHL",
+    "SHR",      "UNM",      "BNOT",     "NOT",      "LEN",      "CONCAT",
+    "JMP",      "EQ",       "LT",       "LE",       "TEST",     "TESTSET",
+    "CALL",     "TAILCALL", "RETURN",   "FORLOOP",  "FORPREP",  "TFORCALL",
+    "TFORLOOP", "SETLIST",  "CLOSURE",  "VARARG",   "EXTRAARG", NULL};
+
+#define opmode(t, a, b, c, m)                                                  \
+  (((t) << 7) | ((a) << 6) | ((b) << 4) | ((c) << 2) | (m))
+>>>>>>> master
 
 LUAI_DDEF const lu_byte luaP_opmodes[NUM_OPCODES] = {
     /*       T  A    B       C     mode		   opcode	*/

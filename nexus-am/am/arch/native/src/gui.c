@@ -26,6 +26,7 @@ static SDL_mutex* key_queue_lock;
 static SDL_Texture* texture;
 static uint32_t     fb[W * H];
 
+<<<<<<< HEAD
 void gui_init()
 {
     _screen.width  = W;
@@ -57,6 +58,30 @@ void _draw_sync()
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
+=======
+void gui_init() {
+  _screen.width = W;
+  _screen.height = H;
+  SDL_Init(SDL_INIT_VIDEO);
+  SDL_CreateWindowAndRenderer(W * 2, H * 2, 0, &window, &renderer);
+  SDL_SetWindowTitle(window, "Native Application");
+  SDL_CreateThread(event_thread, "event thread", NULL);
+  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
+                              SDL_TEXTUREACCESS_STATIC, W, H);
+  memset(fb, 0, W * H * sizeof(uint32_t));
+  _draw_sync();
+  key_queue_lock = SDL_CreateMutex();
+}
+
+static inline int min(int x, int y) { return (x < y) ? x : y; }
+
+void _draw_rect(const uint32_t *pixels, int x, int y, int w, int h) {
+  int cp_bytes = sizeof(uint32_t) * min(w, _screen.width - x);
+  for (int j = 0; j < h && y + j < _screen.height; j++) {
+    memcpy(&fb[(y + j) * W + x], pixels, cp_bytes);
+    pixels += w;
+  }
+>>>>>>> master
 }
 
 int _read_key()
@@ -72,6 +97,7 @@ int _read_key()
 }
 
 #define XX(k) [SDL_SCANCODE_##k] = _KEY_##k,
+<<<<<<< HEAD
 static int keymap[256]           = {_KEYS(XX)};
 
 static int event_thread(void* args)
@@ -100,5 +126,32 @@ static int event_thread(void* args)
             }
             break;
         }
+=======
+static int keymap[256] = {_KEYS(XX)};
+
+static int event_thread(void *args) {
+  SDL_Event event;
+  while (1) {
+    SDL_WaitEvent(&event);
+    switch (event.type) {
+    case SDL_QUIT:
+      exit(0);
+      break;
+    case SDL_KEYDOWN:
+    case SDL_KEYUP: {
+      SDL_Keysym k = event.key.keysym;
+      int keydown = event.key.type == SDL_KEYDOWN;
+      if (event.key.repeat == 0) {
+        int scancode = k.scancode;
+        if (keymap[scancode] != 0) {
+          int am_code = keymap[scancode] | (keydown ? KEYDOWN_MASK : 0);
+          SDL_LockMutex(key_queue_lock);
+          key_queue[key_r] = am_code;
+          key_r = (key_r + 1) % KEY_QUEUE_LEN;
+          SDL_UnlockMutex(key_queue_lock);
+        }
+      }
+    } break;
+>>>>>>> master
     }
 }

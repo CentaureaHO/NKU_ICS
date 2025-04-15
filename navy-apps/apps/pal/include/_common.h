@@ -123,6 +123,7 @@ extern "C" {
 #define PAL_HAS_TOUCH 1
 
 #elif defined(__WINPHONE__)
+<<<<<<< HEAD
 
 #define PAL_PREFIX "Assets\\Data\\"
 #define PAL_SAVE_PREFIX ""  // ???
@@ -133,6 +134,18 @@ extern "C" {
 #endif
 
 FILE* MY_fopen(const char* path, const char* mode);
+=======
+
+#define PAL_PREFIX "Assets\\Data\\"
+#define PAL_SAVE_PREFIX "" // ???
+#define PAL_HAS_TOUCH 1
+#include <stdio.h>
+#ifdef __cplusplus
+#include <cstdio>
+#endif
+
+FILE *MY_fopen(const char *path, const char *mode);
+>>>>>>> master
 #define fopen MY_fopen
 
 #else
@@ -143,7 +156,12 @@ FILE* MY_fopen(const char* path, const char* mode);
 #define PAL_ALLOW_KEYREPEAT 1
 #define PAL_HAS_CD 1
 #endif
+<<<<<<< HEAD
 #if !defined(CYGWIN) && !defined(DINGOO) && !defined(GPH) && !defined(GEKKO) && !defined(__WINPHONE__)
+=======
+#if !defined(CYGWIN) && !defined(DINGOO) && !defined(GPH) &&                   \
+    !defined(GEKKO) && !defined(__WINPHONE__)
+>>>>>>> master
 //#			define PAL_HAS_MP3           1
 #endif
 #endif
@@ -181,7 +199,11 @@ FILE* MY_fopen(const char* path, const char* mode);
 
 #ifndef _LPCBYTE_DEFINED
 #define _LPCBYTE_DEFINED
+<<<<<<< HEAD
 typedef const BYTE* LPCBYTE;
+=======
+typedef const BYTE *LPCBYTE;
+>>>>>>> master
 #endif
 
 #ifndef __WINPHONE__
@@ -200,6 +222,7 @@ typedef const BYTE* LPCBYTE;
 #define TRUE 1
 #endif
 #define VOID void
+<<<<<<< HEAD
 typedef char  CHAR;
 typedef short SHORT;
 typedef long  LONG;
@@ -219,6 +242,27 @@ typedef void*       LPVOID;
 typedef const void* LPCVOID;
 typedef CHAR*       LPSTR;
 typedef const CHAR* LPCSTR;
+=======
+typedef char CHAR;
+typedef short SHORT;
+typedef long LONG;
+
+typedef unsigned long ULONG, *PULONG;
+typedef unsigned short USHORT, *PUSHORT;
+typedef unsigned char UCHAR, *PUCHAR;
+
+typedef unsigned short WORD, *LPWORD;
+typedef unsigned int DWORD, *LPDWORD;
+typedef int INT, *LPINT, BOOL, *LPBOOL;
+typedef unsigned int UINT, *PUINT, UINT32, *PUINT32;
+typedef unsigned char BYTE, *LPBYTE;
+typedef CONST BYTE *LPCBYTE;
+typedef FLOAT *LPFLOAT;
+typedef void *LPVOID;
+typedef const void *LPCVOID;
+typedef CHAR *LPSTR;
+typedef const CHAR *LPCSTR;
+>>>>>>> master
 
 #endif
 

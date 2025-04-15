@@ -33,6 +33,7 @@ float remainderf(_R2 x, y) /* wrapper remainder */
 #endif
 {
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_remainderf(x, y);
 #else
     float z;
@@ -42,6 +43,18 @@ float remainderf(_R2 x, y) /* wrapper remainder */
         return (float)__kernel_standard(_R4, (double)x, (double)y, 128);
     else
         return z;
+=======
+  return __ieee754_remainderf(x, y);
+#else
+  float z;
+  z = __ieee754_remainderf(x, y);
+  if (_LIB_VERSION == _IEEE_ || isnanf(y))
+    return z;
+  if (y == (float)0.0) /* remainder(x,0) */
+    return (float)__kernel_standard(_R4, (double)x, (double)y, 128);
+  else
+    return z;
+>>>>>>> master
 #endif
 }
 

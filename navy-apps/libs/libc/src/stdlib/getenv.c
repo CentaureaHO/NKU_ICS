@@ -73,6 +73,7 @@ extern char** environ;
  *	This routine *should* be a static; don't use it.
  */
 
+<<<<<<< HEAD
 char* _DEFUN(_findenv, (name, offset), register _CONST char* name _AND int* offset)
 {
     register int    len;
@@ -93,6 +94,28 @@ char* _DEFUN(_findenv, (name, offset), register _CONST char* name _AND int* offs
                 return (char*)(++c);
             }
     return NULL;
+=======
+char *_DEFUN(_findenv, (name, offset),
+             register _CONST char *name _AND int *offset) {
+  register int len;
+  register char **p;
+  _CONST char *c;
+
+  c = name;
+  len = 0;
+  while (*c && *c != '=') {
+    c++;
+    len++;
+  }
+
+  for (p = environ; *p; ++p)
+    if (!strncmp(*p, name, len))
+      if (*(c = *p + len) == '=') {
+        *offset = p - environ;
+        return (char *)(++c);
+      }
+  return NULL;
+>>>>>>> master
 }
 
 /*
@@ -100,10 +123,18 @@ char* _DEFUN(_findenv, (name, offset), register _CONST char* name _AND int* offs
  *	Returns ptr to value associated with name, if any, else NULL.
  */
 
+<<<<<<< HEAD
 char* _DEFUN(getenv, (name), _CONST char* name)
 {
     int   offset;
     char* _findenv();
 
     return _findenv(name, &offset);
+=======
+char *_DEFUN(getenv, (name), _CONST char *name) {
+  int offset;
+  char *_findenv();
+
+  return _findenv(name, &offset);
+>>>>>>> master
 }

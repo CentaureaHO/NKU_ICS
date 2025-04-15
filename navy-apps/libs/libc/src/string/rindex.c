@@ -35,4 +35,10 @@ QUICKREF
 
 #include <string.h>
 
+<<<<<<< HEAD
 char* _DEFUN(rindex, (s, c), _CONST char* s _AND int c) { return strrchr(s, c); }
+=======
+char *_DEFUN(rindex, (s, c), _CONST char *s _AND int c) {
+  return strrchr(s, c);
+}
+>>>>>>> master

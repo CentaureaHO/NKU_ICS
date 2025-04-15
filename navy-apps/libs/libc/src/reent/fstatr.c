@@ -49,16 +49,30 @@ DESCRIPTION
         <<errno>>.
 */
 
+<<<<<<< HEAD
 int          _fstat_r(ptr, fd, pstat) struct _reent* ptr;
 int          fd;
 struct stat* pstat;
+=======
+int _fstat_r(ptr, fd, pstat) struct _reent *ptr;
+int fd;
+struct stat *pstat;
+>>>>>>> master
 {
     int ret;
 
+<<<<<<< HEAD
     errno                       = 0;
     ret                         = _fstat(fd, pstat);
     if (errno != 0) ptr->_errno = errno;
     return ret;
+=======
+  errno = 0;
+  ret = _fstat(fd, pstat);
+  if (errno != 0)
+    ptr->_errno = errno;
+  return ret;
+>>>>>>> master
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

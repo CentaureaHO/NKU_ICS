@@ -64,8 +64,13 @@ extern int wait();
 extern char* environ[];
 #endif
 
+<<<<<<< HEAD
 int          _system_r(ptr, s) struct _reent* ptr;
 _CONST char* s;
+=======
+int _system_r(ptr, s) struct _reent *ptr;
+_CONST char *s;
+>>>>>>> master
 {
     char* argv[4];
     int   pid, status;
@@ -73,6 +78,7 @@ _CONST char* s;
 #ifdef NO_EXEC
     return 0;
 #else
+<<<<<<< HEAD
     argv[0] = "sh";
     argv[1] = "-c";
     if (s == NULL)
@@ -93,14 +99,39 @@ _CONST char* s;
         status = (status >> 8) & 0xff;
         return s == NULL ? status == 0 : status;
     }
+=======
+  argv[0] = "sh";
+  argv[1] = "-c";
+  if (s == NULL)
+    argv[2] = (char *)"exit 0";
+  else
+    argv[2] = (char *)s;
+  argv[3] = NULL;
+
+  if ((pid = _fork_r(ptr)) == 0) {
+    _execve("/bin/sh", argv, environ);
+    exit(100);
+  } else if (pid == -1)
+    return s == NULL ? 0 : -1;
+  else {
+    _wait_r(ptr, &status);
+    status = (status >> 8) & 0xff;
+    return s == NULL ? status == 0 : status;
+  }
+>>>>>>> master
 #endif
 }
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 int system(s) _CONST char* s;
 {
     return _system_r(_REENT, s);
 }
+=======
+int system(s) _CONST char *s;
+{ return _system_r(_REENT, s); }
+>>>>>>> master
 
 #endif

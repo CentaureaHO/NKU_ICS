@@ -96,6 +96,7 @@ double atanh(_R2 x) /* wrapper atanh */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_atanh(x);
 #else
     double z, y;
@@ -113,6 +114,25 @@ double atanh(_R2 x) /* wrapper atanh */
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return (double)_atanhf_r(_R4, (float)x);
+=======
+  return __ieee754_atanh(x);
+#else
+  double z, y;
+  z = __ieee754_atanh(x);
+  if (_LIB_VERSION == _IEEE_ || isnan(x))
+    return z;
+  y = fabs(x);
+  if (y >= 1.0) {
+    if (y > 1.0)
+      return __kernel_standard(_R4, x, x, 30); /* atanh(|x|>1) */
+    else
+      return __kernel_standard(_R4, x, x, 31); /* atanh(|x|==1) */
+  } else
+    return z;
+#endif
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_atanhf_r(_R4, (float)x);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

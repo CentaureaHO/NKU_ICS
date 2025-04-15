@@ -31,9 +31,15 @@
 extern "C" {
 #endif
 
+<<<<<<< HEAD
 void trim(char* str);
 
 char* va(const char* format, ...);
+=======
+void trim(char *str);
+
+char *va(const char *format, ...);
+>>>>>>> master
 
 int RandomLong(int from, int to);
 
@@ -42,6 +48,7 @@ RandomFloat(FLOAT from, FLOAT to);
 
 void UTIL_Delay(unsigned int ms);
 
+<<<<<<< HEAD
 void TerminateOnError(const char* fmt, ...);
 
 void* UTIL_malloc(size_t buffer_size);
@@ -53,6 +60,19 @@ FILE* UTIL_OpenRequiredFile(LPCSTR lpszFileName);
 FILE* UTIL_OpenFile(LPCSTR lpszFileName);
 
 VOID UTIL_CloseFile(FILE* fp);
+=======
+void TerminateOnError(const char *fmt, ...);
+
+void *UTIL_malloc(size_t buffer_size);
+
+void *UTIL_calloc(size_t n, size_t size);
+
+FILE *UTIL_OpenRequiredFile(LPCSTR lpszFileName);
+
+FILE *UTIL_OpenFile(LPCSTR lpszFileName);
+
+VOID UTIL_CloseFile(FILE *fp);
+>>>>>>> master
 
 #define _PATH_LOG PAL_PREFIX "log.txt"
 #define LOG_EMERG 0         /* system is unusable */
@@ -67,11 +87,19 @@ VOID UTIL_CloseFile(FILE* fp);
 
 #ifdef ENABLE_LOG
 
+<<<<<<< HEAD
 FILE* UTIL_OpenLog(VOID);
 
 VOID UTIL_CloseLog(VOID);
 
 VOID UTIL_WriteLog(int Priority, const char* Fmt, ...);
+=======
+FILE *UTIL_OpenLog(VOID);
+
+VOID UTIL_CloseLog(VOID);
+
+VOID UTIL_WriteLog(int Priority, const char *Fmt, ...);
+>>>>>>> master
 
 #else
 

@@ -31,8 +31,14 @@ Supporting OS subroutines required: none.
 #include "local.h"
 #include <stdio.h>
 
+<<<<<<< HEAD
 int _DEFUN(fileno, (f), FILE* f)
 {
     CHECK_INIT(f);
     return __sfileno(f);
+=======
+int _DEFUN(fileno, (f), FILE *f) {
+  CHECK_INIT(f);
+  return __sfileno(f);
+>>>>>>> master
 }

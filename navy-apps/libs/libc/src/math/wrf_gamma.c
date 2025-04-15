@@ -26,6 +26,7 @@
 #if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
+<<<<<<< HEAD
 float gammaf_r(_R1 float x, int* signgamp) /* wrapper lgammaf_r */
 #else
 float gammaf_r(_R2 x, signgamp) /* wrapper lgammaf_r */
@@ -48,6 +49,30 @@ int*      signgamp;
     }
     else
         return y;
+=======
+float gammaf_r(_R1 float x, int *signgamp) /* wrapper lgammaf_r */
+#else
+float gammaf_r(_R2 x, signgamp) /* wrapper lgammaf_r */
+    _R3 float x;
+int *signgamp;
+#endif
+{
+#ifdef _IEEE_LIBM
+  return __ieee754_gammaf_r(x, signgamp);
+#else
+  float y;
+  y = __ieee754_gammaf_r(x, signgamp);
+  if (_LIB_VERSION == _IEEE_)
+    return y;
+  if (!finitef(y) && finitef(x)) {
+    if (floorf(x) == x && x <= (float)0.0) /* gammaf pole */
+      return (float)__kernel_standard(_R4, (double)x, (double)x, 141);
+    else
+      /* gamma overflow */
+      return (float)__kernel_standard(_R4, (double)x, (double)x, 140);
+  } else
+    return y;
+>>>>>>> master
 #endif
 }
 

@@ -64,6 +64,12 @@ int _DEFUN(raise, (sig), int sig) { return _raise_r(_REENT, sig); }
 
 #endif
 
+<<<<<<< HEAD
 int _DEFUN(_raise_r, (reent, sig), struct _reent* reent _AND int sig) { return _kill_r(reent, _getpid_r(reent), sig); }
+=======
+int _DEFUN(_raise_r, (reent, sig), struct _reent *reent _AND int sig) {
+  return _kill_r(reent, _getpid_r(reent), sig);
+}
+>>>>>>> master
 
 #endif /* ! SIMULATED_SIGNALS */

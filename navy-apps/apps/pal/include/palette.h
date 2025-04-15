@@ -28,7 +28,11 @@
 extern "C" {
 #endif
 
+<<<<<<< HEAD
 SDL_Color* PAL_GetPalette(INT iPaletteNum, BOOL fNight);
+=======
+SDL_Color *PAL_GetPalette(INT iPaletteNum, BOOL fNight);
+>>>>>>> master
 
 VOID PAL_SetPalette(INT iPaletteNum, BOOL fNight);
 

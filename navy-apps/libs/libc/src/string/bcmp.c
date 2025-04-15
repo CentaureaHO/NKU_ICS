@@ -39,4 +39,11 @@ QUICKREF
 
 #include <string.h>
 
+<<<<<<< HEAD
 int _DEFUN(bcmp, (m1, m2, n), _CONST char* m1 _AND _CONST char* m2 _AND size_t n) { return memcmp(m1, m2, n); }
+=======
+int _DEFUN(bcmp, (m1, m2, n),
+           _CONST char *m1 _AND _CONST char *m2 _AND size_t n) {
+  return memcmp(m1, m2, n);
+}
+>>>>>>> master

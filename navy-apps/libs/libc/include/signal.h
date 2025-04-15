@@ -17,12 +17,21 @@ typedef void (*_sig_func_ptr)();
 
 struct _reent;
 
+<<<<<<< HEAD
 _sig_func_ptr _EXFUN(_signal_r, (struct _reent*, int, _sig_func_ptr));
 int           _EXFUN(_raise_r, (struct _reent*, int));
 
 #ifndef _REENT_ONLY
 _sig_func_ptr _EXFUN(signal, (int, _sig_func_ptr));
 int           _EXFUN(raise, (int));
+=======
+_sig_func_ptr _EXFUN(_signal_r, (struct _reent *, int, _sig_func_ptr));
+int _EXFUN(_raise_r, (struct _reent *, int));
+
+#ifndef _REENT_ONLY
+_sig_func_ptr _EXFUN(signal, (int, _sig_func_ptr));
+int _EXFUN(raise, (int));
+>>>>>>> master
 #endif
 
 #ifdef __cplusplus

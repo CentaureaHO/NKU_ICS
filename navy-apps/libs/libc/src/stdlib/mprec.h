@@ -45,6 +45,7 @@
 
 #ifdef DEBUG
 #include "stdio.h"
+<<<<<<< HEAD
 #define Bug(x)                      \
     {                               \
         fprintf(stderr, "%s\n", x); \
@@ -55,12 +56,29 @@
 #ifdef Unsigned_Shifts
 #define Sign_Extend(a, b) \
     if (b < 0) a |= 0xffff0000;
+=======
+#define Bug(x)                                                                 \
+  {                                                                            \
+    fprintf(stderr, "%s\n", x);                                                \
+    exit(1);                                                                   \
+  }
+#endif
+
+#ifdef Unsigned_Shifts
+#define Sign_Extend(a, b)                                                      \
+  if (b < 0)                                                                   \
+    a |= 0xffff0000;
+>>>>>>> master
 #else
 #define Sign_Extend(a, b) /*no-op*/
 #endif
 
 #if defined(IEEE_8087) + defined(IEEE_MC68k) + defined(VAX) + defined(IBM) != 1
+<<<<<<< HEAD
 Exactly one of                                     IEEE_8087, IEEE_MC68k, VAX, or
+=======
+Exactly one of IEEE_8087, IEEE_MC68k, VAX, or
+>>>>>>> master
                                                IBM should be defined.
 #endif
 
@@ -77,11 +95,21 @@ Exactly one of                                     IEEE_8087, IEEE_MC68k, VAX, o
  * #define Storeinc(a,b,c) (*a++ = b << 16 | c & 0xffff)
  */
 #if defined(IEEE_8087) + defined(VAX)
+<<<<<<< HEAD
 #define Storeinc(a, b, c) \
     (((unsigned short*)a)[1] = (unsigned short)b, ((unsigned short*)a)[0] = (unsigned short)c, a++)
 #else
 #define Storeinc(a, b, c) \
     (((unsigned short*)a)[0] = (unsigned short)b, ((unsigned short*)a)[1] = (unsigned short)c, a++)
+=======
+#define Storeinc(a, b, c)                                                      \
+  (((unsigned short *)a)[1] = (unsigned short)b,                               \
+   ((unsigned short *)a)[0] = (unsigned short)c, a++)
+#else
+#define Storeinc(a, b, c)                                                      \
+  (((unsigned short *)a)[0] = (unsigned short)b,                               \
+   ((unsigned short *)a)[1] = (unsigned short)c, a++)
+>>>>>>> master
 #endif
 
 /* #define P DBL_MANT_DIG */
@@ -176,7 +204,11 @@ Exactly one of                                     IEEE_8087, IEEE_MC68k, VAX, o
 #endif
 
 #ifdef RND_PRODQUOT
+<<<<<<< HEAD
 #define rounded_product(a, b) a  = rnd_prod(a, b)
+=======
+#define rounded_product(a, b) a = rnd_prod(a, b)
+>>>>>>> master
 #define rounded_quotient(a, b) a = rnd_quot(a, b)
 #ifdef KR_headers
                                                extern double
@@ -208,8 +240,14 @@ Exactly one of                                     IEEE_8087, IEEE_MC68k, VAX, o
 #endif
 
 #ifdef __cplusplus
+<<<<<<< HEAD
 extern "C" double strtod(const char* s00, char** se);
 extern "C" char* dtoa(double d, int mode, int ndigits, int* decpt, int* sign, char** rve);
+=======
+extern "C" double strtod(const char *s00, char **se);
+extern "C" char *dtoa(double d, int mode, int ndigits, int *decpt, int *sign,
+                      char **rve);
+>>>>>>> master
 #endif
 
 typedef struct _Bigint _Bigint;
@@ -225,6 +263,7 @@ typedef struct _Bigint _Bigint;
 #define diff __mdiff
 struct _reent;
 double _EXFUN(ulp, (double x));
+<<<<<<< HEAD
 double _EXFUN(b2d, (_Bigint * a, int* e));
 _Bigint* _EXFUN(Balloc, (struct _reent * p, int k));
 void _EXFUN(Bfree, (struct _reent * p, _Bigint* v));
@@ -242,6 +281,27 @@ int _EXFUN(cmp, (_Bigint * a, _Bigint* b));
 
 double _EXFUN(ratio, (_Bigint * a, _Bigint* b));
 #define Bcopy(x, y) memcpy((char*)&x->_sign, (char*)&y->_sign, (y->_wds - 1) * sizeof(x->_x[0]) + sizeof(*x))
+=======
+double _EXFUN(b2d, (_Bigint * a, int *e));
+_Bigint *_EXFUN(Balloc, (struct _reent * p, int k));
+void _EXFUN(Bfree, (struct _reent * p, _Bigint *v));
+_Bigint *_EXFUN(multadd, (struct _reent * p, _Bigint *, int, int));
+_Bigint *_EXFUN(s2b, (struct _reent *, const char *, int, int, unsigned long));
+_Bigint *_EXFUN(i2b, (struct _reent *, int));
+_Bigint *_EXFUN(mult, (struct _reent *, _Bigint *, _Bigint *));
+_Bigint *_EXFUN(pow5mult, (struct _reent *, _Bigint *, int k));
+int _EXFUN(hi0bits, (unsigned long));
+int _EXFUN(lo0bits, (unsigned long *));
+_Bigint *_EXFUN(d2b, (struct _reent * p, double d, int *e, int *bits));
+_Bigint *_EXFUN(lshift, (struct _reent * p, _Bigint *b, int k));
+_Bigint *_EXFUN(diff, (struct _reent * p, _Bigint *a, _Bigint *b));
+int _EXFUN(cmp, (_Bigint * a, _Bigint *b));
+
+double _EXFUN(ratio, (_Bigint * a, _Bigint *b));
+#define Bcopy(x, y)                                                            \
+  memcpy((char *)&x->_sign, (char *)&y->_sign,                                 \
+         (y->_wds - 1) * sizeof(x->_x[0]) + sizeof(*x))
+>>>>>>> master
 
 #define tens __mprec_tens
 #define bigtens __mprec_bigtens

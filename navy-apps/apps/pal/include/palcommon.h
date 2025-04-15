@@ -28,16 +28,26 @@
 extern "C" {
 #endif
 
+<<<<<<< HEAD
 typedef LPBYTE  LPSPRITE, LPBITMAPRLE;
+=======
+typedef LPBYTE LPSPRITE, LPBITMAPRLE;
+>>>>>>> master
 typedef LPCBYTE LPCSPRITE, LPCBITMAPRLE;
 
 typedef DWORD PAL_POS;
 
+<<<<<<< HEAD
 #define PAL_XY(x, y) (PAL_POS)(((((WORD)(y)) << 16) & 0xFFFF0000) | (((WORD)(x)) & 0xFFFF))
+=======
+#define PAL_XY(x, y)                                                           \
+  (PAL_POS)(((((WORD)(y)) << 16) & 0xFFFF0000) | (((WORD)(x)) & 0xFFFF))
+>>>>>>> master
 #define PAL_X(xy) (SHORT)((xy)&0xFFFF)
 #define PAL_Y(xy) (SHORT)(((xy) >> 16) & 0xFFFF)
 
 typedef enum tagPALDIRECTION {
+<<<<<<< HEAD
     kDirSouth = 0,
     kDirWest,
     kDirNorth,
@@ -54,6 +64,27 @@ INT PAL_RLEBlitMonoColor(
     LPCBITMAPRLE lpBitmapRLE, SDL_Surface* lpDstSurface, PAL_POS pos, BYTE bColor, INT iColorShift);
 
 INT PAL_FBPBlitToSurface(LPBYTE lpBitmapFBP, SDL_Surface* lpDstSurface);
+=======
+  kDirSouth = 0,
+  kDirWest,
+  kDirNorth,
+  kDirEast,
+  kDirUnknown
+} PALDIRECTION,
+    *LPPALDIRECTION;
+
+INT PAL_RLEBlitToSurface(LPCBITMAPRLE lpBitmapRLE, SDL_Surface *lpDstSurface,
+                         PAL_POS pos);
+
+INT PAL_RLEBlitWithColorShift(LPCBITMAPRLE lpBitmapRLE,
+                              SDL_Surface *lpDstSurface, PAL_POS pos,
+                              INT iColorShift);
+
+INT PAL_RLEBlitMonoColor(LPCBITMAPRLE lpBitmapRLE, SDL_Surface *lpDstSurface,
+                         PAL_POS pos, BYTE bColor, INT iColorShift);
+
+INT PAL_FBPBlitToSurface(LPBYTE lpBitmapFBP, SDL_Surface *lpDstSurface);
+>>>>>>> master
 
 UINT PAL_RLEGetWidth(LPCBITMAPRLE lpBitmapRLE);
 
@@ -64,6 +95,7 @@ WORD PAL_SpriteGetNumFrames(LPCSPRITE lpSprite);
 LPCBITMAPRLE
 PAL_SpriteGetFrame(LPCSPRITE lpSprite, INT iFrameNum);
 
+<<<<<<< HEAD
 INT PAL_MKFGetChunkCount(FILE* fp);
 
 INT PAL_MKFGetChunkSize(UINT uiChunkNum, FILE* fp);
@@ -73,6 +105,19 @@ INT PAL_MKFReadChunk(LPBYTE lpBuffer, UINT uiBufferSize, UINT uiChunkNum, FILE* 
 INT PAL_MKFGetDecompressedSize(UINT uiChunkNum, FILE* fp);
 
 INT PAL_MKFDecompressChunk(LPBYTE lpBuffer, UINT uiBufferSize, UINT uiChunkNum, FILE* fp);
+=======
+INT PAL_MKFGetChunkCount(FILE *fp);
+
+INT PAL_MKFGetChunkSize(UINT uiChunkNum, FILE *fp);
+
+INT PAL_MKFReadChunk(LPBYTE lpBuffer, UINT uiBufferSize, UINT uiChunkNum,
+                     FILE *fp);
+
+INT PAL_MKFGetDecompressedSize(UINT uiChunkNum, FILE *fp);
+
+INT PAL_MKFDecompressChunk(LPBYTE lpBuffer, UINT uiBufferSize, UINT uiChunkNum,
+                           FILE *fp);
+>>>>>>> master
 
 // From yj1.c:
 INT Decompress(LPCVOID Source, LPVOID Destination, INT DestSize);

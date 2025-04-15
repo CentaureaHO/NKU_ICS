@@ -56,4 +56,8 @@ No supporting OS subroutines are required.
 #undef clearerr
 
 _VOID
+<<<<<<< HEAD
 _DEFUN(clearerr, (fp), FILE* fp) { __sclearerr(fp); }
+=======
+_DEFUN(clearerr, (fp), FILE *fp) { __sclearerr(fp); }
+>>>>>>> master

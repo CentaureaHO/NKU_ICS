@@ -28,4 +28,8 @@ No supporting OS subroutines are required.
 #include <_ansi.h>
 #include <stdlib.h>
 
+<<<<<<< HEAD
 long _DEFUN(atol, (s), _CONST char* s) { return strtol(s, NULL, 10); }
+=======
+long _DEFUN(atol, (s), _CONST char *s) { return strtol(s, NULL, 10); }
+>>>>>>> master

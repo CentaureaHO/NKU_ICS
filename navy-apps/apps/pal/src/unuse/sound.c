@@ -64,7 +64,11 @@ INT SOUND_OpenAudio(VOID)
 
 --*/
 {
+<<<<<<< HEAD
     return 0;
+=======
+  return 0;
+>>>>>>> master
 }
 
 VOID SOUND_CloseAudio(VOID)
@@ -83,7 +87,11 @@ VOID SOUND_CloseAudio(VOID)
 
 --*/
 {
+<<<<<<< HEAD
     return;
+=======
+  return;
+>>>>>>> master
 }
 
 VOID SOUND_PlayChannel(INT iSoundNum, INT iChannel)
@@ -104,7 +112,11 @@ VOID SOUND_PlayChannel(INT iSoundNum, INT iChannel)
 
 --*/
 {
+<<<<<<< HEAD
     return;
+=======
+  return;
+>>>>>>> master
 }
 
 VOID PAL_PlayMUS(INT iNumRIX, BOOL fLoop, FLOAT flFadeTime) { return; }
@@ -125,5 +137,9 @@ BOOL SOUND_PlayCDA(INT iNumTrack)
 
 --*/
 {
+<<<<<<< HEAD
     return FALSE;
+=======
+  return FALSE;
+>>>>>>> master
 }

@@ -16,12 +16,21 @@ int _dummy_mstats = 1;
 #ifdef MSTATS
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 void _DEFUN(mstats, (s), char* s) { _mstats_r(_REENT, s); }
+=======
+void _DEFUN(mstats, (s), char *s) { _mstats_r(_REENT, s); }
+>>>>>>> master
 
 #endif
 #else
 
+<<<<<<< HEAD
 mstats() { /* dummy to keep people happy */}
+=======
+mstats() { /* dummy to keep people happy */
+}
+>>>>>>> master
 
 #endif
 

@@ -68,6 +68,7 @@ int ilogb(x) double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
+<<<<<<< HEAD
     __int32_t hx, lx, ix;
 
     EXTRACT_WORDS(hx, lx, x);
@@ -92,5 +93,29 @@ int ilogb(x) double x;
         return INT_MAX;
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return ilogbf((float)x);
+=======
+  __int32_t hx, lx, ix;
+
+  EXTRACT_WORDS(hx, lx, x);
+  hx &= 0x7fffffff;
+  if (hx < 0x00100000) {
+    if ((hx | lx) == 0)
+      return -INT_MAX; /* ilogb(0) = 0x80000001 */
+    else               /* subnormal x */
+        if (hx == 0) {
+      for (ix = -1043; lx > 0; lx <<= 1)
+        ix -= 1;
+    } else {
+      for (ix = -1022, hx <<= 11; hx > 0; hx <<= 1)
+        ix -= 1;
+    }
+    return ix;
+  } else if (hx < 0x7ff00000)
+    return (hx >> 20) - 1023;
+  else
+    return INT_MAX;
+#else  /* defined (_DOUBLE_IS_32BITS) */
+  return ilogbf((float)x);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

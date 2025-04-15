@@ -66,6 +66,7 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
  * Re-direct an existing, open (probably) file to some other file.
  */
 
+<<<<<<< HEAD
 FILE* _DEFUN(freopen, (file, mode, fp), _CONST char* file _AND _CONST char* mode _AND register FILE* fp)
 {
     register int   f;
@@ -102,11 +103,27 @@ FILE* _DEFUN(freopen, (file, mode, fp), _CONST char* file _AND _CONST char* mode
             isopen = 0;
         }
     }
+=======
+FILE *_DEFUN(freopen, (file, mode, fp),
+             _CONST char *file _AND _CONST char *mode _AND register FILE *fp) {
+  register int f;
+  int isopen, flags, oflags, e;
+  struct _reent *ptr;
+
+  CHECK_INIT(fp);
+  ptr = fp->_data;
+
+  if ((flags = __sflags(ptr, mode, &oflags)) == 0) {
+    (void)fclose(fp);
+    return NULL;
+  }
+>>>>>>> master
 
     /*
      * Now get a new descriptor to refer to the new file.
      */
 
+<<<<<<< HEAD
     f = _open_r(ptr, (char*)file, oflags, 0666);
     if (f < 0 && isopen) {
         /*
@@ -153,4 +170,74 @@ FILE* _DEFUN(freopen, (file, mode, fp), _CONST char* file _AND _CONST char* mode
     fp->_seek   = __sseek;
     fp->_close  = __sclose;
     return fp;
+=======
+  if (fp->_flags == 0) {
+    fp->_flags = __SEOF; /* hold on to it */
+    isopen = 0;
+  } else {
+    if (fp->_flags & __SWR)
+      (void)fflush(fp);
+    /* if close is NULL, closing is a no-op, hence pointless */
+    isopen = fp->_close != NULL;
+    if (fp->_file < 0 && isopen) {
+      (void)(*fp->_close)(fp->_cookie);
+      isopen = 0;
+    }
+  }
+
+  /*
+   * Now get a new descriptor to refer to the new file.
+   */
+
+  f = _open_r(ptr, (char *)file, oflags, 0666);
+  if (f < 0 && isopen) {
+    /*
+     * May have used up all descriptors, so close the old
+     * and try again.
+     */
+    (void)(*fp->_close)(fp->_cookie);
+    isopen = 0;
+    f = _open_r(ptr, (char *)file, oflags, 0666);
+  }
+  e = ptr->_errno;
+
+  /*
+   * Finish closing fp.  Even if the open succeeded above,
+   * we cannot keep fp->_base: it may be the wrong size.
+   * This loses the effect of any setbuffer calls,
+   * but stdio has always done this before.
+   */
+
+  if (isopen)
+    (void)(*fp->_close)(fp->_cookie);
+  if (fp->_flags & __SMBF)
+    _free_r(ptr, (char *)fp->_bf._base);
+  fp->_w = 0;
+  fp->_r = 0;
+  fp->_p = NULL;
+  fp->_bf._base = NULL;
+  fp->_bf._size = 0;
+  fp->_lbfsize = 0;
+  if (HASUB(fp))
+    FREEUB(fp);
+  fp->_ub._size = 0;
+  if (HASLB(fp))
+    FREELB(fp);
+  fp->_lb._size = 0;
+
+  if (f < 0) {       /* did not get it after all */
+    fp->_flags = 0;  /* set it free */
+    ptr->_errno = e; /* restore in case _close clobbered */
+    return NULL;
+  }
+
+  fp->_flags = flags;
+  fp->_file = f;
+  fp->_cookie = (_PTR)fp;
+  fp->_read = __sread;
+  fp->_write = __swrite;
+  fp->_seek = __sseek;
+  fp->_close = __sclose;
+  return fp;
+>>>>>>> master
 }

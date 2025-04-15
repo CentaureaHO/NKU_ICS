@@ -53,6 +53,7 @@ No supporting OS subroutines are required.
 #include <limits.h>
 #include <stdlib.h>
 
+<<<<<<< HEAD
 div_t _DEFUN(div, (n, d), int n _AND int d)
 {
     div_t res;
@@ -73,6 +74,27 @@ div_t _DEFUN(div, (n, d), int n _AND int d)
 
         res.rem = 0;
     }
+=======
+div_t _DEFUN(div, (n, d), int n _AND int d) {
+  div_t res;
+
+  if (d) {
+    res.quot = abs(n) / abs(d);
+    res.rem = abs(n) % abs(d);
+
+    if ((n < 0 && d > 0) || (n >= 0 && d < 0))
+      res.quot = -res.quot;
+    if (n < 0)
+      res.rem = -res.rem;
+  } else {
+    if (n < 0)
+      res.quot = INT_MIN;
+    else
+      res.quot = INT_MAX;
+
+    res.rem = 0;
+  }
+>>>>>>> master
 
     return res;
 }

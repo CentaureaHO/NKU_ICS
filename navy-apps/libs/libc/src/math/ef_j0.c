@@ -48,6 +48,7 @@ static float zero = 0.0;
 #ifdef __STDC__
 float __ieee754_j0f(float x)
 #else
+<<<<<<< HEAD
 float        __ieee754_j0f(x) float x;
 #endif
 {
@@ -103,6 +104,61 @@ float        __ieee754_j0f(x) float x;
         u = (float)0.5 * x;
         return ((one + u) * (one - u) + z * (r / s));
     }
+=======
+float __ieee754_j0f(x) float x;
+#endif
+{
+  float z, s, c, ss, cc, r, u, v;
+  __int32_t hx, ix;
+
+  GET_FLOAT_WORD(hx, x);
+  ix = hx & 0x7fffffff;
+  if (ix >= 0x7f800000)
+    return one / (x * x);
+  x = fabsf(x);
+  if (ix >= 0x40000000) { /* |x| >= 2.0 */
+    s = sinf(x);
+    c = cosf(x);
+    ss = s - c;
+    cc = s + c;
+    if (ix < 0x7f000000) { /* make sure x+x not overflow */
+      z = -cosf(x + x);
+      if ((s * c) < zero)
+        cc = z / ss;
+      else
+        ss = z / cc;
+    }
+    /*
+     * j0(x) = 1/sqrt(pi) * (P(0,x)*cc - Q(0,x)*ss) / sqrt(x)
+     * y0(x) = 1/sqrt(pi) * (P(0,x)*ss + Q(0,x)*cc) / sqrt(x)
+     */
+    if (ix > 0x80000000)
+      z = (invsqrtpi * cc) / __ieee754_sqrtf(x);
+    else {
+      u = pzerof(x);
+      v = qzerof(x);
+      z = invsqrtpi * (u * cc - v * ss) / __ieee754_sqrtf(x);
+    }
+    return z;
+  }
+  if (ix < 0x39000000) {  /* |x| < 2**-13 */
+    if (huge + x > one) { /* raise inexact if x != 0 */
+      if (ix < 0x32000000)
+        return one; /* |x|<2**-27 */
+      else
+        return one - (float)0.25 * x * x;
+    }
+  }
+  z = x * x;
+  r = z * (R02 + z * (R03 + z * (R04 + z * R05)));
+  s = one + z * (S01 + z * (S02 + z * (S03 + z * S04)));
+  if (ix < 0x3F800000) { /* |x| < 1.00 */
+    return one + z * ((float)-0.25 + (r / s));
+  } else {
+    u = (float)0.5 * x;
+    return ((one + u) * (one - u) + z * (r / s));
+  }
+>>>>>>> master
 }
 
 #ifdef __STDC__
@@ -125,6 +181,7 @@ static float
 #ifdef __STDC__
 float __ieee754_y0f(float x)
 #else
+<<<<<<< HEAD
 float        __ieee754_y0f(x) float x;
 #endif
 {
@@ -181,6 +238,66 @@ float        __ieee754_y0f(x) float x;
     u = u00 + z * (u01 + z * (u02 + z * (u03 + z * (u04 + z * (u05 + z * u06)))));
     v = one + z * (v01 + z * (v02 + z * (v03 + z * v04)));
     return (u / v + tpi * (__ieee754_j0f(x) * __ieee754_logf(x)));
+=======
+float __ieee754_y0f(x) float x;
+#endif
+{
+  float z, s, c, ss, cc, u, v;
+  __int32_t hx, ix;
+
+  GET_FLOAT_WORD(hx, x);
+  ix = 0x7fffffff & hx;
+  /* Y0(NaN) is NaN, y0(-inf) is Nan, y0(inf) is 0  */
+  if (ix >= 0x7f800000)
+    return one / (x + x * x);
+  if (ix == 0)
+    return -one / zero;
+  if (hx < 0)
+    return zero / zero;
+  if (ix >= 0x40000000) { /* |x| >= 2.0 */
+    /* y0(x) = sqrt(2/(pi*x))*(p0(x)*sin(x0)+q0(x)*cos(x0))
+     * where x0 = x-pi/4
+     *      Better formula:
+     *              cos(x0) = cos(x)cos(pi/4)+sin(x)sin(pi/4)
+     *                      =  1/sqrt(2) * (sin(x) + cos(x))
+     *              sin(x0) = sin(x)cos(3pi/4)-cos(x)sin(3pi/4)
+     *                      =  1/sqrt(2) * (sin(x) - cos(x))
+     * To avoid cancellation, use
+     *              sin(x) +- cos(x) = -cos(2x)/(sin(x) -+ cos(x))
+     * to compute the worse one.
+     */
+    s = sinf(x);
+    c = cosf(x);
+    ss = s - c;
+    cc = s + c;
+    /*
+     * j0(x) = 1/sqrt(pi) * (P(0,x)*cc - Q(0,x)*ss) / sqrt(x)
+     * y0(x) = 1/sqrt(pi) * (P(0,x)*ss + Q(0,x)*cc) / sqrt(x)
+     */
+    if (ix < 0x7f000000) { /* make sure x+x not overflow */
+      z = -cosf(x + x);
+      if ((s * c) < zero)
+        cc = z / ss;
+      else
+        ss = z / cc;
+    }
+    if (ix > 0x80000000)
+      z = (invsqrtpi * ss) / __ieee754_sqrtf(x);
+    else {
+      u = pzerof(x);
+      v = qzerof(x);
+      z = invsqrtpi * (u * ss + v * cc) / __ieee754_sqrtf(x);
+    }
+    return z;
+  }
+  if (ix <= 0x32000000) { /* x < 2**-27 */
+    return (u00 + tpi * __ieee754_logf(x));
+  }
+  z = x * x;
+  u = u00 + z * (u01 + z * (u02 + z * (u03 + z * (u04 + z * (u05 + z * u06)))));
+  v = one + z * (v01 + z * (v02 + z * (v03 + z * v04)));
+  return (u / v + tpi * (__ieee754_j0f(x) * __ieee754_logf(x)));
+>>>>>>> master
 }
 
 /* The asymptotic expansions of pzero is
@@ -302,6 +419,7 @@ static float pzerof(x) float x;
 #endif
 {
 #ifdef __STDC__
+<<<<<<< HEAD
     const float *p, *q;
 #else
     float *  p, *q;
@@ -333,6 +451,33 @@ static float pzerof(x) float x;
     r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
     s = one + z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * q[4]))));
     return one + r / s;
+=======
+  const float *p, *q;
+#else
+  float *p, *q;
+#endif
+  float z, r, s;
+  __int32_t ix;
+  GET_FLOAT_WORD(ix, x);
+  ix &= 0x7fffffff;
+  if (ix >= 0x41000000) {
+    p = pR8;
+    q = pS8;
+  } else if (ix >= 0x40f71c58) {
+    p = pR5;
+    q = pS5;
+  } else if (ix >= 0x4036db68) {
+    p = pR3;
+    q = pS3;
+  } else if (ix >= 0x40000000) {
+    p = pR2;
+    q = pS2;
+  }
+  z = one / (x * x);
+  r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
+  s = one + z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * q[4]))));
+  return one + r / s;
+>>>>>>> master
 }
 
 /* For x >= 8, the asymptotic expansions of qzero is
@@ -459,6 +604,7 @@ static float qzerof(x) float x;
 #endif
 {
 #ifdef __STDC__
+<<<<<<< HEAD
     const float *p, *q;
 #else
     float *  p, *q;
@@ -490,4 +636,32 @@ static float qzerof(x) float x;
     r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
     s = one + z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * (q[4] + z * q[5])))));
     return (-(float).125 + r / s) / x;
+=======
+  const float *p, *q;
+#else
+  float *p, *q;
+#endif
+  float s, r, z;
+  __int32_t ix;
+  GET_FLOAT_WORD(ix, x);
+  ix &= 0x7fffffff;
+  if (ix >= 0x41000000) {
+    p = qR8;
+    q = qS8;
+  } else if (ix >= 0x40f71c58) {
+    p = qR5;
+    q = qS5;
+  } else if (ix >= 0x4036db68) {
+    p = qR3;
+    q = qS3;
+  } else if (ix >= 0x40000000) {
+    p = qR2;
+    q = qS2;
+  }
+  z = one / (x * x);
+  r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
+  s = one +
+      z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * (q[4] + z * q[5])))));
+  return (-(float).125 + r / s) / x;
+>>>>>>> master
 }

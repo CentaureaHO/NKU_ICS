@@ -102,6 +102,7 @@ Supporting OS subroutines required: <<getpid>>, <<open>>, <<stat>>.
 #include <sys/stat.h>
 #include <sys/types.h>
 
+<<<<<<< HEAD
 static _DEFUN(_gettemp, (ptr, path, doopen), struct _reent* ptr _AND char* path _AND register int* doopen)
 {
     register char *start, *trv;
@@ -115,12 +116,28 @@ static _DEFUN(_gettemp, (ptr, path, doopen), struct _reent* ptr _AND char* path 
         *trv = (pid % 10) + '0';
         pid /= 10;
     }
+=======
+static _DEFUN(_gettemp, (ptr, path, doopen),
+              struct _reent *ptr _AND char *path _AND register int *doopen) {
+  register char *start, *trv;
+  struct stat sbuf;
+  unsigned int pid;
+
+  pid = _getpid_r(ptr);
+  for (trv = path; *trv; ++trv) /* extra X's get set to 0's */
+    continue;
+  while (*--trv == 'X') {
+    *trv = (pid % 10) + '0';
+    pid /= 10;
+  }
+>>>>>>> master
 
     /*
      * Check the target directory; if you have six X's and it
      * doesn't exist this runs for a *very* long time.
      */
 
+<<<<<<< HEAD
     for (start = trv + 1;; --trv) {
         if (trv <= path) break;
         if (*trv == '/') {
@@ -133,8 +150,25 @@ static _DEFUN(_gettemp, (ptr, path, doopen), struct _reent* ptr _AND char* path 
             *trv = '/';
             break;
         }
+=======
+  for (start = trv + 1;; --trv) {
+    if (trv <= path)
+      break;
+    if (*trv == '/') {
+      *trv = '\0';
+      if (_stat_r(ptr, path, &sbuf))
+        return (0);
+      if (!(sbuf.st_mode & S_IFDIR)) {
+        ptr->_errno = ENOTDIR;
+        return (0);
+      }
+      *trv = '/';
+      break;
+>>>>>>> master
     }
+  }
 
+<<<<<<< HEAD
     for (;;) {
         if (doopen) {
             if ((*doopen = _open_r(ptr, path, O_CREAT | O_EXCL | O_RDWR, 0600)) >= 0) return 1;
@@ -171,10 +205,48 @@ _DEFUN(_mkstemp_r, (ptr, path), struct _reent* ptr _AND char* path)
 char* _DEFUN(_mktemp_r, (ptr, path), struct _reent* ptr _AND char* path)
 {
     return (_gettemp(ptr, path, (int*)NULL) ? path : (char*)NULL);
+=======
+  for (;;) {
+    if (doopen) {
+      if ((*doopen = _open_r(ptr, path, O_CREAT | O_EXCL | O_RDWR, 0600)) >= 0)
+        return 1;
+      if (ptr->_errno != EEXIST)
+        return 0;
+    } else if (_stat_r(ptr, path, &sbuf))
+      return (ptr->_errno == ENOENT ? 1 : 0);
+
+    /* tricky little algorithm for backward compatibility */
+    for (trv = start;;) {
+      if (!*trv)
+        return 0;
+      if (*trv == 'z')
+        *trv++ = 'a';
+      else {
+        if (isdigit(*trv))
+          *trv = 'a';
+        else
+          ++*trv;
+        break;
+      }
+    }
+  }
+  /*NOTREACHED*/
+}
+
+_DEFUN(_mkstemp_r, (ptr, path), struct _reent *ptr _AND char *path) {
+  int fd;
+
+  return (_gettemp(ptr, path, &fd) ? fd : -1);
+}
+
+char *_DEFUN(_mktemp_r, (ptr, path), struct _reent *ptr _AND char *path) {
+  return (_gettemp(ptr, path, (int *)NULL) ? path : (char *)NULL);
+>>>>>>> master
 }
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 _DEFUN(mkstemp, (path), char* path)
 {
     int fd;
@@ -183,5 +255,16 @@ _DEFUN(mkstemp, (path), char* path)
 }
 
 char* _DEFUN(mktemp, (path), char* path) { return (_gettemp(_REENT, path, (int*)NULL) ? path : (char*)NULL); }
+=======
+_DEFUN(mkstemp, (path), char *path) {
+  int fd;
+
+  return (_gettemp(_REENT, path, &fd) ? fd : -1);
+}
+
+char *_DEFUN(mktemp, (path), char *path) {
+  return (_gettemp(_REENT, path, (int *)NULL) ? path : (char *)NULL);
+}
+>>>>>>> master
 
 #endif /* ! defined (_REENT_ONLY) */

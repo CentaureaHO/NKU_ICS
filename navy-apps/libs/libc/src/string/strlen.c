@@ -34,9 +34,14 @@ QUICKREF
 #include <_ansi.h>
 #include <string.h>
 
+<<<<<<< HEAD
 size_t _DEFUN(strlen, (str), _CONST char* str)
 {
     _CONST char* start = str;
+=======
+size_t _DEFUN(strlen, (str), _CONST char *str) {
+  _CONST char *start = str;
+>>>>>>> master
 
     while (*str) str++;
 

@@ -15,6 +15,7 @@
 #ifndef _STAT_H_
 #define _STAT_H_
 
+<<<<<<< HEAD
 struct stat
 {
     short          st_dev;
@@ -30,6 +31,22 @@ struct stat
     long           st_mtime;
     long           st_ctime;
     long           st_blksize;
+=======
+struct stat {
+  short st_dev;
+  short st_ino;
+  unsigned short st_mode;
+  short st_nlink;
+  short st_uid;
+  short st_gid;
+  short st_rdev;
+  short st_align_for_word32;
+  long st_size;
+  long st_atime;
+  long st_mtime;
+  long st_ctime;
+  long st_blksize;
+>>>>>>> master
 };
 
 #define S_IFMT 0xF000   /* file type mask */

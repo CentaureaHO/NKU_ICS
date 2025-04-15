@@ -70,4 +70,10 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 #include <_ansi.h>
 #include <stdio.h>
 
+<<<<<<< HEAD
 void _DEFUN(setbuf, (fp, buf), FILE* fp _AND char* buf) { (void)setvbuf(fp, buf, buf ? _IOFBF : _IONBF, BUFSIZ); }
+=======
+void _DEFUN(setbuf, (fp, buf), FILE *fp _AND char *buf) {
+  (void)setvbuf(fp, buf, buf ? _IOFBF : _IONBF, BUFSIZ);
+}
+>>>>>>> master

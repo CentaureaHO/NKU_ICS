@@ -44,8 +44,13 @@ int
 #ifdef _HAVE_STDC
 _DEFUN (siprintf, (str, fmt), char *str _AND _CONST char *fmt _DOTS)
 #else
+<<<<<<< HEAD
     siprintf(str, fmt, va_alist) char* str;
 _CONST char* fmt;
+=======
+    siprintf(str, fmt, va_alist) char *str;
+_CONST char *fmt;
+>>>>>>> master
 va_dcl
 #endif
 {
@@ -53,6 +58,7 @@ va_dcl
     va_list ap;
     FILE    f;
 
+<<<<<<< HEAD
     f._flags    = __SWR | __SSTR;
     f._bf._base = f._p = (unsigned char*)str;
     f._bf._size = f._w = INT_MAX;
@@ -66,4 +72,19 @@ va_dcl
     va_end(ap);
     *f._p = 0;
     return (ret);
+=======
+  f._flags = __SWR | __SSTR;
+  f._bf._base = f._p = (unsigned char *)str;
+  f._bf._size = f._w = INT_MAX;
+  f._data = _REENT;
+#ifdef _HAVE_STDC
+  va_start(ap, fmt);
+#else
+  va_start(ap);
+#endif
+  ret = vfiprintf(&f, fmt, ap);
+  va_end(ap);
+  *f._p = 0;
+  return (ret);
+>>>>>>> master
 }

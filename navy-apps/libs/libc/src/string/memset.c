@@ -37,6 +37,7 @@ QUICKREF
 
 #define STRIDE int
 
+<<<<<<< HEAD
 _PTR _DEFUN(memset, (m, c, n), _PTR m _AND int c _AND size_t n)
 {
     char*   s = (char*)m;
@@ -60,7 +61,31 @@ _PTR _DEFUN(memset, (m, c, n), _PTR m _AND int c _AND size_t n)
     }
     while (n-- != 0) {
         *s++ = (char)c;
+=======
+_PTR _DEFUN(memset, (m, c, n), _PTR m _AND int c _AND size_t n) {
+  char *s = (char *)m;
+  int count;
+  STRIDE *ip;
+
+  if (c == 0) {
+    /* Special case when storing zero onto an aligned boundary */
+    count = (((int)s) & (sizeof(STRIDE) - 1));
+    while (n != 0 && count > 0 && count != sizeof(STRIDE)) {
+      *s++ = 0;
+      count++;
+      n--;
     }
+    ip = (STRIDE *)s;
+    while (n >= sizeof(STRIDE)) {
+      *ip++ = 0;
+      n -= sizeof(STRIDE);
+>>>>>>> master
+    }
+    s = (char *)ip;
+  }
+  while (n-- != 0) {
+    *s++ = (char)c;
+  }
 
     return m;
 }

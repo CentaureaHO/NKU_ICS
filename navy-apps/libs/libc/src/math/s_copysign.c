@@ -70,6 +70,7 @@ double copysign(x, y) double x, y;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
+<<<<<<< HEAD
     __uint32_t hx, hy;
     GET_HIGH_WORD(hx, x);
     GET_HIGH_WORD(hy, y);
@@ -77,5 +78,14 @@ double copysign(x, y) double x, y;
     return x;
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return (double)copysignf((float)x, (float)y);
+=======
+  __uint32_t hx, hy;
+  GET_HIGH_WORD(hx, x);
+  GET_HIGH_WORD(hy, y);
+  SET_HIGH_WORD(x, (hx & 0x7fffffff) | (hy & 0x80000000));
+  return x;
+#else  /* defined (_DOUBLE_IS_32BITS) */
+  return (double)copysignf((float)x, (float)y);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

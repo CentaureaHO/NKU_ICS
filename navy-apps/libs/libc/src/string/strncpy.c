@@ -39,6 +39,7 @@ QUICKREF
 
 #include <string.h>
 
+<<<<<<< HEAD
 char* _DEFUN(strncpy, (dst, src, n), char* dst _AND _CONST char* src _AND size_t n)
 {
     char*        dscan;
@@ -53,6 +54,24 @@ char* _DEFUN(strncpy, (dst, src, n), char* dst _AND _CONST char* src _AND size_t
         if ((*dscan++ = *sscan++) == '\0') break;
     }
     while (count-- > 0) *dscan++ = '\0';
+=======
+char *_DEFUN(strncpy, (dst, src, n),
+             char *dst _AND _CONST char *src _AND size_t n) {
+  char *dscan;
+  _CONST char *sscan;
+  size_t count;
+
+  dscan = dst;
+  sscan = src;
+  count = n;
+  while (count > 0) {
+    --count;
+    if ((*dscan++ = *sscan++) == '\0')
+      break;
+  }
+  while (count-- > 0)
+    *dscan++ = '\0';
+>>>>>>> master
 
     return dst;
 }

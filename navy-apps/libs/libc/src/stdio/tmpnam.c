@@ -102,16 +102,26 @@ The global pointer <<environ>> is also required.
 /* Try to open the file specified, if it can be opened then try
    another one.  */
 
+<<<<<<< HEAD
 static void  worker(ptr, result, part1, part2, part3, part4) struct _reent* ptr;
 char*        result;
 _CONST char* part1;
 _CONST char* part2;
 int          part3;
 int*         part4;
+=======
+static void worker(ptr, result, part1, part2, part3, part4) struct _reent *ptr;
+char *result;
+_CONST char *part1;
+_CONST char *part2;
+int part3;
+int *part4;
+>>>>>>> master
 {
     /*  Generate the filename and make sure that there isn't one called
         it already.  */
 
+<<<<<<< HEAD
     while (1) {
         int t;
         _sprintf_r(ptr, result, "%s/%s%x.%x", part1, part2, part3, *part4);
@@ -140,10 +150,40 @@ char* _DEFUN(_tmpnam_r, (p, s), struct _reent* p _AND char* s)
     pid = _getpid_r(p);
 
     worker(p, result, "/tmp/", "t", pid, &p->_inc);
+=======
+  while (1) {
+    int t;
+    _sprintf_r(ptr, result, "%s/%s%x.%x", part1, part2, part3, *part4);
+    t = _open_r(ptr, result, O_RDONLY, 0);
+    if (t == -1)
+      break;
+    (*part4)++;
+    _close_r(ptr, t);
+  }
+}
+
+char *_DEFUN(_tmpnam_r, (p, s), struct _reent *p _AND char *s) {
+  char *result;
+  int pid;
+
+  if (s == NULL) {
+    result = _malloc_r(p, L_tmpnam + 1);
+    /* ANSI says that a static buf must be used - so
+     if malloc fails, we have one. */
+    if (result == NULL)
+      result = p->_emergency;
+  } else {
+    result = s;
+  }
+  pid = _getpid_r(p);
+
+  worker(p, result, "/tmp/", "t", pid, &p->_inc);
+>>>>>>> master
 
     return result;
 }
 
+<<<<<<< HEAD
 char* _DEFUN(_tempnam_r, (p, dir, pfx), struct _reent* p _AND char* dir _AND char* pfx)
 {
     char* filename;
@@ -158,12 +198,37 @@ char* _DEFUN(_tempnam_r, (p, dir, pfx), struct _reent* p _AND char* dir _AND cha
         worker(p, filename, dir, pfx, _getpid_r(p) ^ (int)p, &p->_inc);
     }
     return filename;
+=======
+char *_DEFUN(_tempnam_r, (p, dir, pfx),
+             struct _reent *p _AND char *dir _AND char *pfx) {
+  char *filename;
+  int length;
+  if (dir == NULL && (dir = getenv("TMPDIR")) == NULL)
+    dir = "/tmp/";
+
+  length = strlen(dir) + strlen(pfx) + 10 + 1; /* two 8 digit
+                                                  numbers + . / */
+
+  filename = _malloc_r(p, length);
+  if (filename) {
+    worker(p, filename, dir, pfx, _getpid_r(p) ^ (int)p, &p->_inc);
+  }
+  return filename;
+>>>>>>> master
 }
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 char* _DEFUN(tempnam, (dir, pfx), char* dir _AND char* pfx) { return _tempnam_r(_REENT, dir, pfx); }
 
 char* _DEFUN(tmpnam, (s), char* s) { return _tmpnam_r(_REENT, s); }
+=======
+char *_DEFUN(tempnam, (dir, pfx), char *dir _AND char *pfx) {
+  return _tempnam_r(_REENT, dir, pfx);
+}
+
+char *_DEFUN(tmpnam, (s), char *s) { return _tmpnam_r(_REENT, s); }
+>>>>>>> master
 
 #endif

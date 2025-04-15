@@ -1,5 +1,6 @@
 int  init_monitor(int, char* []);
 void ui_mainloop(int);
+void resource_clean();
 
 int main(int argc, char* argv[])
 {
@@ -9,5 +10,11 @@ int main(int argc, char* argv[])
     /* Receive commands from user. */
     ui_mainloop(is_batch_mode);
 
+<<<<<<< HEAD
+=======
+    /* Quit the monitor. */
+    resource_clean();
+
+>>>>>>> master
     return 0;
 }

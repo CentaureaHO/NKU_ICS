@@ -38,9 +38,14 @@ QUICKREF
 /*SUPPRESS 560*/
 /*SUPPRESS 530*/
 
+<<<<<<< HEAD
 char* _DEFUN(strcat, (s1, s2), char* s1 _AND _CONST char* s2)
 {
     char* s = s1;
+=======
+char *_DEFUN(strcat, (s1, s2), char *s1 _AND _CONST char *s2) {
+  char *s = s1;
+>>>>>>> master
 
     while (*s1) s1++;
 

@@ -56,6 +56,7 @@ int n;
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_jn(n, x);
 #else
     double z;
@@ -69,6 +70,21 @@ int n;
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return (double)_jnf_r(_R4, n, (float)x);
+=======
+  return __ieee754_jn(n, x);
+#else
+  double z;
+  z = __ieee754_jn(n, x);
+  if (_LIB_VERSION == _IEEE_ || isnan(x))
+    return z;
+  if (fabs(x) > X_TLOSS) {
+    return __kernel_standard(_R4, (double)n, x, 38); /* jn(|x|>X_TLOSS,n) */
+  } else
+    return z;
+#endif
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_jnf_r(_R4, n, (float)x);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 
@@ -82,6 +98,7 @@ int n;
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_yn(n, x);
 #else
     double z;
@@ -102,6 +119,28 @@ int n;
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return (double)_ynf_r(_R4, n, (float)x);
+=======
+  return __ieee754_yn(n, x);
+#else
+  double z;
+  z = __ieee754_yn(n, x);
+  if (_LIB_VERSION == _IEEE_ || isnan(x))
+    return z;
+  if (x <= 0.0) {
+    if (x == 0.0) /* d= -one/(x-x); */
+      return __kernel_standard(_R4, (double)n, x, 12);
+    else
+      /* d = zero/(x-x); */
+      return __kernel_standard(_R4, (double)n, x, 13);
+  }
+  if (x > X_TLOSS) {
+    return __kernel_standard(_R4, (double)n, x, 39); /* yn(x>X_TLOSS,n) */
+  } else
+    return z;
+#endif
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_ynf_r(_R4, n, (float)x);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

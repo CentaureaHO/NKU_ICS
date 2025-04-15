@@ -34,6 +34,7 @@ float fmodf(_R2 x, y) /* wrapper fmodf */
 #endif
 {
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_fmodf(x, y);
 #else
     float z;
@@ -45,6 +46,19 @@ float fmodf(_R2 x, y) /* wrapper fmodf */
     }
     else
         return z;
+=======
+  return __ieee754_fmodf(x, y);
+#else
+  float z;
+  z = __ieee754_fmodf(x, y);
+  if (_LIB_VERSION == _IEEE_ || isnanf(y) || isnanf(x))
+    return z;
+  if (y == (float)0.0) {
+    /* fmodf(x,0) */
+    return (float)__kernel_standard(_R4, (double)x, (double)y, 127);
+  } else
+    return z;
+>>>>>>> master
 #endif
 }
 

@@ -7,6 +7,10 @@
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 int* __errno() { return &_REENT->_errno; }
+=======
+int *__errno() { return &_REENT->_errno; }
+>>>>>>> master
 
 #endif

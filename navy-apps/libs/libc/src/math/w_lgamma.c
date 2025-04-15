@@ -34,6 +34,7 @@ double lgamma(_R2 x) _R3 double x;
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_lgamma_r(x, &_R4->_signgam);
 #else
     double y;
@@ -50,6 +51,24 @@ double lgamma(_R2 x) _R3 double x;
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return (double)_lgammaf_r(_R4, (float)x);
+=======
+  return __ieee754_lgamma_r(x, &_R4->_signgam);
+#else
+  double y;
+  y = __ieee754_lgamma_r(x, &_R4->_signgam);
+  if (_LIB_VERSION == _IEEE_)
+    return y;
+  if (!finite(y) && finite(x)) {
+    if (floor(x) == x && x <= 0.0)
+      return __kernel_standard(_R4, x, x, 15); /* lgamma pole */
+    else
+      return __kernel_standard(_R4, x, x, 14); /* lgamma overflow */
+  } else
+    return y;
+#endif
+#else /* defined (_DOUBLE_IS_32BITS) */
+  return (double)_lgammaf_r(_R4, (float)x);
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

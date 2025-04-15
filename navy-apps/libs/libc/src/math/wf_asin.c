@@ -34,6 +34,7 @@ float asinf(_R2 x) /* wrapper asinf */
 #endif
 {
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_asinf(x);
 #else
     float z;
@@ -45,6 +46,19 @@ float asinf(_R2 x) /* wrapper asinf */
     }
     else
         return z;
+=======
+  return __ieee754_asinf(x);
+#else
+  float z;
+  z = __ieee754_asinf(x);
+  if (_LIB_VERSION == _IEEE_ || isnanf(x))
+    return z;
+  if (fabsf(x) > (float)1.0) {
+    /* asinf(|x|>1) */
+    return (float)__kernel_standard(_R4, (double)x, (double)x, 102);
+  } else
+    return z;
+>>>>>>> master
 #endif
 }
 

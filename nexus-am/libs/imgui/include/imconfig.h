@@ -9,12 +9,20 @@
 
 #include <klib.h>
 
+<<<<<<< HEAD
 typedef struct FILE
 {
 } FILE;
 
 void* kalloc(size_t);
 void  kfree(void*);
+=======
+typedef struct FILE {
+} FILE;
+
+void *kalloc(size_t);
+void kfree(void *);
+>>>>>>> master
 
 //---- Define assertion handler. Defaults to calling assert().
 //#define IM_ASSERT(_EXPR)  MyAssert(_EXPR)

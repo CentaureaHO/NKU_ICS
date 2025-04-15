@@ -54,9 +54,14 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 _PTR _DEFUN(calloc, (n, size), size_t n _AND size_t size)
 {
     register char* cp;
+=======
+_PTR _DEFUN(calloc, (n, size), size_t n _AND size_t size) {
+  register char *cp;
+>>>>>>> master
 
     n *= size;
 
@@ -64,10 +69,18 @@ _PTR _DEFUN(calloc, (n, size), size_t n _AND size_t size)
        The application may have provided it's own malloc() and we want free()
        (which will also be replaced) to properly free the buffer we allocate.  */
 
+<<<<<<< HEAD
     cp = malloc(n);
     if (cp == 0) return 0;
     memset(cp, '\0', n);
     return cp;
+=======
+  cp = malloc(n);
+  if (cp == 0)
+    return 0;
+  memset(cp, '\0', n);
+  return cp;
+>>>>>>> master
 }
 
 #endif

@@ -95,17 +95,29 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
  * Set one of the three kinds of buffering, optionally including a buffer.
  */
 
+<<<<<<< HEAD
 int _DEFUN(
     setvbuf, (fp, buf, mode, size), register FILE* fp _AND char* buf _AND register int mode _AND register size_t size)
 {
     CHECK_INIT(fp);
+=======
+int _DEFUN(setvbuf, (fp, buf, mode, size),
+           register FILE *fp _AND char *buf _AND register int mode
+               _AND register size_t size) {
+  CHECK_INIT(fp);
+>>>>>>> master
 
     /*
      * Verify arguments.  The `int' limit on `size' is due to this
      * particular implementation.
      */
 
+<<<<<<< HEAD
     if ((mode != _IOFBF && mode != _IOLBF && mode != _IONBF) || (int)size < 0) return (EOF);
+=======
+  if ((mode != _IOFBF && mode != _IOLBF && mode != _IONBF) || (int)size < 0)
+    return (EOF);
+>>>>>>> master
 
     /*
      * Write current buffer, if any; drop read count, if any.
@@ -114,11 +126,20 @@ int _DEFUN(
      * non buffer flags, and clear malloc flag.
      */
 
+<<<<<<< HEAD
     (void)fflush(fp);
     fp->_r       = 0;
     fp->_lbfsize = 0;
     if (fp->_flags & __SMBF) _free_r(fp->_data, (void*)fp->_bf._base);
     fp->_flags &= ~(__SLBF | __SNBF | __SMBF);
+=======
+  (void)fflush(fp);
+  fp->_r = 0;
+  fp->_lbfsize = 0;
+  if (fp->_flags & __SMBF)
+    _free_r(fp->_data, (void *)fp->_bf._base);
+  fp->_flags &= ~(__SLBF | __SNBF | __SMBF);
+>>>>>>> master
 
     /*
      * Now put back whichever flag is needed, and fix _lbfsize
@@ -126,6 +147,7 @@ int _DEFUN(
      * stream will be buffered at all.
      */
 
+<<<<<<< HEAD
     switch (mode)
     {
         case _IONBF:
@@ -146,6 +168,27 @@ int _DEFUN(
             fp->_bf._size          = size;
             break;
     }
+=======
+  switch (mode) {
+  case _IONBF:
+    fp->_flags |= __SNBF;
+    fp->_bf._base = fp->_p = fp->_nbuf;
+    fp->_bf._size = 1;
+    break;
+
+  case _IOLBF:
+    fp->_flags |= __SLBF;
+    fp->_lbfsize = -size;
+  /* FALLTHROUGH */
+
+  case _IOFBF:
+    /* no flag */
+    fp->_data->__cleanup = _cleanup_r;
+    fp->_bf._base = fp->_p = (unsigned char *)buf;
+    fp->_bf._size = size;
+    break;
+  }
+>>>>>>> master
 
     /*
      * Patch up write count if necessary.

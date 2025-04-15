@@ -76,11 +76,20 @@ static char sccsid[] = "%W% (Berkeley) %G%";
  * Return the number of whole objects written.
  */
 
+<<<<<<< HEAD
 size_t _DEFUN(fwrite, (buf, size, count, fp), _CONST _PTR buf _AND size_t size _AND size_t count _AND FILE* fp)
 {
     size_t        n;
     struct __suio uio;
     struct __siov iov;
+=======
+size_t
+_DEFUN(fwrite, (buf, size, count, fp),
+       _CONST _PTR buf _AND size_t size _AND size_t count _AND FILE *fp) {
+  size_t n;
+  struct __suio uio;
+  struct __siov iov;
+>>>>>>> master
 
     iov.iov_base  = buf;
     uio.uio_resid = iov.iov_len = n = count * size;
@@ -93,6 +102,12 @@ size_t _DEFUN(fwrite, (buf, size, count, fp), _CONST _PTR buf _AND size_t size _
      * generally slow and since this occurs whenever size==0.
      */
 
+<<<<<<< HEAD
     if (__sfvwrite(fp, &uio) == 0) return count;
     return (n - uio.uio_resid) / size;
+=======
+  if (__sfvwrite(fp, &uio) == 0)
+    return count;
+  return (n - uio.uio_resid) / size;
+>>>>>>> master
 }

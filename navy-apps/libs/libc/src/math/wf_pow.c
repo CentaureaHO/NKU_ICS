@@ -34,6 +34,7 @@ float powf(_R2 x, y) /* wrapper powf */
 #endif
 {
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_powf(x, y);
 #else
     float z;
@@ -64,6 +65,39 @@ float powf(_R2 x, y) /* wrapper powf */
     if (z == (float)0.0 && finitef(x) && finitef(y)) /* powf underflow */
         return (float)__kernel_standard(_R4, (double)x, (double)y, 122);
     return z;
+=======
+  return __ieee754_powf(x, y);
+#else
+  float z;
+  z = __ieee754_powf(x, y);
+  if (_LIB_VERSION == _IEEE_ || isnanf(y))
+    return z;
+  if (isnanf(x)) {
+    if (y == (float)0.0) /* powf(NaN,0.0) */
+      return (float)__kernel_standard(_R4, (double)x, (double)y, 142);
+    else
+      return z;
+  }
+  if (x == (float)0.0) {
+    if (y == (float)0.0) /* powf(0.0,0.0) */
+      return (float)__kernel_standard(_R4, (double)x, (double)y, 120);
+    if (finitef(y) && y < (float)0.0) /* powf(0.0,negative) */
+      return (float)__kernel_standard(_R4, (double)x, (double)y, 123);
+    return z;
+  }
+  if (!finitef(z)) {
+    if (finitef(x) && finitef(y)) {
+      if (isnanf(z)) /* powf neg**non-int */
+        return (float)__kernel_standard(_R4, (double)x, (double)y, 124);
+      else
+        /* powf overflow */
+        return (float)__kernel_standard(_R4, (double)x, (double)y, 121);
+    }
+  }
+  if (z == (float)0.0 && finitef(x) && finitef(y)) /* powf underflow */
+    return (float)__kernel_standard(_R4, (double)x, (double)y, 122);
+  return z;
+>>>>>>> master
 #endif
 }
 

@@ -43,6 +43,7 @@ extern "C" {
 #define optarg PAL_optarg
 #define getopt PAL_getopt
 
+<<<<<<< HEAD
 extern int   opterr;
 extern int   optind;
 extern int   optopt;
@@ -50,6 +51,15 @@ extern int   optreset;
 extern char* optarg;
 
 int getopt(int nargc, char* const* nargv, const char* ostr);
+=======
+extern int opterr;
+extern int optind;
+extern int optopt;
+extern int optreset;
+extern char *optarg;
+
+int getopt(int nargc, char *const *nargv, const char *ostr);
+>>>>>>> master
 
 #ifdef __cplusplus
 }

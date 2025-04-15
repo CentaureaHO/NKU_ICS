@@ -34,6 +34,7 @@ QUICKREF
 
 #include "fdlibm.h"
 
+<<<<<<< HEAD
 double nan()
 {
 #ifndef _DOUBLE_IS_32BITS
@@ -43,5 +44,15 @@ double nan()
     return x;
 #else  /* defined (_DOUBLE_IS_32BITS) */
     return nanf();
+=======
+double nan() {
+#ifndef _DOUBLE_IS_32BITS
+  double x;
+
+  INSERT_WORDS(x, 0x7ff80000, 0);
+  return x;
+#else  /* defined (_DOUBLE_IS_32BITS) */
+  return nanf();
+>>>>>>> master
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

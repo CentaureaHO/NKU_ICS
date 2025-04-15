@@ -26,8 +26,14 @@
 #include <varargs.h>
 #endif
 
+<<<<<<< HEAD
 int     vprintf(fmt, ap) char _CONST* fmt;
 va_list ap;
 {
     return vfprintf(stdout, fmt, ap);
 }
+=======
+int vprintf(fmt, ap) char _CONST *fmt;
+va_list ap;
+{ return vfprintf(stdout, fmt, ap); }
+>>>>>>> master

@@ -27,8 +27,13 @@ extern "C" {
 #endif
 
 typedef enum tagLOADRESFLAG {
+<<<<<<< HEAD
     kLoadScene        = (1 << 0),  // load a scene
     kLoadPlayerSprite = (1 << 1),  // load player sprites
+=======
+  kLoadScene = (1 << 0),        // load a scene
+  kLoadPlayerSprite = (1 << 1), // load player sprites
+>>>>>>> master
 } LOADRESFLAG,
     *LPLOADRESFLAG;
 

@@ -31,14 +31,23 @@ static char sccsid[] = "%W% (Berkeley) %G%";
  * or if c=='\n' and the file is line buffered.
  */
 
+<<<<<<< HEAD
 int            __swbuf(c, fp) register int c;
 register FILE* fp;
+=======
+int __swbuf(c, fp) register int c;
+register FILE *fp;
+>>>>>>> master
 {
     register int n;
 
     /* Ensure stdio has been initialized.  */
 
+<<<<<<< HEAD
     CHECK_INIT(fp);
+=======
+  CHECK_INIT(fp);
+>>>>>>> master
 
     /*
      * In case we cannot write, or longjmp takes us out early,
@@ -48,9 +57,16 @@ register FILE* fp;
      * calls might wrap _w from negative to positive.
      */
 
+<<<<<<< HEAD
     fp->_w = fp->_lbfsize;
     if (cantwrite(fp)) return EOF;
     c = (unsigned char)c;
+=======
+  fp->_w = fp->_lbfsize;
+  if (cantwrite(fp))
+    return EOF;
+  c = (unsigned char)c;
+>>>>>>> master
 
     /*
      * If it is completely full, flush it out.  Then, in any case,
@@ -62,6 +78,7 @@ register FILE* fp;
      * to 0, so we need not do anything else.
      */
 
+<<<<<<< HEAD
     n = fp->_p - fp->_bf._base;
     if (n >= fp->_bf._size) {
         if (fflush(fp)) return EOF;
@@ -72,4 +89,18 @@ register FILE* fp;
     if (++n == fp->_bf._size || (fp->_flags & __SLBF && c == '\n'))
         if (fflush(fp)) return EOF;
     return c;
+=======
+  n = fp->_p - fp->_bf._base;
+  if (n >= fp->_bf._size) {
+    if (fflush(fp))
+      return EOF;
+    n = 0;
+  }
+  fp->_w--;
+  *fp->_p++ = c;
+  if (++n == fp->_bf._size || (fp->_flags & __SLBF && c == '\n'))
+    if (fflush(fp))
+      return EOF;
+  return c;
+>>>>>>> master
 }

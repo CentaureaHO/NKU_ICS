@@ -34,6 +34,7 @@ float acoshf(_R2 x) /* wrapper acoshf */
 #endif
 {
 #ifdef _IEEE_LIBM
+<<<<<<< HEAD
     return __ieee754_acoshf(x);
 #else
     float z;
@@ -45,6 +46,19 @@ float acoshf(_R2 x) /* wrapper acoshf */
     }
     else
         return z;
+=======
+  return __ieee754_acoshf(x);
+#else
+  float z;
+  z = __ieee754_acoshf(x);
+  if (_LIB_VERSION == _IEEE_ || isnanf(x))
+    return z;
+  if (x < (float)1.0) {
+    /* acosh(x<1) */
+    return (float)__kernel_standard(_R4, (double)x, (double)x, 129);
+  } else
+    return z;
+>>>>>>> master
 #endif
 }
 

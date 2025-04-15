@@ -72,6 +72,7 @@ ldiv_t ldiv(n, d) long n, d;
 {
     ldiv_t res;
 
+<<<<<<< HEAD
     if (d) {
         res.quot = labs(n) / labs(d);
         res.rem  = labs(n) % labs(d);
@@ -88,6 +89,24 @@ ldiv_t ldiv(n, d) long n, d;
 
         res.rem = 0;
     }
+=======
+  if (d) {
+    res.quot = labs(n) / labs(d);
+    res.rem = labs(n) % labs(d);
+
+    if ((n < 0 && d > 0) || (n >= 0 && d < 0))
+      res.quot = -res.quot;
+    if (n < 0)
+      res.rem = -res.rem;
+  } else {
+    if (n < 0)
+      res.quot = LONG_MIN;
+    else
+      res.quot = LONG_MAX;
+
+    res.rem = 0;
+  }
+>>>>>>> master
 
     return res;
 }

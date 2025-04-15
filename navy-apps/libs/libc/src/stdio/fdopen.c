@@ -46,6 +46,7 @@ PORTABILITY
 
 extern int __sflags();
 
+<<<<<<< HEAD
 FILE* _DEFUN(_fdopen_r, (ptr, fd, mode), struct _reent* ptr _AND int fd _AND _CONST char* mode)
 {
     register FILE* fp;
@@ -65,6 +66,30 @@ FILE* _DEFUN(_fdopen_r, (ptr, fd, mode), struct _reent* ptr _AND int fd _AND _CO
 
     if ((fp = __sfp(ptr)) == 0) return 0;
     fp->_flags = flags;
+=======
+FILE *_DEFUN(_fdopen_r, (ptr, fd, mode),
+             struct _reent *ptr _AND int fd _AND _CONST char *mode) {
+  register FILE *fp;
+  int flags, oflags;
+
+  if ((flags = __sflags(ptr, mode, &oflags)) == 0)
+    return 0;
+
+/* make sure the mode the user wants is a subset of the actual mode */
+#ifdef F_GETFL
+  if ((fdflags = _fcntl(fd, F_GETFL, 0)) < 0)
+    return 0;
+  fdmode = fdflags & O_ACCMODE;
+  if (fdmode != O_RDWR && (fdmode != (oflags & O_ACCMODE))) {
+    ptr->_errno = EBADF;
+    return 0;
+  }
+#endif
+
+  if ((fp = __sfp(ptr)) == 0)
+    return 0;
+  fp->_flags = flags;
+>>>>>>> master
 /*
  * If opened for appending, but underlying descriptor
  * does not have O_APPEND bit set, assert __SAPP so that
@@ -73,9 +98,15 @@ FILE* _DEFUN(_fdopen_r, (ptr, fd, mode), struct _reent* ptr _AND int fd _AND _CO
 #ifdef F_GETFL
     if ((oflags & O_APPEND) && !(fdflags & O_APPEND))
 #endif
+<<<<<<< HEAD
         fp->_flags |= __SAPP;
     fp->_file   = fd;
     fp->_cookie = (_PTR)fp;
+=======
+    fp->_flags |= __SAPP;
+  fp->_file = fd;
+  fp->_cookie = (_PTR)fp;
+>>>>>>> master
 
 #undef _read
 #undef _write
@@ -91,6 +122,12 @@ FILE* _DEFUN(_fdopen_r, (ptr, fd, mode), struct _reent* ptr _AND int fd _AND _CO
 
 #ifndef _REENT_ONLY
 
+<<<<<<< HEAD
 FILE* _DEFUN(fdopen, (fd, mode), int fd _AND _CONST char* mode) { return _fdopen_r(_REENT, fd, mode); }
+=======
+FILE *_DEFUN(fdopen, (fd, mode), int fd _AND _CONST char *mode) {
+  return _fdopen_r(_REENT, fd, mode);
+}
+>>>>>>> master
 
 #endif

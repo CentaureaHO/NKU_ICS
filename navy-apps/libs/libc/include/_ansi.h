@@ -23,7 +23,11 @@
 #endif
 
 #ifdef _HAVE_STDC
+<<<<<<< HEAD
 #define _PTR void*
+=======
+#define _PTR void *
+>>>>>>> master
 #define _AND ,
 #define _NOARGS void
 #define _CONST const
@@ -42,7 +46,11 @@
 #define _PARAMS(paramlist) paramlist
 #endif
 #else
+<<<<<<< HEAD
 #define _PTR char*
+=======
+#define _PTR char *
+>>>>>>> master
 #define _AND ;
 #define _NOARGS
 #define _CONST

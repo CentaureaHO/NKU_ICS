@@ -51,6 +51,7 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 
 #include <stdio.h>
 
+<<<<<<< HEAD
 void _DEFUN(rewind, (fp), register FILE* fp)
 {
     (void)fflush(fp);
@@ -59,4 +60,14 @@ void _DEFUN(rewind, (fp), register FILE* fp)
     fp->_r = 0;
     fp->_p = fp->_bf._base;
     (void)(*fp->_seek)(fp->_cookie, (fpos_t)0, SEEK_SET);
+=======
+void _DEFUN(rewind, (fp), register FILE *fp) {
+  (void)fflush(fp);
+  clearerr(fp);
+  if (fp->_seek == NULL)
+    return; /* ??? */
+  fp->_r = 0;
+  fp->_p = fp->_bf._base;
+  (void)(*fp->_seek)(fp->_cookie, (fpos_t)0, SEEK_SET);
+>>>>>>> master
 }

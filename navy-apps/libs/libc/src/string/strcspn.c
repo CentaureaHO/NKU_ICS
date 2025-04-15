@@ -30,6 +30,7 @@ PORTABILITY
 
 #include <string.h>
 
+<<<<<<< HEAD
 size_t _DEFUN(strcspn, (s1, s2), _CONST char* s1 _AND _CONST char* s2)
 {
     _CONST char* s = s1;
@@ -41,7 +42,21 @@ size_t _DEFUN(strcspn, (s1, s2), _CONST char* s1 _AND _CONST char* s2)
         }
         if (*c) break;
         s1++;
+=======
+size_t _DEFUN(strcspn, (s1, s2), _CONST char *s1 _AND _CONST char *s2) {
+  _CONST char *s = s1;
+  _CONST char *c;
+
+  while (*s1) {
+    for (c = s2; *c; c++) {
+      if (*s1 == *c)
+        break;
+>>>>>>> master
     }
+    if (*c)
+      break;
+    s1++;
+  }
 
     return s1 - s;
 }

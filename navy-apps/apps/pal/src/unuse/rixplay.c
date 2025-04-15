@@ -19,7 +19,11 @@ VOID RIX_FillBuffer(LPBYTE stream, INT len)
 
 --*/
 {
+<<<<<<< HEAD
     return;
+=======
+  return;
+>>>>>>> master
 }
 
 INT RIX_Init(LPCSTR szFileName)
@@ -38,7 +42,11 @@ INT RIX_Init(LPCSTR szFileName)
 
 --*/
 {
+<<<<<<< HEAD
     return 0;
+=======
+  return 0;
+>>>>>>> master
 }
 
 VOID RIX_Shutdown(VOID)
@@ -57,7 +65,11 @@ VOID RIX_Shutdown(VOID)
 
 --*/
 {
+<<<<<<< HEAD
     return;
+=======
+  return;
+>>>>>>> master
 }
 
 VOID RIX_Play(INT iNumRIX, BOOL fLoop, FLOAT flFadeTime)
@@ -80,5 +92,9 @@ VOID RIX_Play(INT iNumRIX, BOOL fLoop, FLOAT flFadeTime)
 
 --*/
 {
+<<<<<<< HEAD
     return;
+=======
+  return;
+>>>>>>> master
 }

@@ -48,9 +48,14 @@ No supporting OS subroutines are required.
 
 #include <stdio.h>
 
+<<<<<<< HEAD
 int _DEFUN(fgetpos, (fp, pos), FILE* fp _AND fpos_t* pos)
 {
     *pos = ftell(fp);
+=======
+int _DEFUN(fgetpos, (fp, pos), FILE *fp _AND fpos_t *pos) {
+  *pos = ftell(fp);
+>>>>>>> master
 
     if (*pos != -1) return 0;
     return 1;

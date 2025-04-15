@@ -76,6 +76,7 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 
 #undef getchar
 
+<<<<<<< HEAD
 int _getchar_r(f) struct _reent* f;
 {
     return getc(_stdin_r(f));
@@ -88,6 +89,17 @@ int getchar()
     /* CHECK_INIT is called (eventually) by __srefill.  */
 
     return _getchar_r(_REENT);
+=======
+int _getchar_r(f) struct _reent *f;
+{ return getc(_stdin_r(f)); }
+
+#ifndef _REENT_ONLY
+
+int getchar() {
+  /* CHECK_INIT is called (eventually) by __srefill.  */
+
+  return _getchar_r(_REENT);
+>>>>>>> master
 }
 
 #endif

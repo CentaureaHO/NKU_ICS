@@ -29,10 +29,19 @@ float ldexpf(_R2 value, exp) _R3 float value;
 int exp;
 #endif
 {
+<<<<<<< HEAD
     if (!finitef(value) || value == (float)0.0) return value;
     value                                                   = scalbnf(value, exp);
     if (!finitef(value) || value == (float)0.0) _R4->_errno = ERANGE;
     return value;
+=======
+  if (!finitef(value) || value == (float)0.0)
+    return value;
+  value = scalbnf(value, exp);
+  if (!finitef(value) || value == (float)0.0)
+    _R4->_errno = ERANGE;
+  return value;
+>>>>>>> master
 }
 
 #endif /* defined (_LIBM_REENT) || ! defined (_REENT_ONLY) */
