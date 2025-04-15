@@ -260,8 +260,4 @@ void difftest_step(uint32_t eip)
         Log("Diff test failed at eip = 0x%x, exec_cnt = %d", eip, cpu.exec_cnt);
         nemu_state = NEMU_END;
     }
-    else if (cpu.exec_cnt % 100000 == 0)
-    {
-        Log("eip = 0x%x, exec_cnt = %d", eip, cpu.exec_cnt);
-    }
 }
