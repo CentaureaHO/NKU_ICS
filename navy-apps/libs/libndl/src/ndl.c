@@ -39,13 +39,16 @@ int NDL_OpenDisplay(int w, int h) {
   } else {
     printf("OpenDisplay breakpoint 2.5\n");
     get_display_info();
+    printf("OpenDisplay breakpoint 2.6\n");
     assert(screen_w >= canvas_w);
     assert(screen_h >= canvas_h);
     pad_x = (screen_w - canvas_w) / 2;
     pad_y = (screen_h - canvas_h) / 2;
     fbdev = fopen("/dev/fb", "w");
+    printf("OpenDisplay breakpoint 2.7\n");
     assert(fbdev);
     evtdev = fopen("/dev/events", "r");
+    printf("OpenDisplay breakpoint 2.8\n");
     assert(evtdev);
   }
 
