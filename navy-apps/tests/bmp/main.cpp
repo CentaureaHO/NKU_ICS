@@ -5,13 +5,11 @@
 
 int main() {
   NDL_Bitmap *bmp = (NDL_Bitmap *)malloc(sizeof(NDL_Bitmap));
-  printf("bmp: %p\n", bmp);
   NDL_LoadBitmap(bmp, "/share/pictures/projectn.bmp");
-  printf("bmp->pixels: %p\n", bmp->pixels);
   assert(bmp->pixels);
-  printf("bmp->w: %d\n", bmp->w);
+  printf("bmp->size: %d x %d\n", bmp->w, bmp->h);
   NDL_OpenDisplay(bmp->w, bmp->h);
-  printf("bmp->h: %d\n", bmp->h);
+  printf("NDL_OpenDisplay done\n");
   NDL_DrawRect(bmp->pixels, 0, 0, bmp->w, bmp->h);
   printf("NDL_DrawRect done\n");
   NDL_Render();
