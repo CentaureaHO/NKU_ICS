@@ -25,6 +25,7 @@ static inline _RegSet *sys_read(_RegSet *r) // 2
   size_t len = SYSCALL_ARG4(r);
 
   SYSCALL_ARG1(r) = fs_read(fd, buf, len);
+  Log("sys_read returns %d", SYSCALL_ARG1(r));
 
   return NULL;
 }
