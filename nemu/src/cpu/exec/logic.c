@@ -60,6 +60,8 @@ make_EHelper(or)
     rtl_update_ZFSF(&t0, id_dest->width);
 
     operand_write(id_dest, &t0);
+    printf("OR: id_dest->val = 0x%x, id_src->val = 0x%x\n", id_dest->val, id_src->val);
+    printf("OR: t0 = 0x%x\n", t0);
 
     print_asm_template2(or);
 }
