@@ -84,6 +84,7 @@ make_EHelper(sub)
     print_asm_template2(sub);
 }
 
+extern bool exec_diff_test;
 make_EHelper(cmp)
 {
     // OF, SF, ZF, AF, PF, and CF as described in Appendix C
@@ -108,7 +109,13 @@ make_EHelper(cmp)
     rtl_update_PFZFSF(r2, id_dest->width);
 
     // update CF: carry means minuend < subtrahend
+    if (exec_diff_test) {
+        Log("cmp: %x - %x = %x", t0, t1, t2);
+    }
     rtl_sltu(r3, r0, r1);
+    if (exec_diff_test) {
+        Log("cmp: %x <u %x = %x", t0, t1, t3);
+    }
     rtl_set_CF(r3);
 
     // update OF: overflow only happens when minuend and subtrahend have different sign,
