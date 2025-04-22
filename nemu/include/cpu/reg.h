@@ -185,6 +185,31 @@ typedef struct
 
     uint16_t cs;
 
+    union
+    {
+        uint32_t cr3;
+        struct
+        {
+            const uint32_t : 12;
+            uint32_t PDBR : 20;
+        };
+    };
+
+    union
+    {
+        uint32_t cr0;
+        struct
+        {
+            uint32_t PE : 1;  // Protection Enable
+            uint32_t MP : 1;  // Monitor Coprocessor
+            uint32_t EM : 1;  // Emulation
+            uint32_t TS : 1;  // Task Switched
+            uint32_t ET : 1;  // Extension Type
+            const uint32_t : 26;
+            uint32_t PG : 1;  // Paging
+        };
+    };
+
     uint32_t exec_cnt;
 
 } CPU_state;

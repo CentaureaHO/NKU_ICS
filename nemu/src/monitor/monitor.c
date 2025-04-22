@@ -121,6 +121,7 @@ static inline void restart()
     cpu.eip      = ENTRY_START;
     cpu.eflags   = 0x6;
     cpu.cs       = 0x8;
+    cpu.cr0      = 0x60000011;
     cpu.exec_cnt = 0;
 
 #ifdef DIFF_TEST
