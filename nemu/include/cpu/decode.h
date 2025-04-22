@@ -129,4 +129,7 @@ make_DHelper(out_a2dx);
 
 make_DHelper(movsb);
 
+make_DHelper(mov_Cd2r);
+make_DHelper(mov_r2Cd);
+
 #endif
