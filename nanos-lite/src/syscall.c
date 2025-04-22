@@ -2,9 +2,6 @@
 #include "common.h"
 #include "fs.h"
 
-extern char end;
-static uintptr_t program_break = 0;
-
 static inline _RegSet *sys_none(_RegSet *r) // 0
 {
   SYSCALL_ARG1(r) = 1;
@@ -72,17 +69,7 @@ static inline _RegSet *sys_lseek(_RegSet *r) // 6
 
 static inline _RegSet *sys_brk(_RegSet *r) // 9
 {
-  uintptr_t new_break = SYSCALL_ARG2(r);
-
-  if (program_break == 0) program_break = (uintptr_t)&end;
-  
-  if (new_break >= (uintptr_t)&end) 
-  {
-    program_break = new_break;
-    SYSCALL_ARG1(r) = 0;
-  } 
-  else SYSCALL_ARG1(r) = -1;
-  
+  SYSCALL_ARG1(r) = 0;
   return NULL;
 }
 
