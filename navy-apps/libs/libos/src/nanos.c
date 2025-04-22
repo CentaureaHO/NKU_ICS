@@ -35,24 +35,8 @@ int _write(int fd, void *buf, size_t count) {
   return _syscall_(SYS_write, fd, (uintptr_t)buf, count);
 }
 
-extern char end;
-
 void *_sbrk(intptr_t increment) {
-  static intptr_t program_break = 0;
-  intptr_t old_break;
-
-  if (program_break == 0)
-    program_break = (intptr_t)&end;
-
-  old_break = program_break;
-  intptr_t new_break = old_break + increment;
-
-  if (_syscall_(SYS_brk, new_break, 0, 0) == 0) {
-    program_break = new_break;
-    return (void *)old_break;
-  }
-
-  return (void *)-1;
+  return (void*)_syscall_(SYS_brk, increment, 0, 0);
 }
 
 int _read(int fd, void *buf, size_t count) {
