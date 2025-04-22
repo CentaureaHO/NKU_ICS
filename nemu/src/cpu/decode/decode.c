@@ -339,26 +339,6 @@ make_DHelper(out_a2dx)
 
 make_DHelper(movsb) { decoding.src.width = decoding.dest.width = 1; }
 
-make_DHelper(mov_Cd2r) {
-    decode_op_rm(eip, NULL, false, id_dest, false);
-    id_src->type = OP_TYPE_REG;
-    id_src->reg = decoding.ext_opcode;
-    
-#ifdef DEBUG
-    sprintf(id_src->str, "%%cr%d", id_src->reg);
-#endif
-}
-
-make_DHelper(mov_r2Cd) {
-    decode_op_rm(eip, NULL, false, id_src, true);
-    id_dest->type = OP_TYPE_REG;
-    id_dest->reg = decoding.ext_opcode;
-    
-#ifdef DEBUG
-    sprintf(id_dest->str, "%%cr%d", id_dest->reg);
-#endif
-}
-
 void operand_write(Operand* op, rtlreg_t* src)
 {
     if (op->type == OP_TYPE_REG) {
