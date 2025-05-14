@@ -27,8 +27,8 @@ paddr_t page_translate(vaddr_t vaddr, bool is_write)
     pde.val = paddr_read(pde_base + dir_index * sizeof(PDE), sizeof(PDE));
     
     if (!pde.present)
-        Assert(0, "Page Directory Entry not present, vaddr = 0x%x, dir_index = %d", 
-            vaddr, dir_index);
+        Assert(0, "Page Directory Entry not present, vaddr = 0x%x, dir_index = %d, addr = 0x%x", 
+            vaddr, dir_index, pde_base + dir_index * sizeof(PDE));
     
     if (pde.accessed == 0) 
     {
