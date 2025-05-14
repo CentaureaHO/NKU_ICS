@@ -138,26 +138,25 @@ static inline void rtl_not(rtlreg_t* dest)
 #define RTL_MAX_WIDTH 4
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width, int target_width)
 {
-    if (width == target_width) 
-    {
+    if (width == target_width) {
         *dest = *src1;
         return;
     }
 
-    if (target_width == 4) 
-        switch (width)
+    if (target_width == 4) switch (width)
         {
             case 1: *dest = (int8_t)(*src1 & 0xFF); break;
             case 2: *dest = (int16_t)(*src1 & 0xFFFF); break;
             default: Assert(0, "Invalid width");
         }
-    else if (target_width == 2) 
+    else if (target_width == 2)
         switch (width)
         {
             case 1: *dest = (int16_t)(int8_t)(*src1 & 0xFF) & 0xFFFF; break;
             default: Assert(0, "Invalid width for target_width=2");
         }
-    else Assert(0, "Invalid target width");
+    else
+        Assert(0, "Invalid target width");
 }
 
 static inline void rtl_push(const rtlreg_t* src1)

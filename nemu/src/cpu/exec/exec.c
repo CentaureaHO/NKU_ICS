@@ -359,7 +359,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         EMPTY,
         EMPTY,
         /* 0x20 */ IDEX(mov_E2G, mov_cr2r),
-        EMPTY, 
+        EMPTY,
         IDEX(mov_E2G, mov_r2cr),
         EMPTY,
         /* 0x24 */ EMPTY,
