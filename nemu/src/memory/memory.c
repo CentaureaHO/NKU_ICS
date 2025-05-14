@@ -85,6 +85,7 @@ void paddr_write(paddr_t addr, int len, uint32_t data)
 uint32_t vaddr_read(vaddr_t addr, int len)
 {
     if (((addr & PAGE_MASK) + len) > PAGE_SIZE) {
+        // uint32_t至多读四字节，此次直接认定至多跨一页
         int len1 = PAGE_SIZE - (addr & PAGE_MASK);
         int len2 = len - len1;
 
@@ -110,6 +111,7 @@ uint32_t vaddr_read(vaddr_t addr, int len)
 void vaddr_write(vaddr_t addr, int len, uint32_t data)
 {
     if (((addr & PAGE_MASK) + len) > PAGE_SIZE) {
+        // uint32_t至多写四字节，此次直接认定至多跨一页
         int len1 = PAGE_SIZE - (addr & PAGE_MASK);
         int len2 = len - len1;
 
