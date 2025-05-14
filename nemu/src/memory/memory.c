@@ -20,7 +20,7 @@ paddr_t page_translate(vaddr_t vaddr, bool is_write)
     uint32_t page_index = (vaddr >> 12) & 0x3FF;
     uint32_t offset = vaddr & 0xFFF;
 
-    uint32_t pde_base = cpu.PDBR;
+    uint32_t pde_base = cpu.PDBR << 12;
     PDE pde;
     pde.val = paddr_read(pde_base + dir_index * sizeof(PDE), sizeof(PDE));
     
