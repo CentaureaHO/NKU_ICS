@@ -14,6 +14,8 @@ paddr_t page_translate(vaddr_t vaddr, bool is_write)
 {
     if (!cpu.PG) return vaddr;
 
+    Log("vaddr = 0x%x, cpu.PDBR = 0x%x", vaddr, cpu.PDBR);
+
     uint32_t dir_index = (vaddr >> 22) & 0x3FF;
     uint32_t page_index = (vaddr >> 12) & 0x3FF;
     uint32_t offset = vaddr & 0xFFF;
