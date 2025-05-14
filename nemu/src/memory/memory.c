@@ -14,13 +14,14 @@ paddr_t page_translate(vaddr_t vaddr, bool is_write)
 {
     if (!cpu.PG) return vaddr;
 
-    Log("vaddr = 0x%x, cpu.PDBR = 0x%x", vaddr, cpu.PDBR);
+    // Log("vaddr = 0x%x, cpu.PDBR = 0x%x", vaddr, cpu.PDBR);
 
     uint32_t dir_index = (vaddr >> 22) & 0x3FF;
     uint32_t page_index = (vaddr >> 12) & 0x3FF;
     uint32_t offset = vaddr & 0xFFF;
 
     uint32_t pde_base = cpu.PDBR << 12;
+    Log("pde_base = 0x%x", pde_base);
     PDE pde;
     pde.val = paddr_read(pde_base + dir_index * sizeof(PDE), sizeof(PDE));
     
