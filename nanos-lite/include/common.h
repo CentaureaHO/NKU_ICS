@@ -17,6 +17,6 @@ typedef char bool;
 #define true 1
 #define false 0
 
-#define SCHEDULE_POLICY 3
+#define SCHEDULE_POLICY 2
 
 #endif
