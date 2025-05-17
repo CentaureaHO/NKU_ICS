@@ -67,9 +67,11 @@ static inline _RegSet* sys_lseek(_RegSet* r)  // 6
     return NULL;
 }
 
+int mm_brk(uint32_t new_brk);
 static inline _RegSet* sys_brk(_RegSet* r)  // 9
 {
-    SYSCALL_ARG1(r) = 0;
+    uintptr_t new_brk = SYSCALL_ARG2(r);
+    SYSCALL_ARG1(r) = mm_brk(new_brk);
     return NULL;
 }
 
