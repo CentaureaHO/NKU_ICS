@@ -2,16 +2,50 @@
 #include <assert.h>
 #include <stdint.h>
 
-FLOAT F_mul_F(FLOAT a, FLOAT b)
+typedef int64_t  arith64_s64;
+typedef uint64_t arith64_u64;
+
+arith64_u64 arith64_abs(arith64_s64 a) { return (a < 0) ? -a : a; }
+
+arith64_s64 arith64_neg(arith64_u64 a, int sign) { return sign ? -(arith64_s64)a : a; }
+
+arith64_u64 __udivdi3(arith64_u64 a, arith64_u64 b)
 {
-    assert(0);
-    return 0;
+    if (b == 0) return 0;
+
+    arith64_u64 q = 0;
+    arith64_u64 r = 0;
+    int         i;
+
+    for (i = 63; i >= 0; i--) {
+        r = r << 1;
+        r |= (a >> i) & 1;
+
+        if (r >= b) {
+            r -= b;
+            q |= (arith64_u64)1 << i;
+        }
+    }
+
+    return q;
 }
+
+arith64_s64 __divdi3(arith64_s64 a, arith64_s64 b)
+{
+    arith64_u64 ua = arith64_abs(a);
+    arith64_u64 ub = arith64_abs(b);
+
+    arith64_u64 q = __udivdi3(ua, ub);
+
+    return arith64_neg(q, (a < 0) ^ (b < 0));
+}
+
+FLOAT F_mul_F(FLOAT a, FLOAT b) { return (FLOAT)(((int64_t)a * b) >> 16); }
 
 FLOAT F_div_F(FLOAT a, FLOAT b)
 {
-    assert(0);
-    return 0;
+    assert(b != 0);
+    return (FLOAT)(((int64_t)a << 16) / b);
 }
 
 FLOAT f2F(float a)
@@ -26,14 +60,13 @@ FLOAT f2F(float a)
      * performing arithmetic operations on it directly?
      */
 
-    assert(0);
-    return 0;
+    return (int32_t)(a * (1 << 16));
 }
 
 FLOAT Fabs(FLOAT a)
 {
-    assert(0);
-    return 0;
+    if (a < 0) return -a;
+    return a;
 }
 
 /* Functions below are already implemented */

@@ -2,16 +2,12 @@
 #include <assert.h>
 #include <stdint.h>
 
-FLOAT F_mul_F(FLOAT a, FLOAT b)
-{
-    assert(0);
-    return 0;
-}
+FLOAT F_mul_F(FLOAT a, FLOAT b) { return (FLOAT)(((int64_t)a * b) >> 16); }
 
 FLOAT F_div_F(FLOAT a, FLOAT b)
 {
-    assert(0);
-    return 0;
+    assert(b != 0);
+    return (FLOAT)(((int64_t)a << 16) / b);
 }
 
 FLOAT f2F(float a)
@@ -26,14 +22,13 @@ FLOAT f2F(float a)
      * performing arithmetic operations on it directly?
      */
 
-    assert(0);
-    return 0;
+    return (int32_t)(a * (1 << 16));
 }
 
 FLOAT Fabs(FLOAT a)
 {
-    assert(0);
-    return 0;
+    if (a < 0) return -a;
+    return a;
 }
 
 /* Functions below are already implemented */
