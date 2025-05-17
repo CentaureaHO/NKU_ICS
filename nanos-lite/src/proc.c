@@ -33,7 +33,15 @@ _RegSet* schedule(_RegSet* prev)
 {
     // printf("prev = %p", prev);
     if (current) current->tf = prev;
-    current                  = &pcb[0];
+    
+    static size_t i = 0;
+
+    ++i;
+    if (i % 100) current = &pcb[1];
+    else current = &pcb[0];
+//    current                  = &pcb[0];
+    
+    
     _switch(&current->as);
 
     return current->tf;
