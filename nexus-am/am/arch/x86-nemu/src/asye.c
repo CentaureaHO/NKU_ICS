@@ -73,9 +73,6 @@ void _asye_init(_RegSet* (*h)(_Event, _RegSet*))
 
 _RegSet* _make(_Area stack, void* entry, void* arg) { return NULL; }
 
-void _trap() 
-{
-    asm volatile("int $0x81");
-}
+void _trap() { asm volatile("int $0x81"); }
 
 int _istatus(int enable) { return 0; }
