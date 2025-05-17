@@ -102,6 +102,7 @@ _RegSet* schedule(_RegSet* prev)
 
     static size_t i = 0;
 
+    ++i;
     if (i % 2)
         current = &pcb[1];
     else
