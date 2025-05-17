@@ -87,7 +87,7 @@ ssize_t fs_read(int fd, void* buf, size_t len)
             read_len = dispinfo_read(buf, file_table[fd].open_offset, len);
             file_table[fd].open_offset += read_len;
             return read_len;
-        case FD_NORMAL: panic("Not implemented for read FD_NORMAL");
+        // case FD_NORMAL: panic("Not implemented for read FD_NORMAL");
         default: break;
     }
 
