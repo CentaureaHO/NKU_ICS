@@ -44,6 +44,7 @@ int main()
 #if SCHEDULE_POLICY == 3
     load_prog("/bin/videotest");
 #endif
+    load_prog("/bin/hello");
 
     _trap();
 
