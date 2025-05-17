@@ -42,27 +42,12 @@ arith64_s64 __divdi3(arith64_s64 a, arith64_s64 b)
     return arith64_neg(q, (a < 0) ^ (b < 0));
 }
 
-FLOAT F_mul_F(FLOAT a, FLOAT b) { return ((int64_t)a * (int64_t)b) >> 16; }
+FLOAT F_mul_F(FLOAT a, FLOAT b) { return (FLOAT)(((int64_t)a * b) >> 16); }
 
 FLOAT F_div_F(FLOAT a, FLOAT b)
 {
     assert(b != 0);
-    FLOAT x   = Fabs(a);
-    FLOAT y   = Fabs(b);
-    FLOAT ret = x / y;
-    x         = x % y;
-    for (int i = 0; i < 16; i++) {
-        x <<= 1;
-        ret <<= 1;
-        if (x >= y) {
-            x -= y;
-            ret++;
-        }
-    }
-    if (((a ^ b) & 0x80000000) == 0x80000000) {
-        ret = -ret;
-    }
-    return ret;
+    return (FLOAT)(((int64_t)a << 16) / b);
 }
 
 typedef union
@@ -83,38 +68,71 @@ FLOAT f2F(float a)
      * performing arithmetic operations on it directly?
      */
 
-    union float_
-    {
-        struct
-        {
-            uint32_t man : 23;
-            uint32_t exp : 8;
-            uint32_t sign : 1;
-        };
-        uint32_t val;
-    };
-    union float_ f;
-    f.val     = *((uint32_t*)(void*)&a);
-    int   exp = f.exp - 127;
-    FLOAT ret = 0;
-    if (exp == 128) assert(0);
-    if (exp >= 0) {
-        int mov = 7 - exp;
-        if (mov >= 0)
-            ret = (f.man | (1 << 23)) >> mov;
+    float_u_caster caster;
+    caster.f      = a;
+    uint32_t bits = caster.u;
+
+    uint32_t sign_bit       = (bits >> 31);
+    int32_t  exp_biased     = (bits >> 23) & 0xFF;
+    uint32_t mant_frac_bits = bits & 0x007FFFFF;
+
+    if (exp_biased == 0xFF) {
+        if (mant_frac_bits != 0)
+            return 0;
         else
-            ret = (f.man | (1 << 23)) << (-mov);
+            return sign_bit ? (FLOAT)0x80000000 : (FLOAT)0x7FFFFFFF;
+    }
+
+    if (exp_biased == 0 && mant_frac_bits == 0) return 0;
+
+    int32_t  exponent_unbiased = exp_biased - 127;
+    uint32_t abs_mantissa;
+
+    if (exp_biased == 0) {
+        abs_mantissa      = mant_frac_bits;
+        exponent_unbiased = -126;
     }
     else
-        return 0;
+        abs_mantissa = mant_frac_bits | 0x00800000;
 
-    return f.sign == 0 ? ret : -ret;
+    int     shift_amount = exponent_unbiased - 7;
+    int64_t abs_result_64;
+
+    if (abs_mantissa == 0)
+        abs_result_64 = 0;
+    else if (shift_amount >= (63 - 24))
+        abs_result_64 = 0x7FFFFFFFFFFFFFFFLL;
+    else if (shift_amount < -(63))
+        abs_result_64 = 0;
+    else
+    {
+        if (shift_amount >= 0)
+            abs_result_64 = (int64_t)abs_mantissa << shift_amount;
+        else
+            abs_result_64 = (int64_t)abs_mantissa >> (-shift_amount);
+    }
+
+    FLOAT final_result;
+    if (sign_bit) {
+        if (abs_result_64 >= 0x80000000LL)
+            final_result = (FLOAT)0x80000000;
+        else
+            final_result = (FLOAT)(-abs_result_64);
+    }
+    else
+    {
+        if (abs_result_64 >= 0x7FFFFFFFLL)
+            final_result = (FLOAT)0x7FFFFFFF;
+        else
+            final_result = (FLOAT)abs_result_64;
+    }
+    return final_result;
 }
 
 FLOAT Fabs(FLOAT a)
 {
-    if ((a & 0x80000000) == 0) return a;
-    return -a;
+    if (a < 0) return -a;
+    return a;
 }
 
 /* Functions below are already implemented */

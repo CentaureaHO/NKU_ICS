@@ -5,21 +5,9 @@
 
 typedef int FLOAT;
 
-static inline int F2int(FLOAT a)
-{
-    if ((a & 0x80000000) == 0)
-        return a >> 16;
-    else
-        return -((-a) >> 16);
-}
+static inline int F2int(FLOAT a) { return a / (1 << 16); }
 
-static inline FLOAT int2F(int a)
-{
-    if ((a & 0x80000000) == 0)
-        return a << 16;
-    else
-        return -((-a) << 16);
-}
+static inline FLOAT int2F(int a) { return a << 16; }
 
 static inline FLOAT F_mul_int(FLOAT a, int b) { return a * b; }
 
