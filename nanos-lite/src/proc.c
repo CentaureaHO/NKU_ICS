@@ -37,7 +37,7 @@ _RegSet* schedule(_RegSet* prev)
     static size_t i = 0;
 
     ++i;
-    if (i % 100) current = &pcb[0];
+    if (i % 10) current = &pcb[0];
     else current = &pcb[1];
 //    current                  = &pcb[0];
     
