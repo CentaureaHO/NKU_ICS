@@ -17,8 +17,8 @@ uintptr_t loader(_Protect* as, const char* filename)
     size_t pages = size / PGSIZE;
     size_t remainder = size % PGSIZE;
     size_t alloc_pages = pages + (remainder ? 1 : 0);
-    Log("size = %zu, pages = %zu, remainder = %zu", size, pages, remainder);
-    Log("Alloca %zu pages", alloc_pages);
+    Log("size = %d, pages = %d, remainder = %d", size, pages, remainder);
+    Log("Alloca %d pages", alloc_pages);
     assert(alloc_pages > 0);
     void* paddr = alloc_page(alloc_pages);
     void* vaddr = DEFAULT_ENTRY;
