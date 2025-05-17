@@ -89,8 +89,8 @@ FLOAT f2F(float a)
     uint32_t abs_mantissa;
 
     if (exp_biased == 0) {
-        abs_mantissa = mant_frac_bits;
-        exponent_unbiased       = -126;
+        abs_mantissa      = mant_frac_bits;
+        exponent_unbiased = -126;
     }
     else
         abs_mantissa = mant_frac_bits | 0x00800000;
