@@ -22,7 +22,7 @@ paddr_t page_translate(vaddr_t vaddr, bool is_write)
 
     uint32_t pde_base = cpu.PDBR << 12;
     // Log("pde_base = 0x%x", pde_base);
-    Assert(pde_base == 0x1d6e000, "pde_base = 0x%x", pde_base);
+    // Assert(pde_base == 0x1d6e000, "pde_base = 0x%x", pde_base);
     PDE pde;
     pde.val = paddr_read(pde_base + dir_index * sizeof(PDE), sizeof(PDE));
 
