@@ -113,8 +113,8 @@ FLOAT f2F(float a)
 
 FLOAT Fabs(FLOAT a)
 {
-    if (a < 0) return -a;
-    return a;
+    if ((a & 0x80000000) == 0) return a;
+    return -a;
 }
 
 /* Functions below are already implemented */
