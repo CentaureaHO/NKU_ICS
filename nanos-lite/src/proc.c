@@ -37,8 +37,8 @@ _RegSet* schedule(_RegSet* prev)
     static size_t i = 0;
 
     ++i;
-    if (i % 1000000) current = &pcb[1];
-    else current = &pcb[0];
+    if (i % 1000000) current = &pcb[0];
+    else current = &pcb[1];
 //    current                  = &pcb[0];
     
     
