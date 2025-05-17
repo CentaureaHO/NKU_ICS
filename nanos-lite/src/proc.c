@@ -104,9 +104,9 @@ _RegSet* schedule(_RegSet* prev)
 
     ++i;
     if (i % 10000)
-        current = &pcb[1];
-    else
         current = &pcb[0];
+    else
+        current = &pcb[1];
 
     _switch(&current->as);
 
