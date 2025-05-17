@@ -24,32 +24,28 @@ void* alloc_page(size_t n)
 /* The brk() system call handler. */
 int mm_brk(uint32_t new_brk)
 {
-    if (current->cur_brk == 0)
-    {
+    if (current->cur_brk == 0) {
         current->cur_brk = current->max_brk = new_brk;
         return 0;
     }
 
-    if (new_brk > current->max_brk)
-    {
+    if (new_brk > current->max_brk) {
         uint32_t map_start_va = PGROUNDUP(current->max_brk);
         uint32_t map_end_va   = PGROUNDDOWN(new_brk);
         uint32_t nums_to_map  = 0;
 
         if (map_start_va != 0 && map_start_va <= map_end_va) nums_to_map = (map_end_va - map_start_va) / PGSIZE + 1;
-        if (nums_to_map > 0)
-        {
+        if (nums_to_map > 0) {
             void* pa = alloc_page(nums_to_map);
 
-            for (uint32_t va_to_map = map_start_va; va_to_map <= map_end_va; va_to_map += PGSIZE)
-            {
+            for (uint32_t va_to_map = map_start_va; va_to_map <= map_end_va; va_to_map += PGSIZE) {
                 _map(&current->as, (void*)va_to_map, pa);
                 pa += PGSIZE;
             }
         }
         current->max_brk = new_brk;
     }
-    
+
     current->cur_brk = new_brk;
     return 0;
 }
