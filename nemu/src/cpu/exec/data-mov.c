@@ -256,4 +256,6 @@ make_EHelper(shrd)
         rtl_update_ZFSF(&result, width_bytes);
         rtl_update_PF(&result);
     }
+
+    print_asm_template3(shrd);
 }
