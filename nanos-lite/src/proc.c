@@ -45,6 +45,7 @@ void load_prog(const char* filename)
     list_add(&proc_list, &proc_nodes[i].list);
 }
 
+/*
 _RegSet* schedule(_RegSet* prev)
 {
     if (current) current->tf = prev;
@@ -88,6 +89,23 @@ _RegSet* schedule(_RegSet* prev)
             current = node->pcb;
         }
     }
+
+    _switch(&current->as);
+
+    return current->tf;
+}
+*/
+
+_RegSet* schedule(_RegSet* prev)
+{
+    if (current) current->tf = prev;
+
+    static size_t i = 0;
+
+    if (i % 10)
+        current = &pcb[0];
+    else
+        current = &pcb[1];
 
     _switch(&current->as);
 
