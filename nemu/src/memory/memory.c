@@ -31,7 +31,7 @@ paddr_t page_translate(vaddr_t vaddr, bool is_write)
             "Page Directory Entry not present, vaddr = 0x%x, dir_index = %d, addr = 0x%x",
             vaddr,
             dir_index,
-            pde_base + dir_index * sizeof(PDE));
+            (unsigned int)(pde_base + dir_index * sizeof(PDE)));
 
     if (pde.accessed == 0) {
         pde.accessed = 1;
