@@ -45,7 +45,7 @@ void load_prog(const char* filename)
     list_add(&proc_list, &proc_nodes[i].list);
 }
 
-/*
+
 _RegSet* schedule(_RegSet* prev)
 {
     if (current) current->tf = prev;
@@ -94,8 +94,9 @@ _RegSet* schedule(_RegSet* prev)
 
     return current->tf;
 }
-*/
 
+
+/*
 _RegSet* schedule(_RegSet* prev)
 {
     if (current) current->tf = prev;
@@ -112,3 +113,4 @@ _RegSet* schedule(_RegSet* prev)
 
     return current->tf;
 }
+    */
