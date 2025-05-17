@@ -212,6 +212,8 @@ typedef struct
 
     uint32_t exec_cnt;
 
+    bool INTR;
+
 } CPU_state;
 
 extern CPU_state cpu;
