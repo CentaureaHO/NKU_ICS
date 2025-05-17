@@ -29,6 +29,7 @@ make_EHelper(pusha);
 make_EHelper(popa);
 make_EHelper(movsb);
 make_EHelper(shrd);
+make_EHelper(shld);
 
 make_EHelper(operand_size);
 

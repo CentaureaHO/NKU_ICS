@@ -259,3 +259,66 @@ make_EHelper(shrd)
 
     print_asm_template3(shrd);
 }
+
+make_EHelper(shld) {
+    // For 0F A4 (imm8): id_dest (r/m), id_src2 (reg), id_src (imm8 count)
+    // For 0F A5 (CL):   id_dest (r/m), id_src (reg), CL is count
+
+    rtlreg_t count;
+    rtlreg_t reg_in_bits_val; // Value from the register providing bits to shift in
+
+    if (decoding.opcode == 0x1A4) { // SHLD r/m, r, imm8
+        count = id_src->val;
+        reg_in_bits_val = id_src2->val;
+    } else if (decoding.opcode == 0x1A5) { // SHLD r/m, r, CL
+        rtlreg_t cl_val;
+        rtl_lr_b(&cl_val, R_CL);
+        count = cl_val;
+        reg_in_bits_val = id_src->val; // For 0F A5, G2E puts reg into id_src
+    } else {
+        panic("shld: unknown opcode");
+        return;
+    }
+
+    count %= 32; // Count is MOD 32
+
+    rtlreg_t dest_val = id_dest->val;
+    int width_bytes = id_dest->width;
+    int width_bits = width_bytes * 8;
+
+    if (count == 0) {
+        // No operation
+    } else if (count >= width_bits) {
+        // According to Intel manual: r/m is UNDEFINED, CF, OF, SF, ZF, AF, PF are UNDEFINED.
+        // For NEMU, we typically don't modify r/m or flags in this "bad parameters" case.
+    } else {
+        rtlreg_t cf_bit;
+        // CF is the last bit shifted out from the MSB side of dest_val
+        cf_bit = (dest_val >> (width_bits - count)) & 0x1;
+        rtl_set_CF(&cf_bit);
+
+        uint32_t result;
+        uint32_t dest_masked, src_masked_msbs;
+
+        if (width_bytes == 2) { // 16-bit operand
+            dest_masked = dest_val & 0xFFFF;
+            // Get 'count' MSBs from 16-bit reg_in_bits_val, then shift them to be LSBs
+            src_masked_msbs = (reg_in_bits_val >> (16 - count)) & ((1U << count) - 1);
+
+            result = (dest_masked << count) | src_masked_msbs;
+            result &= 0xFFFF;
+        } else { // 32-bit operand
+            dest_masked = dest_val;
+            // Get 'count' MSBs from 32-bit reg_in_bits_val, then shift them to be LSBs
+            src_masked_msbs = (reg_in_bits_val >> (32 - count)) & ((1UL << count) - 1);
+
+            result = (dest_masked << count) | src_masked_msbs;
+        }
+
+        operand_write(id_dest, &result);
+
+        rtl_update_ZFSF(&result, width_bytes); // Sets ZF, SF
+        rtl_update_PF(&result);                // Sets PF
+        // AF and OF are undefined for SHLD.
+    }
+}
