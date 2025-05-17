@@ -39,7 +39,7 @@ int main()
     ((void (*)(void))entry)();
     */
 
-    load_prog("/bin/pal");
+    load_prog("/bin/float");
     // load_prog("/bin/events");
 #if SCHEDULE_POLICY == 3
     load_prog("/bin/videotest");
