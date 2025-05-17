@@ -7,6 +7,8 @@ static PCB pcb[MAX_NR_PROC];
 static int nr_proc = 0;
 PCB*       current = NULL;
 
+int curgame_idx = 0;
+
 static list_entry_t proc_list;
 
 typedef struct
@@ -45,7 +47,30 @@ void load_prog(const char* filename)
     list_add(&proc_list, &proc_nodes[i].list);
 }
 
+#if SCHEDULE_POLICY == 1
+_RegSet* schedule(_RegSet* prev)
+{
+    if (current) current->tf = prev;
 
+    if (nr_proc < 2) {
+        if (nr_proc == 1)
+            current = &pcb[0];
+        else
+            return NULL;
+    }
+    else
+    {
+        static size_t i = 0;
+        current         = (i++ % 2 == 0) ? &pcb[0] : &pcb[1];
+    }
+
+    if (current) {
+        _switch(&current->as);
+        return current->tf;
+    }
+    return NULL;
+}
+#elif SCHEDULE_POLICY == 2
 _RegSet* schedule(_RegSet* prev)
 {
     if (current) current->tf = prev;
@@ -90,27 +115,51 @@ _RegSet* schedule(_RegSet* prev)
         }
     }
 
-    _switch(&current->as);
-
-    return current->tf;
+    if (current) {
+        _switch(&current->as);
+        return current->tf;
+    }
+    return NULL;
 }
-
-
-/*
+#elif SCHEDULE_POLICY == 3
 _RegSet* schedule(_RegSet* prev)
 {
     if (current) current->tf = prev;
 
-    static size_t i = 0;
-
-    ++i;
-    if (i % 100)
-        current = &pcb[0];
+    if (nr_proc < 2) {
+        if (nr_proc == 1)
+            current = &pcb[0];
+        else
+            return NULL;
+    }
     else
-        current = &pcb[1];
+    {
+        PCB* game_pcb = NULL;
+        if (curgame_idx == 0)
+            game_pcb = &pcb[0];
+        else
+        {
+            if (nr_proc > 2)
+                game_pcb = &pcb[2];
+            else
+            {
+                game_pcb    = &pcb[0];
+                curgame_idx = 0;
+            }
+        }
 
-    _switch(&current->as);
+        PCB* hello_pcb = &pcb[1];
 
-    return current->tf;
+        if (current == game_pcb)
+            current = hello_pcb;
+        else
+            current = game_pcb;
+    }
+
+    if (current) {
+        _switch(&current->as);
+        return current->tf;
+    }
+    return NULL;
 }
-    */
+#endif

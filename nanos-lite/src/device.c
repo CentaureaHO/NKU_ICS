@@ -7,6 +7,10 @@ extern const size_t get_screen_height();
 
 static const char* keyname[256] __attribute__((used)) = {[_KEY_NONE] = "NONE", _KEYS(NAME)};
 
+#if SCHEDULE_POLICY == 3
+extern int curgame_idx;  // 0 for pal, 1 for videotest
+#endif
+
 static char buffer[64] __attribute__((used));
 size_t events_read(void* buf, size_t len)
 {
@@ -16,6 +20,10 @@ size_t events_read(void* buf, size_t len)
         key ^= 0x8000;
         down = true;
     }
+
+#if SCHEDULE_POLICY == 3
+    if (down && key == _KEY_F12) curgame_idx = 1 - curgame_idx;
+#endif
 
     if (key != _KEY_NONE)
         sprintf(buffer, "%s %s\n", down ? "kd" : "ku", keyname[key]);

@@ -41,6 +41,9 @@ int main()
 
     load_prog("/bin/pal");
     load_prog("/bin/events");
+#if SCHEDULE_POLICY == 3
+    load_prog("/bin/videotest");
+#endif
 
     _trap();
 
