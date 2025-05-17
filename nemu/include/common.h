@@ -26,6 +26,8 @@ typedef uint16_t ioaddr_t;
 #define false 0
 #define true 1
 
+#define TIMER_IRQ 0x32
+
 // #define DIFF_TEST
 
 #endif

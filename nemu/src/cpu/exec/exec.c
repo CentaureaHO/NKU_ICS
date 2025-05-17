@@ -605,6 +605,7 @@ static inline void update_eip(void)
 }
 
 bool exec_diff_test = true;
+void raise_intr(uint8_t NO, vaddr_t ret_addr);
 
 void exec_wrapper(bool print_flag)
 {
@@ -639,4 +640,9 @@ void exec_wrapper(bool print_flag)
     void difftest_step(uint32_t);
     difftest_step(eip);
 #endif
+
+    if (cpu.INTR && cpu.IF) {
+        cpu.INTR = false;
+        raise_intr(TIMER_IRQ, cpu.eip);
+    }
 }

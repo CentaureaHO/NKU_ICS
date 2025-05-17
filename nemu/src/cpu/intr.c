@@ -22,4 +22,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr)
     print_asm("intr %#x", NO);
 }
 
-void dev_raise_intr() {}
+void dev_raise_intr() 
+{
+    cpu.INTR = true;
+}
