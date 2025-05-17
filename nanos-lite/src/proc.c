@@ -102,10 +102,10 @@ _RegSet* schedule(_RegSet* prev)
 
     static size_t i = 0;
 
-    if (i % 10)
-        current = &pcb[0];
-    else
+    if (i % 100)
         current = &pcb[1];
+    else
+        current = &pcb[0];
 
     _switch(&current->as);
 
