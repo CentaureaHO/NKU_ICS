@@ -19,14 +19,14 @@
 */
 #if defined(LUAI_MEM) /* { external definitions? */
 typedef LUAI_UMEM lu_mem;
-typedef LUAI_MEM l_mem;
+typedef LUAI_MEM  l_mem;
 #elif LUAI_BITSINT >= 32 /* }{ */
-typedef size_t lu_mem;
+typedef size_t    lu_mem;
 typedef ptrdiff_t l_mem;
-#else /* 16-bit ints */ /* }{ */
+#else /* 16-bit ints */  /* }{ */
 typedef unsigned long lu_mem;
-typedef long l_mem;
-#endif                  /* } */
+typedef long          l_mem;
+#endif                   /* } */
 
 /* chars used as small naturals (so that 'char' is reserved for characters) */
 typedef unsigned char lu_byte;
@@ -35,8 +35,7 @@ typedef unsigned char lu_byte;
 #define MAX_SIZET ((size_t)(~(size_t)0))
 
 /* maximum size visible for Lua (must be representable in a lua_Integer */
-#define MAX_SIZE                                                               \
-  (sizeof(size_t) < sizeof(lua_Integer) ? MAX_SIZET : (size_t)(LUA_MAXINTEGER))
+#define MAX_SIZE (sizeof(size_t) < sizeof(lua_Integer) ? MAX_SIZET : (size_t)(LUA_MAXINTEGER))
 
 #define MAX_LUMEM ((lu_mem)(~(lu_mem)0))
 
@@ -55,18 +54,19 @@ typedef unsigned char lu_byte;
 #if defined(LUAI_USER_ALIGNMENT_T)
 typedef LUAI_USER_ALIGNMENT_T L_Umaxalign;
 #else
-typedef union {
-  lua_Number n;
-  double u;
-  void *s;
-  lua_Integer i;
-  long l;
+typedef union
+{
+    lua_Number  n;
+    double      u;
+    void*       s;
+    lua_Integer i;
+    long        l;
 } L_Umaxalign;
 #endif
 
 /* types of 'usual argument conversions' for lua_Number and lua_Integer */
 typedef LUAI_UACNUMBER l_uacNumber;
-typedef LUAI_UACINT l_uacInt;
+typedef LUAI_UACINT    l_uacInt;
 
 /* internal assertions for in-house debugging */
 #if defined(lua_assert)
@@ -194,11 +194,11 @@ typedef unsigned long Instruction;
 ** function can yield.
 */
 #if !defined(luai_threadyield)
-#define luai_threadyield(L)                                                    \
-  {                                                                            \
-    lua_unlock(L);                                                             \
-    lua_lock(L);                                                               \
-  }
+#define luai_threadyield(L) \
+    {                       \
+        lua_unlock(L);      \
+        lua_lock(L);        \
+    }
 #endif
 
 /*
@@ -252,12 +252,11 @@ typedef unsigned long Instruction;
 ** negative result, which is equivalent to the test below.
 */
 #if !defined(luai_nummod)
-#define luai_nummod(L, a, b, m)                                                \
-  {                                                                            \
-    (m) = l_mathop(fmod)(a, b);                                                \
-    if ((m) * (b) < 0)                                                         \
-      (m) += (b);                                                              \
-  }
+#define luai_nummod(L, a, b, m)        \
+    {                                  \
+        (m) = l_mathop(fmod)(a, b);    \
+        if ((m) * (b) < 0) (m) += (b); \
+    }
 #endif
 
 /* exponentiation */
@@ -284,26 +283,26 @@ typedef unsigned long Instruction;
 #define condmovestack(L, pre, pos) ((void)0)
 #else
 /* realloc stack keeping its size */
-#define condmovestack(L, pre, pos)                                             \
-  {                                                                            \
-    int sz_ = (L)->stacksize;                                                  \
-    pre;                                                                       \
-    luaD_reallocstack((L), sz_);                                               \
-    pos;                                                                       \
-  }
+#define condmovestack(L, pre, pos)   \
+    {                                \
+        int sz_ = (L)->stacksize;    \
+        pre;                         \
+        luaD_reallocstack((L), sz_); \
+        pos;                         \
+    }
 #endif
 
 #if !defined(HARDMEMTESTS)
 #define condchangemem(L, pre, pos) ((void)0)
 #else
-#define condchangemem(L, pre, pos)                                             \
-  {                                                                            \
-    if (G(L)->gcrunning) {                                                     \
-      pre;                                                                     \
-      luaC_fullgc(L, 0);                                                       \
-      pos;                                                                     \
-    }                                                                          \
-  }
+#define condchangemem(L, pre, pos) \
+    {                              \
+        if (G(L)->gcrunning) {     \
+            pre;                   \
+            luaC_fullgc(L, 0);     \
+            pos;                   \
+        }                          \
+    }
 #endif
 
 #endif

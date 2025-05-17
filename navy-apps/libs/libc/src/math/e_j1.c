@@ -70,19 +70,18 @@ static const double
 static double
 #endif
     huge = 1e300,
-    one = 1.0,
-    invsqrtpi = 5.64189583547756279280e-01, /* 0x3FE20DD7, 0x50429B6D */
-    tpi = 6.36619772367581382433e-01,       /* 0x3FE45F30, 0x6DC9C883 */
-                                            /* R0/S0 on [0,2] */
-    r00 = -6.25000000000000000000e-02,      /* 0xBFB00000, 0x00000000 */
-    r01 = 1.40705666955189706048e-03,       /* 0x3F570D9F, 0x98472C61 */
-    r02 = -1.59955631084035597520e-05,      /* 0xBEF0C5C6, 0xBA169668 */
-    r03 = 4.96727999609584448412e-08,       /* 0x3E6AAAFA, 0x46CA0BD9 */
-    s01 = 1.91537599538363460805e-02,       /* 0x3F939D0B, 0x12637E53 */
-    s02 = 1.85946785588630915560e-04,       /* 0x3F285F56, 0xB9CDF664 */
-    s03 = 1.17718464042623683263e-06,       /* 0x3EB3BFF8, 0x333F8498 */
-    s04 = 5.04636257076217042715e-09,       /* 0x3E35AC88, 0xC97DFF2C */
-    s05 = 1.23542274426137913908e-11;       /* 0x3DAB2ACF, 0xCFB97ED8 */
+    one = 1.0, invsqrtpi = 5.64189583547756279280e-01, /* 0x3FE20DD7, 0x50429B6D */
+    tpi = 6.36619772367581382433e-01,                  /* 0x3FE45F30, 0x6DC9C883 */
+                                                       /* R0/S0 on [0,2] */
+    r00 = -6.25000000000000000000e-02,                 /* 0xBFB00000, 0x00000000 */
+    r01 = 1.40705666955189706048e-03,                  /* 0x3F570D9F, 0x98472C61 */
+    r02 = -1.59955631084035597520e-05,                 /* 0xBEF0C5C6, 0xBA169668 */
+    r03 = 4.96727999609584448412e-08,                  /* 0x3E6AAAFA, 0x46CA0BD9 */
+    s01 = 1.91537599538363460805e-02,                  /* 0x3F939D0B, 0x12637E53 */
+    s02 = 1.85946785588630915560e-04,                  /* 0x3F285F56, 0xB9CDF664 */
+    s03 = 1.17718464042623683263e-06,                  /* 0x3EB3BFF8, 0x333F8498 */
+    s04 = 5.04636257076217042715e-09,                  /* 0x3E35AC88, 0xC97DFF2C */
+    s05 = 1.23542274426137913908e-11;                  /* 0x3DAB2ACF, 0xCFB97ED8 */
 
 #ifdef __STDC__
 static const double zero = 0.0;
@@ -93,56 +92,55 @@ static double zero = 0.0;
 #ifdef __STDC__
 double __ieee754_j1(double x)
 #else
-double __ieee754_j1(x) double x;
+double        __ieee754_j1(x) double x;
 #endif
 {
-  double z, s, c, ss, cc, r, u, v, y;
-  __int32_t hx, ix;
+    double    z, s, c, ss, cc, r, u, v, y;
+    __int32_t hx, ix;
 
-  GET_HIGH_WORD(hx, x);
-  ix = hx & 0x7fffffff;
-  if (ix >= 0x7ff00000)
-    return one / x;
-  y = fabs(x);
-  if (ix >= 0x40000000) { /* |x| >= 2.0 */
-    s = sin(y);
-    c = cos(y);
-    ss = -s - c;
-    cc = s - c;
-    if (ix < 0x7fe00000) { /* make sure y+y not overflow */
-      z = cos(y + y);
-      if ((s * c) > zero)
-        cc = z / ss;
-      else
-        ss = z / cc;
+    GET_HIGH_WORD(hx, x);
+    ix = hx & 0x7fffffff;
+    if (ix >= 0x7ff00000) return one / x;
+    y = fabs(x);
+    if (ix >= 0x40000000) { /* |x| >= 2.0 */
+        s  = sin(y);
+        c  = cos(y);
+        ss = -s - c;
+        cc = s - c;
+        if (ix < 0x7fe00000) { /* make sure y+y not overflow */
+            z = cos(y + y);
+            if ((s * c) > zero)
+                cc = z / ss;
+            else
+                ss = z / cc;
+        }
+        /*
+         * j1(x) = 1/__ieee754_sqrt(pi) * (P(1,x)*cc - Q(1,x)*ss) /
+         * __ieee754_sqrt(x)
+         * y1(x) = 1/__ieee754_sqrt(pi) * (P(1,x)*ss + Q(1,x)*cc) /
+         * __ieee754_sqrt(x)
+         */
+        if (ix > 0x48000000)
+            z = (invsqrtpi * cc) / __ieee754_sqrt(y);
+        else
+        {
+            u = pone(y);
+            v = qone(y);
+            z = invsqrtpi * (u * cc - v * ss) / __ieee754_sqrt(y);
+        }
+        if (hx < 0)
+            return -z;
+        else
+            return z;
     }
-    /*
-     * j1(x) = 1/__ieee754_sqrt(pi) * (P(1,x)*cc - Q(1,x)*ss) /
-     * __ieee754_sqrt(x)
-     * y1(x) = 1/__ieee754_sqrt(pi) * (P(1,x)*ss + Q(1,x)*cc) /
-     * __ieee754_sqrt(x)
-     */
-    if (ix > 0x48000000)
-      z = (invsqrtpi * cc) / __ieee754_sqrt(y);
-    else {
-      u = pone(y);
-      v = qone(y);
-      z = invsqrtpi * (u * cc - v * ss) / __ieee754_sqrt(y);
+    if (ix < 0x3e400000) {                  /* |x|<2**-27 */
+        if (huge + x > one) return 0.5 * x; /* inexact if x!=0 necessary */
     }
-    if (hx < 0)
-      return -z;
-    else
-      return z;
-  }
-  if (ix < 0x3e400000) { /* |x|<2**-27 */
-    if (huge + x > one)
-      return 0.5 * x; /* inexact if x!=0 necessary */
-  }
-  z = x * x;
-  r = z * (r00 + z * (r01 + z * (r02 + z * r03)));
-  s = one + z * (s01 + z * (s02 + z * (s03 + z * (s04 + z * s05))));
-  r *= x;
-  return (x * 0.5 + r / s);
+    z = x * x;
+    r = z * (r00 + z * (r01 + z * (r02 + z * r03)));
+    s = one + z * (s01 + z * (s02 + z * (s03 + z * (s04 + z * s05))));
+    r *= x;
+    return (x * 0.5 + r / s);
 }
 
 #ifdef __STDC__
@@ -171,60 +169,58 @@ static double V0[5] = {
 #ifdef __STDC__
 double __ieee754_y1(double x)
 #else
-double __ieee754_y1(x) double x;
+double        __ieee754_y1(x) double x;
 #endif
 {
-  double z, s, c, ss, cc, u, v;
-  __int32_t hx, ix, lx;
+    double    z, s, c, ss, cc, u, v;
+    __int32_t hx, ix, lx;
 
-  EXTRACT_WORDS(hx, lx, x);
-  ix = 0x7fffffff & hx;
-  /* if Y1(NaN) is NaN, Y1(-inf) is NaN, Y1(inf) is 0 */
-  if (ix >= 0x7ff00000)
-    return one / (x + x * x);
-  if ((ix | lx) == 0)
-    return -one / zero;
-  if (hx < 0)
-    return zero / zero;
-  if (ix >= 0x40000000) { /* |x| >= 2.0 */
-    s = sin(x);
-    c = cos(x);
-    ss = -s - c;
-    cc = s - c;
-    if (ix < 0x7fe00000) { /* make sure x+x not overflow */
-      z = cos(x + x);
-      if ((s * c) > zero)
-        cc = z / ss;
-      else
-        ss = z / cc;
+    EXTRACT_WORDS(hx, lx, x);
+    ix = 0x7fffffff & hx;
+    /* if Y1(NaN) is NaN, Y1(-inf) is NaN, Y1(inf) is 0 */
+    if (ix >= 0x7ff00000) return one / (x + x * x);
+    if ((ix | lx) == 0) return -one / zero;
+    if (hx < 0) return zero / zero;
+    if (ix >= 0x40000000) { /* |x| >= 2.0 */
+        s  = sin(x);
+        c  = cos(x);
+        ss = -s - c;
+        cc = s - c;
+        if (ix < 0x7fe00000) { /* make sure x+x not overflow */
+            z = cos(x + x);
+            if ((s * c) > zero)
+                cc = z / ss;
+            else
+                ss = z / cc;
+        }
+        /* y1(x) = sqrt(2/(pi*x))*(p1(x)*sin(x0)+q1(x)*cos(x0))
+         * where x0 = x-3pi/4
+         *      Better formula:
+         *              cos(x0) = cos(x)cos(3pi/4)+sin(x)sin(3pi/4)
+         *                      =  1/sqrt(2) * (sin(x) - cos(x))
+         *              sin(x0) = sin(x)cos(3pi/4)-cos(x)sin(3pi/4)
+         *                      = -1/sqrt(2) * (cos(x) + sin(x))
+         * To avoid cancellation, use
+         *              sin(x) +- cos(x) = -cos(2x)/(sin(x) -+ cos(x))
+         * to compute the worse one.
+         */
+        if (ix > 0x48000000)
+            z = (invsqrtpi * ss) / __ieee754_sqrt(x);
+        else
+        {
+            u = pone(x);
+            v = qone(x);
+            z = invsqrtpi * (u * ss + v * cc) / __ieee754_sqrt(x);
+        }
+        return z;
     }
-    /* y1(x) = sqrt(2/(pi*x))*(p1(x)*sin(x0)+q1(x)*cos(x0))
-     * where x0 = x-3pi/4
-     *      Better formula:
-     *              cos(x0) = cos(x)cos(3pi/4)+sin(x)sin(3pi/4)
-     *                      =  1/sqrt(2) * (sin(x) - cos(x))
-     *              sin(x0) = sin(x)cos(3pi/4)-cos(x)sin(3pi/4)
-     *                      = -1/sqrt(2) * (cos(x) + sin(x))
-     * To avoid cancellation, use
-     *              sin(x) +- cos(x) = -cos(2x)/(sin(x) -+ cos(x))
-     * to compute the worse one.
-     */
-    if (ix > 0x48000000)
-      z = (invsqrtpi * ss) / __ieee754_sqrt(x);
-    else {
-      u = pone(x);
-      v = qone(x);
-      z = invsqrtpi * (u * ss + v * cc) / __ieee754_sqrt(x);
+    if (ix <= 0x3c900000) { /* x < 2**-54 */
+        return (-tpi / x);
     }
-    return z;
-  }
-  if (ix <= 0x3c900000) { /* x < 2**-54 */
-    return (-tpi / x);
-  }
-  z = x * x;
-  u = U0[0] + z * (U0[1] + z * (U0[2] + z * (U0[3] + z * U0[4])));
-  v = one + z * (V0[0] + z * (V0[1] + z * (V0[2] + z * (V0[3] + z * V0[4]))));
-  return (x * (u / v) + tpi * (__ieee754_j1(x) * __ieee754_log(x) - one / x));
+    z = x * x;
+    u = U0[0] + z * (U0[1] + z * (U0[2] + z * (U0[3] + z * U0[4])));
+    v = one + z * (V0[0] + z * (V0[1] + z * (V0[2] + z * (V0[3] + z * V0[4]))));
+    return (x * (u / v) + tpi * (__ieee754_j1(x) * __ieee754_log(x) - one / x));
 }
 
 /* For x >= 8, the asymptotic expansions of pone is
@@ -347,31 +343,37 @@ static double pone(x) double x;
 #endif
 {
 #ifdef __STDC__
-  const double *p, *q;
+    const double *p, *q;
 #else
-  double *p, *q;
+    double *  p, *q;
 #endif
-  double z, r, s;
-  __int32_t ix;
-  GET_HIGH_WORD(ix, x);
-  ix &= 0x7fffffff;
-  if (ix >= 0x40200000) {
-    p = pr8;
-    q = ps8;
-  } else if (ix >= 0x40122E8B) {
-    p = pr5;
-    q = ps5;
-  } else if (ix >= 0x4006DB6D) {
-    p = pr3;
-    q = ps3;
-  } else if (ix >= 0x40000000) {
-    p = pr2;
-    q = ps2;
-  }
-  z = one / (x * x);
-  r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
-  s = one + z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * q[4]))));
-  return one + r / s;
+    double    z, r, s;
+    __int32_t ix;
+    GET_HIGH_WORD(ix, x);
+    ix &= 0x7fffffff;
+    if (ix >= 0x40200000) {
+        p = pr8;
+        q = ps8;
+    }
+    else if (ix >= 0x40122E8B)
+    {
+        p = pr5;
+        q = ps5;
+    }
+    else if (ix >= 0x4006DB6D)
+    {
+        p = pr3;
+        q = ps3;
+    }
+    else if (ix >= 0x40000000)
+    {
+        p = pr2;
+        q = ps2;
+    }
+    z = one / (x * x);
+    r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
+    s = one + z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * q[4]))));
+    return one + r / s;
 }
 
 /* For x >= 8, the asymptotic expansions of qone is
@@ -498,30 +500,35 @@ static double qone(x) double x;
 #endif
 {
 #ifdef __STDC__
-  const double *p, *q;
+    const double *p, *q;
 #else
-  double *p, *q;
+    double *  p, *q;
 #endif
-  double s, r, z;
-  __int32_t ix;
-  GET_HIGH_WORD(ix, x);
-  ix &= 0x7fffffff;
-  if (ix >= 0x40200000) {
-    p = qr8;
-    q = qs8;
-  } else if (ix >= 0x40122E8B) {
-    p = qr5;
-    q = qs5;
-  } else if (ix >= 0x4006DB6D) {
-    p = qr3;
-    q = qs3;
-  } else if (ix >= 0x40000000) {
-    p = qr2;
-    q = qs2;
-  }
-  z = one / (x * x);
-  r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
-  s = one +
-      z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * (q[4] + z * q[5])))));
-  return (.375 + r / s) / x;
+    double    s, r, z;
+    __int32_t ix;
+    GET_HIGH_WORD(ix, x);
+    ix &= 0x7fffffff;
+    if (ix >= 0x40200000) {
+        p = qr8;
+        q = qs8;
+    }
+    else if (ix >= 0x40122E8B)
+    {
+        p = qr5;
+        q = qs5;
+    }
+    else if (ix >= 0x4006DB6D)
+    {
+        p = qr3;
+        q = qs3;
+    }
+    else if (ix >= 0x40000000)
+    {
+        p = qr2;
+        q = qs2;
+    }
+    z = one / (x * x);
+    r = p[0] + z * (p[1] + z * (p[2] + z * (p[3] + z * (p[4] + z * p[5]))));
+    s = one + z * (q[0] + z * (q[1] + z * (q[2] + z * (q[3] + z * (q[4] + z * q[5])))));
+    return (.375 + r / s) / x;
 }

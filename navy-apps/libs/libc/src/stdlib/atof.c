@@ -63,6 +63,6 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 #include <_ansi.h>
 #include <stdlib.h>
 
-double _DEFUN(atof, (s), _CONST char *s) { return strtod(s, NULL); }
+double _DEFUN(atof, (s), _CONST char* s) { return strtod(s, NULL); }
 
-float _DEFUN(atoff, (s), _CONST char *s) { return strtodf(s, NULL); }
+float _DEFUN(atoff, (s), _CONST char* s) { return strtodf(s, NULL); }

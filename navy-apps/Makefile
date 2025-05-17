@@ -14,3 +14,7 @@ clean:
 	$(foreach lib, $(shell ls libs/), $(MAKE) -C $(NAVY_HOME)/libs/$(lib) clean ;)
 	$(foreach test, $(shell ls tests/), $(MAKE) -C $(NAVY_HOME)/tests/$(test) clean ;)
 	rm -f fsimg/bin/*
+
+.PHONY: format
+format:
+	@find . -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.hh" \) -exec clang-format -i {} +

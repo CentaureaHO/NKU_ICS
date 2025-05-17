@@ -50,8 +50,8 @@ Supporting OS subroutines required (only if enabled): <<close>>, <<fstat>>,
 #include <stdio.h>
 #include <stdlib.h>
 
-int _DEFUN(__assertfail, (string, cond, file, line),
-           char *string _AND char *cond _AND char *file _AND int line) {
-  fprintf(stderr, string, cond, file, line);
-  abort();
+int _DEFUN(__assertfail, (string, cond, file, line), char* string _AND char* cond _AND char* file _AND int line)
+{
+    fprintf(stderr, string, cond, file, line);
+    abort();
 }

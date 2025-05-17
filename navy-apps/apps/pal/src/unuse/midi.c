@@ -41,7 +41,7 @@ VOID MIDI_Play(INT iNumRIX, BOOL fLoop)
 
 --*/
 {
-  return;
+    return;
 }
 
 VOID MIDI_CheckLoop(VOID) { return; }

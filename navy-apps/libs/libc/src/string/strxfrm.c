@@ -50,18 +50,18 @@ QUICKREF
 
 #include <string.h>
 
-size_t _DEFUN(strxfrm, (s1, s2, n),
-              char *s1 _AND _CONST char *s2 _AND size_t n) {
-  size_t res;
-  res = 0;
-  while (n-- > 0 && *s2) {
-    *s1++ = *s2++;
-    res++;
-  }
-  while (*s2) {
-    s2++;
-    res++;
-  }
+size_t _DEFUN(strxfrm, (s1, s2, n), char* s1 _AND _CONST char* s2 _AND size_t n)
+{
+    size_t res;
+    res = 0;
+    while (n-- > 0 && *s2) {
+        *s1++ = *s2++;
+        res++;
+    }
+    while (*s2) {
+        s2++;
+        res++;
+    }
 
-  return res;
+    return res;
 }

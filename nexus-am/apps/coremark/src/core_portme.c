@@ -93,17 +93,17 @@ ee_u32 default_num_contexts = 1;
         Target specific initialization code
         Test for some common mistakes.
 */
-void portable_init(core_portable *p, int *argc, char *argv[]) {
-  if (sizeof(ee_ptr_int) != sizeof(ee_u8 *)) {
-    ee_printf(
-        "ERROR! Please define ee_ptr_int to a type that holds a pointer!\n");
-  }
-  if (sizeof(ee_u32) != 4) {
-    ee_printf("ERROR! Please define ee_u32 to a 32b unsigned type!\n");
-  }
-  p->portable_id = 1;
+void portable_init(core_portable* p, int* argc, char* argv[])
+{
+    if (sizeof(ee_ptr_int) != sizeof(ee_u8*)) {
+        ee_printf("ERROR! Please define ee_ptr_int to a type that holds a pointer!\n");
+    }
+    if (sizeof(ee_u32) != 4) {
+        ee_printf("ERROR! Please define ee_u32 to a 32b unsigned type!\n");
+    }
+    p->portable_id = 1;
 }
 /* Function : portable_fini
         Target specific final code
 */
-void portable_fini(core_portable *p) { p->portable_id = 0; }
+void portable_fini(core_portable* p) { p->portable_id = 0; }

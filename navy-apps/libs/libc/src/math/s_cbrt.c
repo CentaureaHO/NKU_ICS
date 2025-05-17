@@ -72,52 +72,51 @@ double cbrt(x) double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-  __int32_t hx;
-  double r, s, t = 0.0, w;
-  __uint32_t sign;
-  __uint32_t high, low;
+    __int32_t  hx;
+    double     r, s, t = 0.0, w;
+    __uint32_t sign;
+    __uint32_t high, low;
 
-  GET_HIGH_WORD(hx, x);
-  sign = hx & 0x80000000; /* sign= sign(x) */
-  hx ^= sign;
-  if (hx >= 0x7ff00000)
-    return (x + x); /* cbrt(NaN,INF) is itself */
-  GET_LOW_WORD(low, x);
-  if ((hx | low) == 0)
-    return (x); /* cbrt(0) is itself */
+    GET_HIGH_WORD(hx, x);
+    sign = hx & 0x80000000; /* sign= sign(x) */
+    hx ^= sign;
+    if (hx >= 0x7ff00000) return (x + x); /* cbrt(NaN,INF) is itself */
+    GET_LOW_WORD(low, x);
+    if ((hx | low) == 0) return (x); /* cbrt(0) is itself */
 
-  SET_HIGH_WORD(x, hx); /* x <- |x| */
-                        /* rough cbrt to 5 bits */
-  if (hx < 0x00100000)  /* subnormal number */
-  {
-    SET_HIGH_WORD(t, 0x43500000); /* set t= 2**54 */
-    t *= x;
+    SET_HIGH_WORD(x, hx); /* x <- |x| */
+                          /* rough cbrt to 5 bits */
+    if (hx < 0x00100000)  /* subnormal number */
+    {
+        SET_HIGH_WORD(t, 0x43500000); /* set t= 2**54 */
+        t *= x;
+        GET_HIGH_WORD(high, t);
+        SET_HIGH_WORD(t, high / 3 + B2);
+    }
+    else
+        SET_HIGH_WORD(t, hx / 3 + B1);
+
+    /* new cbrt to 23 bits, may be implemented in single precision */
+    r = t * t / x;
+    s = C + r * t;
+    t *= G + F / (s + E + D / s);
+
+    /* chopped to 20 bits and make it larger than cbrt(x) */
     GET_HIGH_WORD(high, t);
-    SET_HIGH_WORD(t, high / 3 + B2);
-  } else
-    SET_HIGH_WORD(t, hx / 3 + B1);
+    INSERT_WORDS(t, high + 0x00000001, 0);
 
-  /* new cbrt to 23 bits, may be implemented in single precision */
-  r = t * t / x;
-  s = C + r * t;
-  t *= G + F / (s + E + D / s);
+    /* one step newton iteration to 53 bits with error less than 0.667 ulps */
+    s = t * t; /* t*t is exact */
+    r = x / s;
+    w = t + t;
+    r = (r - t) / (w + r); /* r-s is exact */
+    t = t + t * r;
 
-  /* chopped to 20 bits and make it larger than cbrt(x) */
-  GET_HIGH_WORD(high, t);
-  INSERT_WORDS(t, high + 0x00000001, 0);
-
-  /* one step newton iteration to 53 bits with error less than 0.667 ulps */
-  s = t * t; /* t*t is exact */
-  r = x / s;
-  w = t + t;
-  r = (r - t) / (w + r); /* r-s is exact */
-  t = t + t * r;
-
-  /* retore the sign bit */
-  GET_HIGH_WORD(high, t);
-  SET_HIGH_WORD(t, high | sign);
-  return (t);
+    /* retore the sign bit */
+    GET_HIGH_WORD(high, t);
+    SET_HIGH_WORD(t, high | sign);
+    return (t);
 #else  /* defined (_DOUBLE_IS_32BITS) */
-  return (double)cbrtf((float)x);
+    return (double)cbrtf((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

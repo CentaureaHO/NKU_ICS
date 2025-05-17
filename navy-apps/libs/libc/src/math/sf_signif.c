@@ -21,5 +21,5 @@ float significandf(float x)
 float significandf(x) float x;
 #endif
 {
-  return __ieee754_scalbf(x, (float)-ilogbf(x));
+    return __ieee754_scalbf(x, (float)-ilogbf(x));
 }

@@ -30,23 +30,20 @@ PORTABILITY
 
 #include <string.h>
 
-char *_DEFUN(strpbrk, (s1, s2), _CONST char *s1 _AND _CONST char *s2) {
-  _CONST char *c = s2;
-  if (!*s1)
-    return (char *)NULL;
+char* _DEFUN(strpbrk, (s1, s2), _CONST char* s1 _AND _CONST char* s2)
+{
+    _CONST char* c = s2;
+    if (!*s1) return (char*)NULL;
 
-  while (*s1) {
-    for (c = s2; *c; c++) {
-      if (*s1 == *c)
-        break;
+    while (*s1) {
+        for (c = s2; *c; c++) {
+            if (*s1 == *c) break;
+        }
+        if (*c) break;
+        s1++;
     }
-    if (*c)
-      break;
-    s1++;
-  }
 
-  if (*c == '\0')
-    s1 = NULL;
+    if (*c == '\0') s1 = NULL;
 
-  return (char *)s1;
+    return (char*)s1;
 }

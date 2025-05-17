@@ -22,19 +22,19 @@ int ilogbf(float x)
 int ilogbf(x) float x;
 #endif
 {
-  __int32_t hx, ix;
+    __int32_t hx, ix;
 
-  GET_FLOAT_WORD(hx, x);
-  hx &= 0x7fffffff;
-  if (hx < 0x00800000) {
-    if (hx == 0)
-      return -INT_MAX; /* ilogb(0) = 0x80000001 */
-    else               /* subnormal x */
-      for (ix = -126, hx <<= 8; hx > 0; hx <<= 1)
-        ix -= 1;
-    return ix;
-  } else if (hx < 0x7f800000)
-    return (hx >> 23) - 127;
-  else
-    return INT_MAX;
+    GET_FLOAT_WORD(hx, x);
+    hx &= 0x7fffffff;
+    if (hx < 0x00800000) {
+        if (hx == 0)
+            return -INT_MAX; /* ilogb(0) = 0x80000001 */
+        else                 /* subnormal x */
+            for (ix = -126, hx <<= 8; hx > 0; hx <<= 1) ix -= 1;
+        return ix;
+    }
+    else if (hx < 0x7f800000)
+        return (hx >> 23) - 127;
+    else
+        return INT_MAX;
 }

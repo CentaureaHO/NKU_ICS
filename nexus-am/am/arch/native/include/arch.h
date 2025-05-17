@@ -4,6 +4,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-struct _RegSet {};
+struct _RegSet
+{
+};
 
 #endif

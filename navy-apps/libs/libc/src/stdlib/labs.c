@@ -37,9 +37,10 @@ No supporting OS subroutine calls are required.
 
 #include <stdlib.h>
 
-long _DEFUN(labs, (x), long x) {
-  if (x < 0) {
-    x = -x;
-  }
-  return x;
+long _DEFUN(labs, (x), long x)
+{
+    if (x < 0) {
+        x = -x;
+    }
+    return x;
 }

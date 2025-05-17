@@ -102,88 +102,86 @@ Supporting OS subroutines required: <<getpid>>, <<open>>, <<stat>>.
 #include <sys/stat.h>
 #include <sys/types.h>
 
-static _DEFUN(_gettemp, (ptr, path, doopen),
-              struct _reent *ptr _AND char *path _AND register int *doopen) {
-  register char *start, *trv;
-  struct stat sbuf;
-  unsigned int pid;
+static _DEFUN(_gettemp, (ptr, path, doopen), struct _reent* ptr _AND char* path _AND register int* doopen)
+{
+    register char *start, *trv;
+    struct stat    sbuf;
+    unsigned int   pid;
 
-  pid = _getpid_r(ptr);
-  for (trv = path; *trv; ++trv) /* extra X's get set to 0's */
-    continue;
-  while (*--trv == 'X') {
-    *trv = (pid % 10) + '0';
-    pid /= 10;
-  }
-
-  /*
-   * Check the target directory; if you have six X's and it
-   * doesn't exist this runs for a *very* long time.
-   */
-
-  for (start = trv + 1;; --trv) {
-    if (trv <= path)
-      break;
-    if (*trv == '/') {
-      *trv = '\0';
-      if (_stat_r(ptr, path, &sbuf))
-        return (0);
-      if (!(sbuf.st_mode & S_IFDIR)) {
-        ptr->_errno = ENOTDIR;
-        return (0);
-      }
-      *trv = '/';
-      break;
+    pid = _getpid_r(ptr);
+    for (trv = path; *trv; ++trv) /* extra X's get set to 0's */
+        continue;
+    while (*--trv == 'X') {
+        *trv = (pid % 10) + '0';
+        pid /= 10;
     }
-  }
 
-  for (;;) {
-    if (doopen) {
-      if ((*doopen = _open_r(ptr, path, O_CREAT | O_EXCL | O_RDWR, 0600)) >= 0)
-        return 1;
-      if (ptr->_errno != EEXIST)
-        return 0;
-    } else if (_stat_r(ptr, path, &sbuf))
-      return (ptr->_errno == ENOENT ? 1 : 0);
+    /*
+     * Check the target directory; if you have six X's and it
+     * doesn't exist this runs for a *very* long time.
+     */
 
-    /* tricky little algorithm for backward compatibility */
-    for (trv = start;;) {
-      if (!*trv)
-        return 0;
-      if (*trv == 'z')
-        *trv++ = 'a';
-      else {
-        if (isdigit(*trv))
-          *trv = 'a';
-        else
-          ++*trv;
-        break;
-      }
+    for (start = trv + 1;; --trv) {
+        if (trv <= path) break;
+        if (*trv == '/') {
+            *trv = '\0';
+            if (_stat_r(ptr, path, &sbuf)) return (0);
+            if (!(sbuf.st_mode & S_IFDIR)) {
+                ptr->_errno = ENOTDIR;
+                return (0);
+            }
+            *trv = '/';
+            break;
+        }
     }
-  }
-  /*NOTREACHED*/
+
+    for (;;) {
+        if (doopen) {
+            if ((*doopen = _open_r(ptr, path, O_CREAT | O_EXCL | O_RDWR, 0600)) >= 0) return 1;
+            if (ptr->_errno != EEXIST) return 0;
+        }
+        else if (_stat_r(ptr, path, &sbuf))
+            return (ptr->_errno == ENOENT ? 1 : 0);
+
+        /* tricky little algorithm for backward compatibility */
+        for (trv = start;;) {
+            if (!*trv) return 0;
+            if (*trv == 'z')
+                *trv++ = 'a';
+            else
+            {
+                if (isdigit(*trv))
+                    *trv = 'a';
+                else
+                    ++*trv;
+                break;
+            }
+        }
+    }
+    /*NOTREACHED*/
 }
 
-_DEFUN(_mkstemp_r, (ptr, path), struct _reent *ptr _AND char *path) {
-  int fd;
+_DEFUN(_mkstemp_r, (ptr, path), struct _reent* ptr _AND char* path)
+{
+    int fd;
 
-  return (_gettemp(ptr, path, &fd) ? fd : -1);
+    return (_gettemp(ptr, path, &fd) ? fd : -1);
 }
 
-char *_DEFUN(_mktemp_r, (ptr, path), struct _reent *ptr _AND char *path) {
-  return (_gettemp(ptr, path, (int *)NULL) ? path : (char *)NULL);
+char* _DEFUN(_mktemp_r, (ptr, path), struct _reent* ptr _AND char* path)
+{
+    return (_gettemp(ptr, path, (int*)NULL) ? path : (char*)NULL);
 }
 
 #ifndef _REENT_ONLY
 
-_DEFUN(mkstemp, (path), char *path) {
-  int fd;
+_DEFUN(mkstemp, (path), char* path)
+{
+    int fd;
 
-  return (_gettemp(_REENT, path, &fd) ? fd : -1);
+    return (_gettemp(_REENT, path, &fd) ? fd : -1);
 }
 
-char *_DEFUN(mktemp, (path), char *path) {
-  return (_gettemp(_REENT, path, (int *)NULL) ? path : (char *)NULL);
-}
+char* _DEFUN(mktemp, (path), char* path) { return (_gettemp(_REENT, path, (int*)NULL) ? path : (char*)NULL); }
 
 #endif /* ! defined (_REENT_ONLY) */

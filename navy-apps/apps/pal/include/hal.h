@@ -20,38 +20,45 @@ bool process_keys(void (*)(int), void (*)(int));
 
 void incr_nr_draw(void);
 
-typedef struct {
-  int16_t x, y;
-  uint16_t w, h;
+typedef struct
+{
+    int16_t  x, y;
+    uint16_t w, h;
 } SDL_Rect;
 
-typedef struct { uint8_t r, g, b, unused; } SDL_Color;
+typedef struct
+{
+    uint8_t r, g, b, unused;
+} SDL_Color;
 
-typedef struct {
-  int ncolors;
-  SDL_Color *colors;
+typedef struct
+{
+    int        ncolors;
+    SDL_Color* colors;
 } SDL_Palette;
 
-typedef struct {
-  SDL_Palette *palette;
-  uint8_t BitsPerPixel;
-  uint8_t BytesPerPixel;
-  uint8_t Rloss, Gloss, Bloss, Aloss;
-  uint8_t Rshift, Gshift, Bshift, Ashift;
-  uint32_t Rmask, Gmask, Bmask, Amask;
-  uint32_t colorkey;
-  uint8_t alpha;
+typedef struct
+{
+    SDL_Palette* palette;
+    uint8_t      BitsPerPixel;
+    uint8_t      BytesPerPixel;
+    uint8_t      Rloss, Gloss, Bloss, Aloss;
+    uint8_t      Rshift, Gshift, Bshift, Ashift;
+    uint32_t     Rmask, Gmask, Bmask, Amask;
+    uint32_t     colorkey;
+    uint8_t      alpha;
 } SDL_PixelFormat;
 
-typedef struct {
-  uint32_t flags;
-  SDL_PixelFormat *format;
-  int w, h;
-  uint16_t pitch;
-  SDL_Rect clip_rect;
+typedef struct
+{
+    uint32_t         flags;
+    SDL_PixelFormat* format;
+    int              w, h;
+    uint16_t         pitch;
+    SDL_Rect         clip_rect;
 
-  int refcount;
-  uint8_t *pixels;
+    int      refcount;
+    uint8_t* pixels;
 
 } SDL_Surface;
 
@@ -60,7 +67,10 @@ typedef struct {
 #define SDL_LOGPAL 0x4
 #define SDL_SWSURFACE 0x8
 
-typedef union { uint8_t type; } SDL_Event;
+typedef union
+{
+    uint8_t type;
+} SDL_Event;
 
 #define K_UP 0x48
 #define K_DOWN 0x50
@@ -81,26 +91,25 @@ typedef union { uint8_t type; } SDL_Event;
 #define K_f 0x21
 #define K_p 0x19
 
-void SDL_BlitSurface(SDL_Surface *, SDL_Rect *, SDL_Surface *, SDL_Rect *);
+void     SDL_BlitSurface(SDL_Surface*, SDL_Rect*, SDL_Surface*, SDL_Rect*);
 uint32_t SDL_GetTicks();
 void SDL_Delay(uint32_t ms);
-SDL_Surface *SDL_CreateRGBSurface(uint32_t, int, int, int, uint32_t, uint32_t,
-                                  uint32_t, uint32_t);
-SDL_Surface *SDL_SetVideoMode(int, int, int, uint32_t);
-void SDL_SetPalette(SDL_Surface *, int, SDL_Color *, int, int);
-void SDL_FreeSurface(SDL_Surface *);
-void SDL_SoftStretch(SDL_Surface *, SDL_Rect *, SDL_Surface *, SDL_Rect *);
-void SDL_UpdateRect(SDL_Surface *, int, int, int, int);
-void SDL_FillRect(SDL_Surface *, SDL_Rect *, uint32_t);
+SDL_Surface* SDL_CreateRGBSurface(uint32_t, int, int, int, uint32_t, uint32_t, uint32_t, uint32_t);
+SDL_Surface* SDL_SetVideoMode(int, int, int, uint32_t);
+void         SDL_SetPalette(SDL_Surface*, int, SDL_Color*, int, int);
+void         SDL_FreeSurface(SDL_Surface*);
+void         SDL_SoftStretch(SDL_Surface*, SDL_Rect*, SDL_Surface*, SDL_Rect*);
+void         SDL_UpdateRect(SDL_Surface*, int, int, int, int);
+void         SDL_FillRect(SDL_Surface*, SDL_Rect*, uint32_t);
 
-int SDL_PollEvent(SDL_Event *);
-int SDL_LockSurface(SDL_Surface *);
-void SDL_UnlockSurface(SDL_Surface *);
-int SDL_ShowCursor(int);
-int SDL_SaveBMP(SDL_Surface *, const char *);
-int SDL_Init(uint32_t);
-char *SDL_GetError(void);
-void SDL_WM_SetCaption(const char *, const char *);
-void SDL_Quit(void);
+int   SDL_PollEvent(SDL_Event*);
+int   SDL_LockSurface(SDL_Surface*);
+void  SDL_UnlockSurface(SDL_Surface*);
+int   SDL_ShowCursor(int);
+int   SDL_SaveBMP(SDL_Surface*, const char*);
+int   SDL_Init(uint32_t);
+char* SDL_GetError(void);
+void  SDL_WM_SetCaption(const char*, const char*);
+void  SDL_Quit(void);
 
 #endif

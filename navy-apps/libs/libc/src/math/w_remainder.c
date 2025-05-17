@@ -76,19 +76,18 @@ double remainder(_R2 x, y) /* wrapper remainder */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-  return __ieee754_remainder(x, y);
+    return __ieee754_remainder(x, y);
 #else
-  double z;
-  z = __ieee754_remainder(x, y);
-  if (_LIB_VERSION == _IEEE_ || isnan(y))
-    return z;
-  if (y == 0.0)
-    return __kernel_standard(_R4, x, y, 28); /* remainder(x,0) */
-  else
-    return z;
+    double z;
+    z = __ieee754_remainder(x, y);
+    if (_LIB_VERSION == _IEEE_ || isnan(y)) return z;
+    if (y == 0.0)
+        return __kernel_standard(_R4, x, y, 28); /* remainder(x,0) */
+    else
+        return z;
 #endif
 #else  /* defined (_DOUBLE_IS_32BITS) */
-  return (double)_remainderf_r(_R4, (float)x, (float)y);
+    return (double)_remainderf_r(_R4, (float)x, (float)y);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

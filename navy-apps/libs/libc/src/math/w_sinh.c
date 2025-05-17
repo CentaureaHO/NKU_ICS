@@ -85,19 +85,19 @@ double sinh(_R2 x) /* wrapper sinh */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-  return __ieee754_sinh(x);
+    return __ieee754_sinh(x);
 #else
-  double z;
-  z = __ieee754_sinh(x);
-  if (_LIB_VERSION == _IEEE_)
-    return z;
-  if (!finite(z) && finite(x)) {
-    return __kernel_standard(_R4, x, x, 25); /* sinh overflow */
-  } else
-    return z;
+    double z;
+    z = __ieee754_sinh(x);
+    if (_LIB_VERSION == _IEEE_) return z;
+    if (!finite(z) && finite(x)) {
+        return __kernel_standard(_R4, x, x, 25); /* sinh overflow */
+    }
+    else
+        return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-  return (double)_sinhf_r(_R4, (float)x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_sinhf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

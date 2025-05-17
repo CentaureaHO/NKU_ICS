@@ -111,11 +111,11 @@ PORTABILITY
 #include "fdlibm.h"
 
 #ifdef __STDC__
-int matherr(struct exception *x)
+int matherr(struct exception* x)
 #else
-int matherr(x) struct exception *x;
+int matherr(x) struct exception* x;
 #endif
 {
-  assert(0);
-  return 0;
+    assert(0);
+    return 0;
 }

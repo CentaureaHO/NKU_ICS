@@ -34,16 +34,17 @@ typedef _TIME_T_ time_t;
 #define __time_t_defined
 #endif
 
-struct tm {
-  int tm_sec;
-  int tm_min;
-  int tm_hour;
-  int tm_mday;
-  int tm_mon;
-  int tm_year;
-  int tm_wday;
-  int tm_yday;
-  int tm_isdst;
+struct tm
+{
+    int tm_sec;
+    int tm_min;
+    int tm_hour;
+    int tm_mday;
+    int tm_mon;
+    int tm_year;
+    int tm_wday;
+    int tm_yday;
+    int tm_isdst;
 };
 
 clock_t _EXFUN(clock, (void));
@@ -51,15 +52,14 @@ double _EXFUN(difftime, (time_t _time2, time_t _time1));
 time_t _EXFUN(mktime, (struct tm * _timeptr));
 time_t _EXFUN(time, (time_t * _timer));
 #ifndef _REENT_ONLY
-char *_EXFUN(asctime, (const struct tm *_tblock));
+char* _EXFUN(asctime, (const struct tm* _tblock));
 #endif
-char *_EXFUN(ctime, (const time_t *_time));
-struct tm *_EXFUN(gmtime, (const time_t *_timer));
-struct tm *_EXFUN(localtime, (const time_t *_timer));
-size_t _EXFUN(strftime, (char *_s, size_t _maxsize, const char *_fmt,
-                         const struct tm *_t));
+char* _EXFUN(ctime, (const time_t* _time));
+struct tm* _EXFUN(gmtime, (const time_t* _timer));
+struct tm* _EXFUN(localtime, (const time_t* _timer));
+size_t _EXFUN(strftime, (char* _s, size_t _maxsize, const char* _fmt, const struct tm* _t));
 
-char *_EXFUN(_asctime_r, (const struct tm *_tblock, void *_p));
+char* _EXFUN(_asctime_r, (const struct tm* _tblock, void* _p));
 
 #ifdef __cplusplus
 }

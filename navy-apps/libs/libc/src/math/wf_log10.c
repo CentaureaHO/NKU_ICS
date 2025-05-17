@@ -33,20 +33,20 @@ float log10f(_R2 x) /* wrapper log10f */
 #endif
 {
 #ifdef _IEEE_LIBM
-  return __ieee754_log10f(x);
+    return __ieee754_log10f(x);
 #else
-  float z;
-  z = __ieee754_log10f(x);
-  if (_LIB_VERSION == _IEEE_ || isnanf(x))
-    return z;
-  if (x <= (float)0.0) {
-    if (x == (float)0.0) /* log10(0) */
-      return (float)__kernel_standard(_R4, (double)x, (double)x, 118);
+    float z;
+    z = __ieee754_log10f(x);
+    if (_LIB_VERSION == _IEEE_ || isnanf(x)) return z;
+    if (x <= (float)0.0) {
+        if (x == (float)0.0) /* log10(0) */
+            return (float)__kernel_standard(_R4, (double)x, (double)x, 118);
+        else
+            /* log10(x<0) */
+            return (float)__kernel_standard(_R4, (double)x, (double)x, 119);
+    }
     else
-      /* log10(x<0) */
-      return (float)__kernel_standard(_R4, (double)x, (double)x, 119);
-  } else
-    return z;
+        return z;
 #endif
 }
 

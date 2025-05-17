@@ -34,11 +34,11 @@ QUICKREF
 #include <_ansi.h>
 #include <string.h>
 
-size_t _DEFUN(strlen, (str), _CONST char *str) {
-  _CONST char *start = str;
+size_t _DEFUN(strlen, (str), _CONST char* str)
+{
+    _CONST char* start = str;
 
-  while (*str)
-    str++;
+    while (*str) str++;
 
-  return str - start;
+    return str - start;
 }

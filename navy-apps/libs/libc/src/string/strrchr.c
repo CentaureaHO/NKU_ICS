@@ -35,20 +35,21 @@ QUICKREF
 
 #include <string.h>
 
-char *_DEFUN(strrchr, (s, i), _CONST char *s _AND int i) {
-  _CONST char *last = NULL;
-  char c = i;
+char* _DEFUN(strrchr, (s, i), _CONST char* s _AND int i)
+{
+    _CONST char* last = NULL;
+    char         c    = i;
 
-  while (*s) {
-    if (*s == c) {
-      last = s;
+    while (*s) {
+        if (*s == c) {
+            last = s;
+        }
+        s++;
     }
-    s++;
-  }
 
-  if (*s == c) {
-    last = s;
-  }
+    if (*s == c) {
+        last = s;
+    }
 
-  return (char *)last;
+    return (char*)last;
 }

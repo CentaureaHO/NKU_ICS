@@ -70,22 +70,22 @@ double log10(_R2 x) /* wrapper log10 */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-  return __ieee754_log10(x);
+    return __ieee754_log10(x);
 #else
-  double z;
-  z = __ieee754_log10(x);
-  if (_LIB_VERSION == _IEEE_ || isnan(x))
-    return z;
-  if (x <= 0.0) {
-    if (x == 0.0)
-      return __kernel_standard(_R4, x, x, 18); /* log10(0) */
+    double z;
+    z = __ieee754_log10(x);
+    if (_LIB_VERSION == _IEEE_ || isnan(x)) return z;
+    if (x <= 0.0) {
+        if (x == 0.0)
+            return __kernel_standard(_R4, x, x, 18); /* log10(0) */
+        else
+            return __kernel_standard(_R4, x, x, 19); /* log10(x<0) */
+    }
     else
-      return __kernel_standard(_R4, x, x, 19); /* log10(x<0) */
-  } else
-    return z;
+        return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-  return (double)_log10f_r(_R4, (float)x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_log10f_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

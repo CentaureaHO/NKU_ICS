@@ -305,29 +305,29 @@ int
 #ifdef _HAVE_STDC
 _DEFUN (_sprintf_r, (ptr, str, fmt), struct _reent *ptr _AND char *str _AND _CONST char *fmt _DOTS)
 #else
-    _sprintf_r(ptr, str, fmt, va_alist) struct _reent *ptr;
-char *str;
-_CONST char *fmt;
+    _sprintf_r(ptr, str, fmt, va_alist) struct _reent* ptr;
+char*        str;
+_CONST char* fmt;
 va_dcl
 #endif
 {
-  int ret;
-  va_list ap;
-  FILE f;
+    int     ret;
+    va_list ap;
+    FILE    f;
 
-  f._flags = __SWR | __SSTR;
-  f._bf._base = f._p = (unsigned char *)str;
-  f._bf._size = f._w = INT_MAX;
-  f._data = ptr;
+    f._flags    = __SWR | __SSTR;
+    f._bf._base = f._p = (unsigned char*)str;
+    f._bf._size = f._w = INT_MAX;
+    f._data            = ptr;
 #ifdef _HAVE_STDC
-  va_start(ap, fmt);
+    va_start(ap, fmt);
 #else
-  va_start(ap);
+    va_start(ap);
 #endif
-  ret = vfprintf(&f, fmt, ap);
-  va_end(ap);
-  *f._p = 0;
-  return (ret);
+    ret = vfprintf(&f, fmt, ap);
+    va_end(ap);
+    *f._p = 0;
+    return (ret);
 }
 
 #ifndef _REENT_ONLY
@@ -336,28 +336,28 @@ int
 #ifdef _HAVE_STDC
 _DEFUN (sprintf, (str, fmt), char *str _AND _CONST char *fmt _DOTS)
 #else
-    sprintf(str, fmt, va_alist) char *str;
-_CONST char *fmt;
+    sprintf(str, fmt, va_alist) char* str;
+_CONST char* fmt;
 va_dcl
 #endif
 {
-  int ret;
-  va_list ap;
-  FILE f;
+    int     ret;
+    va_list ap;
+    FILE    f;
 
-  f._flags = __SWR | __SSTR;
-  f._bf._base = f._p = (unsigned char *)str;
-  f._bf._size = f._w = INT_MAX;
-  f._data = _REENT;
+    f._flags    = __SWR | __SSTR;
+    f._bf._base = f._p = (unsigned char*)str;
+    f._bf._size = f._w = INT_MAX;
+    f._data            = _REENT;
 #ifdef _HAVE_STDC
-  va_start(ap, fmt);
+    va_start(ap, fmt);
 #else
-  va_start(ap);
+    va_start(ap);
 #endif
-  ret = vfprintf(&f, fmt, ap);
-  va_end(ap);
-  *f._p = 0;
-  return (ret);
+    ret = vfprintf(&f, fmt, ap);
+    va_end(ap);
+    *f._p = 0;
+    return (ret);
 }
 
 #endif

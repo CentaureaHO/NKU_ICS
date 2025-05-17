@@ -35,16 +35,17 @@ QUICKREF
 
 #include <string.h>
 
-char *_DEFUN(strchr, (s, i), _CONST char *s _AND int i) {
-  char c = i;
+char* _DEFUN(strchr, (s, i), _CONST char* s _AND int i)
+{
+    char c = i;
 
-  while (*s && *s != c) {
-    s++;
-  }
+    while (*s && *s != c) {
+        s++;
+    }
 
-  if (*s != c) {
-    s = NULL;
-  }
+    if (*s != c) {
+        s = NULL;
+    }
 
-  return (char *)s;
+    return (char*)s;
 }

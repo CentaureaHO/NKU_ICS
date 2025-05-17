@@ -26,9 +26,9 @@ int isnanf(float x)
 int isnanf(x) float x;
 #endif
 {
-  __int32_t ix;
-  GET_FLOAT_WORD(ix, x);
-  ix &= 0x7fffffff;
-  ix = 0x7f800000 - ix;
-  return (int)(((__uint32_t)(ix)) >> 31);
+    __int32_t ix;
+    GET_FLOAT_WORD(ix, x);
+    ix &= 0x7fffffff;
+    ix = 0x7f800000 - ix;
+    return (int)(((__uint32_t)(ix)) >> 31);
 }

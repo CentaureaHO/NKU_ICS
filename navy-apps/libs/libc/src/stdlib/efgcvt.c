@@ -133,31 +133,33 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 #include <stdio.h>
 #include <stdlib.h>
 
-char *_DEFUN(gcvt, (d, ndigit, buf), double d _AND int ndigit _AND char *buf) {
-  return _gcvt(_REENT, d, ndigit, buf, 'g', 0);
+char* _DEFUN(gcvt, (d, ndigit, buf), double d _AND int ndigit _AND char* buf)
+{
+    return _gcvt(_REENT, d, ndigit, buf, 'g', 0);
 }
 
-char *_DEFUN(fcvt, (d, ndigit, decpt, sign),
-             double d _AND int ndigit _AND int *decpt _AND int *sign) {
-  return fcvtbuf(d, ndigit, decpt, sign, NULL);
+char* _DEFUN(fcvt, (d, ndigit, decpt, sign), double d _AND int ndigit _AND int* decpt _AND int* sign)
+{
+    return fcvtbuf(d, ndigit, decpt, sign, NULL);
 }
 
-char *_DEFUN(fcvtf, (d, ndigit, decpt, sign),
-             float d _AND int ndigit _AND int *decpt _AND int *sign) {
-  return fcvt((float)d, ndigit, decpt, sign);
+char* _DEFUN(fcvtf, (d, ndigit, decpt, sign), float d _AND int ndigit _AND int* decpt _AND int* sign)
+{
+    return fcvt((float)d, ndigit, decpt, sign);
 }
 
-char *_DEFUN(gcvtf, (d, ndigit, buf), float d _AND int ndigit _AND char *buf) {
-  double asd = d;
-  return gcvt(asd, ndigit, buf);
+char* _DEFUN(gcvtf, (d, ndigit, buf), float d _AND int ndigit _AND char* buf)
+{
+    double asd = d;
+    return gcvt(asd, ndigit, buf);
 }
 
-char *_DEFUN(ecvt, (d, ndigit, decpt, sign),
-             double d _AND int ndigit _AND int *decpt _AND int *sign) {
-  return ecvtbuf(d, ndigit, decpt, sign, NULL);
+char* _DEFUN(ecvt, (d, ndigit, decpt, sign), double d _AND int ndigit _AND int* decpt _AND int* sign)
+{
+    return ecvtbuf(d, ndigit, decpt, sign, NULL);
 }
 
-char *_DEFUN(ecvtf, (d, ndigit, decpt, sign),
-             float d _AND int ndigit _AND int *decpt _AND int *sign) {
-  return ecvt((double)d, ndigit, decpt, sign);
+char* _DEFUN(ecvtf, (d, ndigit, decpt, sign), float d _AND int ndigit _AND int* decpt _AND int* sign)
+{
+    return ecvt((double)d, ndigit, decpt, sign);
 }

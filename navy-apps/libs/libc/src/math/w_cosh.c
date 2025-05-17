@@ -81,19 +81,19 @@ double cosh(_R2 x) /* wrapper cosh */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-  return __ieee754_cosh(x);
+    return __ieee754_cosh(x);
 #else
-  double z;
-  z = __ieee754_cosh(x);
-  if (_LIB_VERSION == _IEEE_ || isnan(x))
-    return z;
-  if (fabs(x) > 7.10475860073943863426e+02) {
-    return __kernel_standard(_R4, x, x, 5); /* cosh overflow */
-  } else
-    return z;
+    double z;
+    z = __ieee754_cosh(x);
+    if (_LIB_VERSION == _IEEE_ || isnan(x)) return z;
+    if (fabs(x) > 7.10475860073943863426e+02) {
+        return __kernel_standard(_R4, x, x, 5); /* cosh overflow */
+    }
+    else
+        return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-  return (double)_coshf_r(_R4, (float)x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_coshf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

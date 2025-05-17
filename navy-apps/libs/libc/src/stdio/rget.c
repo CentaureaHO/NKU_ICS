@@ -30,11 +30,11 @@ static char sccsid[] = "%W% (Berkeley) %G%";
  * in the newly-filled buffer.
  */
 
-int __srget(fp) register FILE *fp;
+int __srget(fp) register FILE* fp;
 {
-  if (__srefill(fp) == 0) {
-    fp->_r--;
-    return *fp->_p++;
-  }
-  return EOF;
+    if (__srefill(fp) == 0) {
+        fp->_r--;
+        return *fp->_p++;
+    }
+    return EOF;
 }

@@ -22,12 +22,7 @@
 #ifndef _TEXT_H
 #define _TEXT_H
 
-typedef enum tagDIALOGPOSITION {
-  kDialogUpper = 0,
-  kDialogCenter,
-  kDialogLower,
-  kDialogCenterWindow
-} DIALOGLOCATION;
+typedef enum tagDIALOGPOSITION { kDialogUpper = 0, kDialogCenter, kDialogLower, kDialogCenterWindow } DIALOGLOCATION;
 
 #define PAL_ADDITIONAL_WORD_FIRST 10000
 
@@ -41,13 +36,11 @@ PAL_GetWord(WORD wNumWord);
 LPCSTR
 PAL_GetMsg(WORD wNumMsg);
 
-VOID PAL_DrawText(LPCSTR lpszText, PAL_POS pos, BYTE bColor, BOOL fShadow,
-                  BOOL fUpdate);
+VOID PAL_DrawText(LPCSTR lpszText, PAL_POS pos, BYTE bColor, BOOL fShadow, BOOL fUpdate);
 
 VOID PAL_DialogSetDelayTime(INT iDelayTime);
 
-VOID PAL_StartDialog(BYTE bDialogLocation, BYTE bFontColor, INT iNumCharFace,
-                     BOOL fPlayingRNG);
+VOID PAL_StartDialog(BYTE bDialogLocation, BYTE bFontColor, INT iNumCharFace, BOOL fPlayingRNG);
 
 VOID PAL_ShowDialogText(LPCSTR szText);
 

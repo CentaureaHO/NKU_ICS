@@ -47,17 +47,16 @@ DESCRIPTION
         <<errno>>.
 */
 
-int _kill_r(ptr, pid, sig) struct _reent *ptr;
+int _kill_r(ptr, pid, sig) struct _reent* ptr;
 int pid;
 int sig;
 {
-  int ret;
+    int ret;
 
-  errno = 0;
-  ret = _kill(pid, sig);
-  if (errno != 0)
-    ptr->_errno = errno;
-  return ret;
+    errno                       = 0;
+    ret                         = _kill(pid, sig);
+    if (errno != 0) ptr->_errno = errno;
+    return ret;
 }
 
 /*
@@ -85,11 +84,11 @@ DESCRIPTION
         still must have the reentrant pointer argument.
 */
 
-int _getpid_r(ptr) struct _reent *ptr;
+int _getpid_r(ptr) struct _reent* ptr;
 {
-  int ret;
-  ret = _getpid();
-  return ret;
+    int ret;
+    ret = _getpid();
+    return ret;
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

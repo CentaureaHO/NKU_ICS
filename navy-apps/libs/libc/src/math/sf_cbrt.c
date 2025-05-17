@@ -44,37 +44,36 @@ float cbrtf(float x)
 float cbrtf(x) float x;
 #endif
 {
-  __int32_t hx;
-  float r, s, t;
-  __uint32_t sign;
-  __uint32_t high;
+    __int32_t  hx;
+    float      r, s, t;
+    __uint32_t sign;
+    __uint32_t high;
 
-  GET_FLOAT_WORD(hx, x);
-  sign = hx & 0x80000000; /* sign= sign(x) */
-  hx ^= sign;
-  if (hx >= 0x7f800000)
-    return (x + x); /* cbrt(NaN,INF) is itself */
-  if (hx == 0)
-    return (x); /* cbrt(0) is itself */
+    GET_FLOAT_WORD(hx, x);
+    sign = hx & 0x80000000; /* sign= sign(x) */
+    hx ^= sign;
+    if (hx >= 0x7f800000) return (x + x); /* cbrt(NaN,INF) is itself */
+    if (hx == 0) return (x);              /* cbrt(0) is itself */
 
-  SET_FLOAT_WORD(x, hx); /* x <- |x| */
-                         /* rough cbrt to 5 bits */
-  if (hx < 0x00800000)   /* subnormal number */
-  {
-    SET_FLOAT_WORD(t, 0x4b800000); /* set t= 2**24 */
-    t *= x;
+    SET_FLOAT_WORD(x, hx); /* x <- |x| */
+                           /* rough cbrt to 5 bits */
+    if (hx < 0x00800000)   /* subnormal number */
+    {
+        SET_FLOAT_WORD(t, 0x4b800000); /* set t= 2**24 */
+        t *= x;
+        GET_FLOAT_WORD(high, t);
+        SET_FLOAT_WORD(t, high / 3 + B2);
+    }
+    else
+        SET_FLOAT_WORD(t, hx / 3 + B1);
+
+    /* new cbrt to 23 bits */
+    r = t * t / x;
+    s = C + r * t;
+    t *= G + F / (s + E + D / s);
+
+    /* retore the sign bit */
     GET_FLOAT_WORD(high, t);
-    SET_FLOAT_WORD(t, high / 3 + B2);
-  } else
-    SET_FLOAT_WORD(t, hx / 3 + B1);
-
-  /* new cbrt to 23 bits */
-  r = t * t / x;
-  s = C + r * t;
-  t *= G + F / (s + E + D / s);
-
-  /* retore the sign bit */
-  GET_FLOAT_WORD(high, t);
-  SET_FLOAT_WORD(t, high | sign);
-  return (t);
+    SET_FLOAT_WORD(t, high | sign);
+    return (t);
 }

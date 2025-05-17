@@ -37,11 +37,12 @@ QUICKREF
 
 #include <string.h>
 
-int _DEFUN(strcmp, (s1, s2), _CONST char *s1 _AND _CONST char *s2) {
-  while (*s1 != '\0' && *s1 == *s2) {
-    s1++;
-    s2++;
-  }
+int _DEFUN(strcmp, (s1, s2), _CONST char* s1 _AND _CONST char* s2)
+{
+    while (*s1 != '\0' && *s1 == *s2) {
+        s1++;
+        s2++;
+    }
 
-  return (*(unsigned char *)s1) - (*(unsigned char *)s2);
+    return (*(unsigned char*)s1) - (*(unsigned char*)s2);
 }

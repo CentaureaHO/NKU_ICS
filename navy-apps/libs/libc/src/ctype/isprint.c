@@ -44,11 +44,7 @@ No supporting OS subroutines are required.
 #include <ctype.h>
 
 #undef isgraph
-int _DEFUN(isgraph, (c), int c) {
-  return ((_ctype_ + 1)[c] & (_P | _U | _L | _N));
-}
+int _DEFUN(isgraph, (c), int c) { return ((_ctype_ + 1)[c] & (_P | _U | _L | _N)); }
 
 #undef isprint
-int _DEFUN(isprint, (c), int c) {
-  return ((_ctype_ + 1)[c] & (_P | _U | _L | _N | _B));
-}
+int _DEFUN(isprint, (c), int c) { return ((_ctype_ + 1)[c] & (_P | _U | _L | _N | _B)); }

@@ -41,10 +41,10 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 
 #include <stdio.h>
 
-int _DEFUN(fsetpos, (iop, pos), FILE *iop _AND _CONST fpos_t *pos) {
-  int x = fseek(iop, *pos, SEEK_SET);
+int _DEFUN(fsetpos, (iop, pos), FILE* iop _AND _CONST fpos_t* pos)
+{
+    int x = fseek(iop, *pos, SEEK_SET);
 
-  if (x != 0)
-    return 1;
-  return 0;
+    if (x != 0) return 1;
+    return 0;
 }

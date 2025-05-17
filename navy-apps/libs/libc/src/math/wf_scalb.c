@@ -38,7 +38,7 @@ float scalbf(_R1 float x, float fn) /* wrapper scalbf */
 float scalbf(_R2 x, fn) /* wrapper scalbf */
 #ifdef _SCALB_INT
     _R3 float x;
-int fn;
+int       fn;
 #else
     _R3 float x,
     fn;
@@ -46,25 +46,23 @@ int fn;
 #endif
 {
 #ifdef _IEEE_LIBM
-  return __ieee754_scalbf(x, fn);
+    return __ieee754_scalbf(x, fn);
 #else
-  float z;
-  z = __ieee754_scalbf(x, fn);
-  if (_LIB_VERSION == _IEEE_)
-    return z;
-  if (!(finitef(z) || isnanf(z)) && finitef(x)) {
-    /* scalbf overflow */
-    return (float)__kernel_standard(_R4, (double)x, (double)fn, 132);
-  }
-  if (z == (float)0.0 && z != x) {
-    /* scalbf underflow */
-    return (float)__kernel_standard(_R4, (double)x, (double)fn, 133);
-  }
+    float z;
+    z = __ieee754_scalbf(x, fn);
+    if (_LIB_VERSION == _IEEE_) return z;
+    if (!(finitef(z) || isnanf(z)) && finitef(x)) {
+        /* scalbf overflow */
+        return (float)__kernel_standard(_R4, (double)x, (double)fn, 132);
+    }
+    if (z == (float)0.0 && z != x) {
+        /* scalbf underflow */
+        return (float)__kernel_standard(_R4, (double)x, (double)fn, 133);
+    }
 #ifndef _SCALB_INT
-  if (!finitef(fn))
-    _R4->_errno = ERANGE;
+    if (!finitef(fn)) _R4->_errno = ERANGE;
 #endif
-  return z;
+    return z;
 #endif
 }
 

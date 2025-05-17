@@ -85,22 +85,21 @@ double exp(_R2 x) /* wrapper exp */
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-  return __ieee754_exp(x);
+    return __ieee754_exp(x);
 #else
-  double z;
-  z = __ieee754_exp(x);
-  if (_LIB_VERSION == _IEEE_)
+    double z;
+    z = __ieee754_exp(x);
+    if (_LIB_VERSION == _IEEE_) return z;
+    if (finite(x)) {
+        if (x > o_threshold)
+            return __kernel_standard(_R4, x, x, 6); /* exp overflow */
+        else if (x < u_threshold)
+            return __kernel_standard(_R4, x, x, 7); /* exp underflow */
+    }
     return z;
-  if (finite(x)) {
-    if (x > o_threshold)
-      return __kernel_standard(_R4, x, x, 6); /* exp overflow */
-    else if (x < u_threshold)
-      return __kernel_standard(_R4, x, x, 7); /* exp underflow */
-  }
-  return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-  return (double)_expf_r(_R4, (float)x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_expf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

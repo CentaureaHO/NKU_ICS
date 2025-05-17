@@ -50,18 +50,17 @@ DESCRIPTION
         <<errno>>.
 */
 
-int _open_r(ptr, file, flags, mode) struct _reent *ptr;
-_CONST char *file;
-int flags;
-int mode;
+int          _open_r(ptr, file, flags, mode) struct _reent* ptr;
+_CONST char* file;
+int          flags;
+int          mode;
 {
-  int ret;
+    int ret;
 
-  errno = 0;
-  ret = _open(file, flags, mode);
-  if (errno != 0)
-    ptr->_errno = errno;
-  return ret;
+    errno                       = 0;
+    ret                         = _open(file, flags, mode);
+    if (errno != 0) ptr->_errno = errno;
+    return ret;
 }
 
 /*
@@ -87,16 +86,15 @@ DESCRIPTION
         <<errno>>.
 */
 
-int _close_r(ptr, fd) struct _reent *ptr;
+int _close_r(ptr, fd) struct _reent* ptr;
 int fd;
 {
-  int ret;
+    int ret;
 
-  errno = 0;
-  ret = _close(fd);
-  if (errno != 0)
-    ptr->_errno = errno;
-  return ret;
+    errno                       = 0;
+    ret                         = _close(fd);
+    if (errno != 0) ptr->_errno = errno;
+    return ret;
 }
 
 /*
@@ -125,18 +123,17 @@ DESCRIPTION
         <<errno>>.
 */
 
-off_t _lseek_r(ptr, fd, pos, whence) struct _reent *ptr;
-int fd;
+off_t _lseek_r(ptr, fd, pos, whence) struct _reent* ptr;
+int   fd;
 off_t pos;
-int whence;
+int   whence;
 {
-  off_t ret;
+    off_t ret;
 
-  errno = 0;
-  ret = _lseek(fd, pos, whence);
-  if (errno != 0)
-    ptr->_errno = errno;
-  return ret;
+    errno                       = 0;
+    ret                         = _lseek(fd, pos, whence);
+    if (errno != 0) ptr->_errno = errno;
+    return ret;
 }
 
 /*
@@ -165,18 +162,17 @@ DESCRIPTION
         <<errno>>.
 */
 
-long _read_r(ptr, fd, buf, cnt) struct _reent *ptr;
-int fd;
-_PTR buf;
+long   _read_r(ptr, fd, buf, cnt) struct _reent* ptr;
+int    fd;
+_PTR   buf;
 size_t cnt;
 {
-  long ret;
+    long ret;
 
-  errno = 0;
-  ret = _read(fd, buf, cnt);
-  if (errno != 0)
-    ptr->_errno = errno;
-  return ret;
+    errno                       = 0;
+    ret                         = _read(fd, buf, cnt);
+    if (errno != 0) ptr->_errno = errno;
+    return ret;
 }
 
 /*
@@ -205,18 +201,17 @@ DESCRIPTION
         <<errno>>.
 */
 
-long _write_r(ptr, fd, buf, cnt) struct _reent *ptr;
-int fd;
+long   _write_r(ptr, fd, buf, cnt) struct _reent* ptr;
+int    fd;
 _CONST _PTR buf;
-size_t cnt;
+size_t      cnt;
 {
-  long ret;
+    long ret;
 
-  errno = 0;
-  ret = _write(fd, buf, cnt);
-  if (errno != 0)
-    ptr->_errno = errno;
-  return ret;
+    errno                       = 0;
+    ret                         = _write(fd, buf, cnt);
+    if (errno != 0) ptr->_errno = errno;
+    return ret;
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

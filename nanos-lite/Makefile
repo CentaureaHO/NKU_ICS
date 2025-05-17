@@ -35,3 +35,7 @@ src/syscall.h: $(NAVY_HOME)/libs/libos/src/syscall.h
 
 update: update-ramdisk-fsimg src/syscall.h
 	@touch src/initrd.S
+
+.PHONY: format
+format:
+	@find . -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.hh" \) -exec clang-format -i {} +

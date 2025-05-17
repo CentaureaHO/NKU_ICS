@@ -113,34 +113,36 @@ extern "C" {
 /*#include <sys/stdtypes.h>*/
 
 /* file segment locking set data type - information passed to system by user */
-struct flock {
-  short l_type;   /* F_RDLCK, F_WRLCK, or F_UNLCK */
-  short l_whence; /* flag to choose starting offset */
-  long l_start;   /* relative offset, in bytes */
-  long l_len;     /* length, in bytes; 0 means lock to EOF */
-  short l_pid;    /* returned with F_GETLK */
-  short l_xxx;    /* reserved for future use */
+struct flock
+{
+    short l_type;   /* F_RDLCK, F_WRLCK, or F_UNLCK */
+    short l_whence; /* flag to choose starting offset */
+    long  l_start;  /* relative offset, in bytes */
+    long  l_len;    /* length, in bytes; 0 means lock to EOF */
+    short l_pid;    /* returned with F_GETLK */
+    short l_xxx;    /* reserved for future use */
 };
 
 #ifndef _POSIX_SOURCE
 /* extended file segment locking set data type */
-struct eflock {
-  short l_type;   /* F_RDLCK, F_WRLCK, or F_UNLCK */
-  short l_whence; /* flag to choose starting offset */
-  long l_start;   /* relative offset, in bytes */
-  long l_len;     /* length, in bytes; 0 means lock to EOF */
-  short l_pid;    /* returned with F_GETLK */
-  short l_xxx;    /* reserved for future use */
-  long l_rpid;    /* Remote process id wanting this lock */
-  long l_rsys;    /* Remote system id wanting this lock */
+struct eflock
+{
+    short l_type;   /* F_RDLCK, F_WRLCK, or F_UNLCK */
+    short l_whence; /* flag to choose starting offset */
+    long  l_start;  /* relative offset, in bytes */
+    long  l_len;    /* length, in bytes; 0 means lock to EOF */
+    short l_pid;    /* returned with F_GETLK */
+    short l_xxx;    /* reserved for future use */
+    long  l_rpid;   /* Remote process id wanting this lock */
+    long  l_rsys;   /* Remote system id wanting this lock */
 };
 #endif /* !_POSIX_SOURCE */
 
 #include <sys/stat.h> /* sigh. for the mode bits for open/creat */
 #include <sys/types.h>
 
-extern int open _PARAMS((const char *, int, ...));
-extern int creat _PARAMS((const char *, mode_t));
+extern int open _PARAMS((const char*, int, ...));
+extern int creat _PARAMS((const char*, mode_t));
 extern int fcntl _PARAMS((int, int, ...));
 
 #ifdef __cplusplus

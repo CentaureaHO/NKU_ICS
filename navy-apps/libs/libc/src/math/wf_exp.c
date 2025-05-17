@@ -41,20 +41,19 @@ float expf(_R2 x) /* wrapper expf */
 #endif
 {
 #ifdef _IEEE_LIBM
-  return __ieee754_expf(x);
+    return __ieee754_expf(x);
 #else
-  float z;
-  z = __ieee754_expf(x);
-  if (_LIB_VERSION == _IEEE_)
+    float z;
+    z = __ieee754_expf(x);
+    if (_LIB_VERSION == _IEEE_) return z;
+    if (finitef(x)) {
+        if (x > o_threshold) /* exp overflow */
+            return (float)__kernel_standard(_R4, (double)x, (double)x, 106);
+        else if (x < u_threshold)
+            /* exp underflow */
+            return (float)__kernel_standard(_R4, (double)x, (double)x, 107);
+    }
     return z;
-  if (finitef(x)) {
-    if (x > o_threshold) /* exp overflow */
-      return (float)__kernel_standard(_R4, (double)x, (double)x, 106);
-    else if (x < u_threshold)
-      /* exp underflow */
-      return (float)__kernel_standard(_R4, (double)x, (double)x, 107);
-  }
-  return z;
 #endif
 }
 

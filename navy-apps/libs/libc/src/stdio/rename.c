@@ -52,25 +52,26 @@ Supporting OS subroutines required: <<link>>, <<unlink>>.
 #include <stdio.h>
 #include <sys/unistd.h>
 
-int _rename_r(ptr, old, new) struct _reent *ptr;
-_CONST char *old;
-_CONST char *new;
+int          _rename_r(ptr, old, new) struct _reent* ptr;
+_CONST char* old;
+_CONST char* new;
 {
-  if (_link_r(ptr, old, new) == -1)
-    return -1;
+    if (_link_r(ptr, old, new) == -1) return -1;
 
-  if (_unlink_r(ptr, old) == -1) {
-    /* ??? Should we unlink new? (rhetorical question) */
-    return -1;
-  }
+    if (_unlink_r(ptr, old) == -1) {
+        /* ??? Should we unlink new? (rhetorical question) */
+        return -1;
+    }
 
-  return 0;
+    return 0;
 }
 
 #ifndef _REENT_ONLY
 
-int rename(old, new) _CONST char *old;
-_CONST char *new;
-{ return _rename_r(_REENT, old, new); }
+int rename(old, new) _CONST char* old;
+_CONST char* new;
+{
+    return _rename_r(_REENT, old, new);
+}
 
 #endif

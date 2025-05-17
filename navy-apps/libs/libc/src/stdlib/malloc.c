@@ -126,15 +126,11 @@ Supporting OS subroutines required: <<sbrk>>, <<write>> (if WARN_VLIMIT).
 
 #ifndef _REENT_ONLY
 
-_PTR _DEFUN(malloc, (nbytes), size_t nbytes) /* get a block */ {
-  return _malloc_r(_REENT, nbytes);
-}
+_PTR _DEFUN(malloc, (nbytes), size_t nbytes) /* get a block */ { return _malloc_r(_REENT, nbytes); }
 
 void _DEFUN(free, (aptr), _PTR aptr) { _free_r(_REENT, aptr); }
 
-_PTR _DEFUN(realloc, (ap, nbytes), _PTR ap _AND size_t nbytes) {
-  return _realloc_r(_REENT, ap, nbytes);
-}
+_PTR _DEFUN(realloc, (ap, nbytes), _PTR ap _AND size_t nbytes) { return _realloc_r(_REENT, ap, nbytes); }
 
 #endif
 

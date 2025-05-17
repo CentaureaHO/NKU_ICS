@@ -25,10 +25,10 @@ int finite(x) double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-  __int32_t hx;
-  GET_HIGH_WORD(hx, x);
-  return (int)((__uint32_t)((hx & 0x7fffffff) - 0x7ff00000) >> 31);
+    __int32_t hx;
+    GET_HIGH_WORD(hx, x);
+    return (int)((__uint32_t)((hx & 0x7fffffff) - 0x7ff00000) >> 31);
 #else  /* defined (_DOUBLE_IS_32BITS) */
-  return finitef((float)x);
+    return finitef((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

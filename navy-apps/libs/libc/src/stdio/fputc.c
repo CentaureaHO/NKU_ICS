@@ -42,4 +42,4 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 
 #include <stdio.h>
 
-int _DEFUN(fputc, (ch, file), int ch _AND FILE *file) { return putc(ch, file); }
+int _DEFUN(fputc, (ch, file), int ch _AND FILE* file) { return putc(ch, file); }

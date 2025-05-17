@@ -70,9 +70,9 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 
 #undef getc
 
-int getc(fp) register FILE *fp;
+int getc(fp) register FILE* fp;
 {
-  /* CHECK_INIT is called (eventually) by __srefill.  */
+    /* CHECK_INIT is called (eventually) by __srefill.  */
 
-  return __sgetc(fp);
+    return __sgetc(fp);
 }

@@ -18,30 +18,31 @@ extern "C" {
 /* dj's stat defines _STAT_H_ */
 #ifndef _STAT_H_
 
-struct stat {
-  dev_t st_dev;
-  ino_t st_ino;
-  mode_t st_mode;
-  short st_nlink;
-  uid_t st_uid;
-  gid_t st_gid;
-  dev_t st_rdev;
-  off_t st_size;
+struct stat
+{
+    dev_t  st_dev;
+    ino_t  st_ino;
+    mode_t st_mode;
+    short  st_nlink;
+    uid_t  st_uid;
+    gid_t  st_gid;
+    dev_t  st_rdev;
+    off_t  st_size;
 /* SysV/sco doesn't have the rest... */
 #ifdef __svr4__
-  time_t st_atime;
-  time_t st_mtime;
-  time_t st_ctime;
+    time_t st_atime;
+    time_t st_mtime;
+    time_t st_ctime;
 #else
-  time_t st_atime;
-  int st_spare1;
-  time_t st_mtime;
-  int st_spare2;
-  time_t st_ctime;
-  int st_spare3;
-  long st_blksize;
-  long st_blocks;
-  long st_spare4[2];
+    time_t st_atime;
+    int    st_spare1;
+    time_t st_mtime;
+    int    st_spare2;
+    time_t st_ctime;
+    int    st_spare3;
+    long   st_blksize;
+    long   st_blocks;
+    long   st_spare4[2];
 #endif
 };
 
@@ -95,11 +96,11 @@ struct stat {
 #define S_ISLNK(m) (((m)&_IFMT) == _IFLNK)
 #define S_ISSOCK(m) (((m)&_IFMT) == _IFSOCK)
 
-int _EXFUN(chmod, (const char *_path, mode_t _mode));
-int _EXFUN(fstat, (int _fd, struct stat *_sbuf));
-int _EXFUN(mkdir, (char *_path, mode_t _mode));
-int _EXFUN(mkfifo, (char *_path, mode_t _mode));
-int _EXFUN(stat, (const char *_path, struct stat *_sbuf));
+int _EXFUN(chmod, (const char* _path, mode_t _mode));
+int _EXFUN(fstat, (int _fd, struct stat* _sbuf));
+int _EXFUN(mkdir, (char* _path, mode_t _mode));
+int _EXFUN(mkfifo, (char* _path, mode_t _mode));
+int _EXFUN(stat, (const char* _path, struct stat* _sbuf));
 mode_t _EXFUN(umask, (mode_t _mask));
 
 #endif /* !_STAT_H_ */

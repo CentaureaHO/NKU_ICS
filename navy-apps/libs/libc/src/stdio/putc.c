@@ -73,10 +73,10 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 
 #undef putc
 
-int putc(c, fp) int c;
-register FILE *fp;
+int            putc(c, fp) int c;
+register FILE* fp;
 {
-  /* CHECK_INIT is (eventually) called by __swbuf.  */
+    /* CHECK_INIT is (eventually) called by __swbuf.  */
 
-  return __sputc(c, fp);
+    return __sputc(c, fp);
 }

@@ -38,13 +38,13 @@ QUICKREF
 /*SUPPRESS 560*/
 /*SUPPRESS 530*/
 
-char *_DEFUN(strcat, (s1, s2), char *s1 _AND _CONST char *s2) {
-  char *s = s1;
+char* _DEFUN(strcat, (s1, s2), char* s1 _AND _CONST char* s2)
+{
+    char* s = s1;
 
-  while (*s1)
-    s1++;
+    while (*s1) s1++;
 
-  while (*s1++ = *s2++)
-    ;
-  return s;
+    while (*s1++ = *s2++)
+        ;
+    return s;
 }
