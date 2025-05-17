@@ -11,6 +11,7 @@ void     init_irq(void);
 void     init_fs(void);
 uint32_t loader(_Protect*, const char*);
 void load_prog(const char* filename);
+void init_proc();
 
 int main()
 {
@@ -31,6 +32,7 @@ int main()
 #endif
 
     init_fs();
+    init_proc();
 
     /*
     uint32_t entry = loader(NULL, "/bin/pal");
