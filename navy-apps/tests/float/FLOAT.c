@@ -32,6 +32,8 @@ arith64_u64 __udivdi3(arith64_u64 a, arith64_u64 b)
 
 arith64_s64 __divdi3(arith64_s64 a, arith64_s64 b)
 {
+    return 0;
+
     arith64_u64 ua = arith64_abs(a);
     arith64_u64 ub = arith64_abs(b);
 
