@@ -50,6 +50,12 @@ FLOAT F_div_F(FLOAT a, FLOAT b)
     return (FLOAT)(((int64_t)a << 16) / b);
 }
 
+typedef union
+{
+    float    f;
+    uint32_t u;
+} float_u_caster;
+
 FLOAT f2F(float a)
 {
     /* You should figure out how to convert `a' into FLOAT without
@@ -62,7 +68,65 @@ FLOAT f2F(float a)
      * performing arithmetic operations on it directly?
      */
 
-    return (int32_t)(a * (1 << 16));
+    float_u_caster caster;
+    caster.f      = a;
+    uint32_t bits = caster.u;
+
+    uint32_t sign_bit       = (bits >> 31);
+    int32_t  exp_biased     = (bits >> 23) & 0xFF;
+    uint32_t mant_frac_bits = bits & 0x007FFFFF;
+
+    if (exp_biased == 0xFF) {
+        if (mant_frac_bits != 0)
+            return 0;
+        else
+            return sign_bit ? (FLOAT)0x80000000 : (FLOAT)0x7FFFFFFF;
+    }
+
+    if (exp_biased == 0 && mant_frac_bits == 0) return 0;
+
+    int32_t  exponent_unbiased = exp_biased - 127;
+    uint32_t abs_mantissa;
+
+    if (exp_biased == 0) {
+        abs_mantissa = mant_frac_bits;
+        exponent_unbiased       = -126;
+    }
+    else
+        abs_mantissa = mant_frac_bits | 0x00800000;
+
+    int     shift_amount = exponent_unbiased - 7;
+    int64_t abs_result_64;
+
+    if (abs_mantissa == 0)
+        abs_result_64 = 0;
+    else if (shift_amount >= (63 - 24))
+        abs_result_64 = 0x7FFFFFFFFFFFFFFFLL;
+    else if (shift_amount < -(63))
+        abs_result_64 = 0;
+    else
+    {
+        if (shift_amount >= 0)
+            abs_result_64 = (int64_t)abs_mantissa << shift_amount;
+        else
+            abs_result_64 = (int64_t)abs_mantissa >> (-shift_amount);
+    }
+
+    FLOAT final_result;
+    if (sign_bit) {
+        if (abs_result_64 >= 0x80000000LL)
+            final_result = (FLOAT)0x80000000;
+        else
+            final_result = (FLOAT)(-abs_result_64);
+    }
+    else
+    {
+        if (abs_result_64 >= 0x7FFFFFFFLL)
+            final_result = (FLOAT)0x7FFFFFFF;
+        else
+            final_result = (FLOAT)abs_result_64;
+    }
+    return final_result;
 }
 
 FLOAT Fabs(FLOAT a)
