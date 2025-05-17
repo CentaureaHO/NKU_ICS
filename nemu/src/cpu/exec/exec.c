@@ -498,7 +498,7 @@ make_group(gp1, EX(add), EX(or), EX(adc), EX(sbb), EX(and), EX(sub), EX (xor), E
         EMPTY,
         EMPTY,
         EMPTY,
-        /* 0xac */ EMPTY,
+        /* 0xac */ IDEX(Ib_G2E, shrd),
         IDEX(G2E, shrd),
         EMPTY,
         IDEX(E2G, imul2),
