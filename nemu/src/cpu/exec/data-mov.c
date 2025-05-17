@@ -212,3 +212,48 @@ make_EHelper(lea)
     operand_write(id_dest, &t2);
     print_asm_template2(lea);
 }
+
+make_EHelper(shrd)
+{
+    rtlreg_t cl_val;
+    rtl_lr_b(&cl_val, R_CL);
+
+    uint32_t count = cl_val % 32;
+
+    uint32_t dest_val    = id_dest->val;
+    uint32_t src_val     = id_src->val;
+    int      width_bytes = id_dest->width;
+    int      width_bits  = width_bytes * 8;
+
+    if (count == 0);
+    else if (count >= width_bits);
+    else
+    {
+        rtlreg_t cf_bit;
+        cf_bit = (dest_val >> (count - 1)) & 0x1;
+        rtl_set_CF(&cf_bit);
+
+        uint32_t result;
+        uint32_t dest_masked, src_masked_lsbs;
+
+        if (width_bytes == 2) {
+            dest_masked     = dest_val & 0xFFFF;
+            src_masked_lsbs = (src_val & 0xFFFF) & ((1U << count) - 1);
+
+            result = (dest_masked >> count) | (src_masked_lsbs << (16 - count));
+            result &= 0xFFFF;
+        }
+        else
+        {
+            dest_masked     = dest_val;
+            src_masked_lsbs = src_val & ((1UL << count) - 1);
+
+            result = (dest_masked >> count) | (src_masked_lsbs << (32 - count));
+        }
+
+        operand_write(id_dest, &result);
+
+        rtl_update_ZFSF(&result, width_bytes);
+        rtl_update_PF(&result);
+    }
+}
